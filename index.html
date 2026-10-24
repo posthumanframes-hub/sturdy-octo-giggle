@@ -1,0 +1,1332 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Plot Twist</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..600&family=Nunito:wght@400;600;700;800&display=swap">
+<style>
+/* Layout: one phone-width column; each scene = eyebrow bar, serif headline, a tactile stage, quiet paper buttons. Chapter One lives on butter, Chapter Two on dusty pink, the in-between on sage. */
+:root{
+  --butter-bg:#F7EDCB; --cream-bg:#FBF6EC; --sage-bg:#E2E8D9; --pink-bg:#F1DDD6; --blue-bg:#DEE8EF;
+  --ink:#3D3431; --ink-soft:#73665F; --line:rgba(61,52,49,.18);
+  --paper:#FFFCF5; --paper-ink:#3D3431; --paper-soft:#7A6D66;
+  --coral:#C65A43; --coral-ink:#FFF8F0;
+  --n-butter:#F3E2A6; --n-pink:#EDC3BC; --n-blue:#CFDDE8; --n-sage:#C3D3B8; --n-cream:#FFFCF5;
+  --table:#FBF4E2; --table-edge:rgba(61,52,49,.14);
+  --shadow:rgba(61,52,49,.16);
+  --serif:"Fraunces", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --sans:"Nunito", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --spring:cubic-bezier(.34,1.56,.64,1);
+  --bg:var(--butter-bg);
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --butter-bg:#2B261B; --cream-bg:#27231E; --sage-bg:#212720; --pink-bg:#2D2224; --blue-bg:#1F252B;
+  --ink:#F2E9DA; --ink-soft:#C3B6A8; --line:rgba(242,233,218,.2);
+  --table:#3A3328; --table-edge:rgba(242,233,218,.12); --shadow:rgba(0,0,0,.4);
+  --coral:#D86A50; color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --butter-bg:#2B261B; --cream-bg:#27231E; --sage-bg:#212720; --pink-bg:#2D2224; --blue-bg:#1F252B;
+  --ink:#F2E9DA; --ink-soft:#C3B6A8; --line:rgba(242,233,218,.2);
+  --table:#3A3328; --table-edge:rgba(242,233,218,.12); --shadow:rgba(0,0,0,.4);
+  --coral:#D86A50; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background-color:var(--bg);color:var(--ink);font:15px/1.5 var(--sans);-webkit-font-smoothing:antialiased;transition:background-color .6s ease;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .35  0 0 0 0 .28  0 0 0 0 .22  0 0 0 .07 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");}
+body[data-tone=butter]{--bg:var(--butter-bg)}
+body[data-tone=cream]{--bg:var(--cream-bg)}
+body[data-tone=sage]{--bg:var(--sage-bg)}
+body[data-tone=pink]{--bg:var(--pink-bg)}
+body[data-tone=blue]{--bg:var(--blue-bg)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2.5px solid var(--coral);outline-offset:3px;border-radius:6px}
+.app{max-width:440px;margin:0 auto;min-height:100%;display:flex;flex-direction:column;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:10px 12px}
+.bar{display:flex;align-items:center;gap:10px;min-height:46px}
+.eyebrow{flex:1;font:800 9.5px/1.3 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft)}
+.icon-btn{width:38px;height:38px;flex:none;border-radius:8px;border:1px solid var(--line);background:var(--paper);color:var(--paper-ink);display:grid;place-items:center;cursor:pointer;box-shadow:0 1px 2px var(--shadow)}
+.icon-btn.back{background:transparent;border-color:transparent;box-shadow:none;color:var(--ink)}
+.icon-btn svg{width:18px;height:18px}
+.scene{flex:1;display:flex;flex-direction:column;gap:14px;animation:sceneIn .55s ease both}
+@keyframes sceneIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+h1.t{font:400 clamp(28px,8.4vw,35px)/1.08 var(--serif);letter-spacing:-.015em;margin:12px 0 0;text-wrap:balance;outline:none}
+.sub{color:var(--ink-soft);margin:-4px 0 0;font-size:13.5px;line-height:1.45;max-width:36ch}
+.label{font:800 9.5px/1.2 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);margin:0}
+.label.w{color:var(--coral)}
+.hint{text-align:center;font-size:11.5px;color:var(--ink-soft);margin:0;line-height:1.5}
+.actions{display:grid;gap:8px;margin-top:auto;padding-top:4px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.btn{font:700 13.5px/1.2 var(--sans);border-radius:8px;padding:13px 14px;border:1px solid var(--line);background:var(--paper);color:var(--paper-ink);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:transform .25s var(--spring),box-shadow .2s;box-shadow:0 1px 2px var(--shadow);text-align:center}
+.btn:active{transform:scale(.97)}
+.btn svg{width:16px;height:16px;flex:none}
+.btn.primary{background:var(--coral);color:var(--coral-ink);border-color:transparent;box-shadow:0 2px 0 rgba(0,0,0,.1)}
+.btn.link{background:none;border:0;box-shadow:none;color:var(--ink-soft);font-weight:600;font-size:12px;text-decoration:underline;text-underline-offset:3px;padding:6px}
+.foot{display:flex;justify-content:center;align-items:center;gap:6px;font-size:10.5px;color:var(--ink-soft);padding-top:16px}
+.foot svg{width:11px;height:11px}
+.ill{display:block;width:100%;height:100%;overflow:visible;filter:url(#wobble)}
+
+/* paper notes */
+.note-w{filter:drop-shadow(0 3px 5px var(--shadow));transition:transform .35s var(--spring)}
+.note{--n:var(--n-butter);position:relative;background:var(--n);color:var(--paper-ink);font:400 18px/1.18 var(--serif);padding:16px 26px 18px 16px;border:1.3px solid var(--paper-ink);
+  clip-path:polygon(0 0,calc(100% - 20px) 0,100% 20px,100% 100%,0 100%)}
+.note::after{content:"";position:absolute;top:-1px;right:-1px;width:21px;height:21px;background:linear-gradient(225deg,transparent 48%,var(--paper-ink) 48% 54%,rgba(0,0,0,.08) 54%)}
+.note small{display:block;font:700 9.5px/1.2 var(--sans);letter-spacing:.08em;text-transform:uppercase;opacity:.6;margin-top:8px}
+.note.pink{--n:var(--n-pink)} .note.blue{--n:var(--n-blue)} .note.sage{--n:var(--n-sage)} .note.cream{--n:var(--n-cream)}
+.tape{position:absolute;width:46px;height:14px;background:rgba(243,226,166,.85);border-left:1px dashed rgba(0,0,0,.08);border-right:1px dashed rgba(0,0,0,.08);transform:rotate(-4deg)}
+
+/* hero illustrations */
+.hero{position:relative;height:250px;margin:4px 0;pointer-events:none}
+.hero .env,.chapter .env{touch-action:auto}
+.page .empty{color:var(--paper-soft)}
+.mini-known .label{color:var(--paper-soft)}
+.nb .cover{backface-visibility:hidden}
+.hero > *{position:absolute}
+.float{animation:float 6s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-5px) rotate(var(--r,0deg))}}
+.squiggle{width:136px;height:12px;color:var(--coral);margin-top:-2px}
+.display{font:400 clamp(54px,17vw,72px)/.92 var(--serif);letter-spacing:-.03em;margin:22px 0 0;outline:none}
+.lede{font-size:15px;margin:0}
+.card-btn{display:block;text-align:left;background:var(--paper);color:var(--paper-ink);border:1px solid var(--line);border-radius:8px;padding:11px 13px;cursor:pointer;font-size:11px;line-height:1.5;box-shadow:0 1px 2px var(--shadow)}
+.card-btn b{font-size:11.5px;display:block}
+.card-btn span{color:var(--paper-soft)}
+
+/* chapter select */
+.chapter{display:grid;grid-template-columns:1fr 130px;gap:12px;align-items:center;background:none;border:0;padding:6px 0;text-align:left;cursor:pointer;color:var(--ink)}
+.chapter.flip{grid-template-columns:110px 1fr}
+.chapter h2{font:400 22px/1.15 var(--serif);margin:0 0 6px}
+.chapter p{margin:0;font-size:13px;color:var(--ink-soft)}
+.chapter .pic{height:110px;transition:transform .4s var(--spring)}
+.chapter:hover .pic,.chapter:focus-visible .pic{transform:rotate(-3deg) translateY(-3px)}
+.dash{border:0;border-top:1.5px dashed var(--line);margin:4px 0;width:100%}
+
+/* envelope */
+.env{position:relative;width:min(100%,320px);aspect-ratio:3/2;margin:14px auto 0;perspective:900px;touch-action:none}
+.env > *{position:absolute;left:0;width:100%}
+.env-body{top:0;height:100%;z-index:1}
+.env-paper{left:7%;width:86%;top:8%;height:84%;z-index:2;background:var(--paper);border:1.3px solid var(--paper-ink);border-radius:2px;transition:transform .8s var(--spring);padding:12px 14px;color:var(--paper-ink);font:400 13px/1.3 var(--serif)}
+.env-paper i{display:block;height:5px;margin:7px 0;background:rgba(61,52,49,.12);border-radius:3px}
+.env-front{top:0;height:100%;z-index:3;pointer-events:none}
+.env-flap{top:0;height:62%;z-index:4;transform-origin:50% 0;transition:transform .7s var(--spring);transform-style:preserve-3d;cursor:grab}
+.env-flap.dragging{transition:none}
+.env.open .env-flap{transform:rotateX(178deg);z-index:0}
+.env.open .env-paper{transform:translateY(-58%)}
+.pull{position:absolute;right:10%;top:-4%;background:var(--n-butter);border:1.3px solid var(--paper-ink);color:var(--paper-ink);font:600 11px var(--serif);padding:4px 9px;transform:rotate(-8deg);z-index:5;pointer-events:none}
+.env-label{position:absolute;left:30%;top:56%;z-index:3;background:var(--paper);border:1.3px solid var(--paper-ink);color:var(--paper-ink);padding:6px 10px;font:600 11px/1.25 var(--sans);transform:rotate(-2deg);pointer-events:none}
+.env-arc{position:absolute;right:-2%;top:-22%;width:60px;height:70px;color:var(--coral);z-index:6;pointer-events:none}
+
+/* biodata paper */
+.fold{position:relative;width:min(100%,330px);margin:6px auto 0;background:var(--paper);color:var(--paper-ink);border:1.3px solid var(--paper-ink);box-shadow:0 8px 18px -8px var(--shadow);transform:rotate(-1.2deg);touch-action:pan-y;cursor:pointer}
+.panel{padding:12px 18px;overflow:hidden;transform-origin:50% 0;transition:max-height .65s var(--spring),transform .65s var(--spring),opacity .4s,padding .4s;max-height:420px}
+.panel + .panel{border-top:1.2px dashed rgba(61,52,49,.3)}
+.panel.shut{max-height:0;opacity:.2;transform:perspective(600px) rotateX(-85deg);padding-block:0}
+.bd-om{text-align:center;font:600 10px/1.2 var(--sans);letter-spacing:.14em;color:var(--coral);margin:2px 0 4px}
+.bd-title{text-align:center;font:600 20px/1.1 var(--serif);letter-spacing:.18em;margin:0 0 8px}
+.bd-row{display:grid;grid-template-columns:42% 1fr;gap:8px;font-size:11.5px;line-height:1.35;padding:2.5px 0;border-bottom:1px dotted rgba(61,52,49,.18)}
+.bd-row b{font-weight:700;color:var(--paper-soft)}
+.bd-row.hide span{font-style:italic;color:var(--paper-soft)}
+.bd-empty{font:400 26px/1.15 var(--serif);padding:22px 4px 26px}
+.fold .tape{left:42%;top:-8px}
+
+/* tabletop */
+.tabletop{position:relative;width:100%;background:var(--table);border:1px solid var(--table-edge);border-radius:6px;box-shadow:inset 0 0 40px rgba(120,90,40,.06),0 10px 24px -14px var(--shadow);overflow:hidden}
+.obj{position:absolute;width:66px;height:66px;transform:translate(-50%,-50%) rotate(var(--r,0deg));background:none;border:0;padding:0;cursor:grab;touch-action:none;transition:left .7s var(--spring),top .7s var(--spring),transform .35s var(--spring),opacity .4s,filter .2s;filter:drop-shadow(0 3px 2px var(--shadow));z-index:2}
+.obj.lifted{transform:translate(-50%,-50%) rotate(var(--r,0deg)) scale(1.14);filter:drop-shadow(0 12px 10px var(--shadow));z-index:20;transition:transform .3s var(--spring),filter .2s;cursor:grabbing}
+.obj.packed{opacity:0;transform:translate(-50%,-50%) scale(.2)}
+.obj.seen::after{content:"";position:absolute;right:4px;top:2px;width:7px;height:7px;border-radius:50%;background:var(--coral);opacity:.55}
+.pocket{position:absolute;width:78px;height:72px;background:none;border:0;padding:0;cursor:pointer;z-index:3;transition:transform .35s var(--spring)}
+.pocket.hot{transform:scale(1.12) rotate(-3deg)}
+.pocket .cnt{position:absolute;left:0;right:0;top:44%;text-align:center;font:700 10px var(--sans);color:#2f3a2c}
+.space{position:absolute;transform:translate(-50%,-50%);border:1.6px dashed var(--ink-soft);border-radius:40% 55% 45% 50%;width:72px;height:64px;display:grid;place-items:center;color:var(--ink-soft);background:none;cursor:pointer;font:400 22px var(--serif);animation:fadeIn 1s ease both;z-index:1}
+@keyframes fadeIn{from{opacity:0}}
+.source{position:absolute;left:8%;top:10%;width:46%;transform:rotate(-3deg);background:var(--paper);color:var(--paper-ink);border:1.3px solid var(--paper-ink);padding:12px;font:400 15px/1.2 var(--serif);cursor:pointer}
+.source small{display:block;font:800 8.5px var(--sans);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;color:var(--paper-soft)}
+
+/* inspect */
+.inspect{display:grid;grid-template-columns:1fr;gap:10px}
+.big{width:150px;height:150px;margin:2px auto 0;transform:rotate(var(--r,0deg));transition:transform .5s var(--spring);touch-action:none;cursor:grab;filter:drop-shadow(0 10px 8px var(--shadow))}
+.big.dragging{transition:none}
+.rot{display:flex;justify-content:center;gap:8px;margin-top:-6px}
+.rot .icon-btn{width:34px;height:34px}
+.known{background:var(--paper);color:var(--paper-ink);border:1px solid var(--line);border-radius:6px;padding:10px 12px;font-size:12.5px;line-height:1.45}
+.known ul{margin:6px 0 0;padding-left:16px}
+.known .label{color:var(--paper-soft)}
+.wrow{display:grid;grid-template-columns:1fr 84px;gap:10px;align-items:end}
+.wrow .note-w{touch-action:none;cursor:grab;transform:rotate(-2deg)}
+.wrow .note-w.lifted{transform:rotate(-5deg) scale(1.04)}
+.wrow .pocket{position:relative;width:84px;height:78px}
+
+/* boards */
+.board{position:relative;width:100%;aspect-ratio:1/1.12;max-width:100%;border-radius:6px;background:color-mix(in srgb,var(--n-sage) 35%,var(--table));border:1px solid var(--table-edge);overflow:hidden}
+.pin{position:absolute;transform:translate(-50%,-50%) rotate(var(--r,0deg));width:min(56%,190px);touch-action:none;cursor:grab;z-index:2;transition:left .5s var(--spring),top .5s var(--spring)}
+.pin.lifted{z-index:20;transition:none}
+.pin .note{font-size:15.5px;padding:12px 22px 14px 12px}
+.pin::before{content:"";position:absolute;left:50%;top:-4px;width:10px;height:10px;border-radius:50%;background:var(--coral);z-index:3;box-shadow:0 1px 1px rgba(0,0,0,.25)}
+.empty{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:30px;color:var(--ink-soft);font:400 16px/1.35 var(--serif)}
+
+/* empty spaces scene */
+.sil-wrap{display:grid;gap:14px;padding:4px 2px}
+.sil{border:1.6px dashed var(--ink-soft);background:transparent;color:var(--ink);text-align:left;font:400 17px/1.22 var(--serif);padding:16px 18px;cursor:pointer;transition:background .4s,transform .4s var(--spring),border-color .3s;width:86%}
+.sil:nth-child(odd){border-radius:22px 6px 26px 8px;transform:rotate(-1.5deg)}
+.sil:nth-child(even){justify-self:end;border-radius:6px 26px 8px 24px;transform:rotate(1.5deg)}
+.sil.kept{border-style:solid;border-color:var(--paper-ink);background:var(--n-blue);color:var(--paper-ink)}
+.sil.kept:nth-child(3n){background:var(--n-pink)} .sil.kept:nth-child(3n+1){background:var(--n-butter)}
+.sil small{display:block;font:700 9px var(--sans);letter-spacing:.1em;text-transform:uppercase;margin-top:8px;opacity:.65}
+
+/* keepsake box */
+.boxstage{position:relative;height:250px}
+.boxstage .box{position:absolute;left:50%;bottom:6px;width:230px;height:160px;transform:translateX(-50%)}
+.kbox .lid,.box .lid{position:absolute;left:0;top:-6px;width:100%;transform-origin:50% 100%;transition:transform .8s var(--spring)}
+.boxstage.closed .lid{transform:translateY(52px) scaleY(.9)}
+.boxstage .note-w{position:absolute;left:50%;top:8px;width:200px;transform:translateX(-50%) rotate(-7deg);transition:transform .7s var(--spring),opacity .5s}
+.boxstage.closed .note-w{transform:translateX(-50%) translateY(120px) scale(.5);opacity:0}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font:600 12.5px/1.25 var(--serif);border:1.2px solid var(--line);background:var(--paper);color:var(--paper-ink);padding:7px 10px;border-radius:3px;cursor:pointer;text-align:left;transition:transform .3s var(--spring),background .2s,opacity .2s}
+.chip[aria-pressed=true]{background:var(--n-sage);border-color:var(--paper-ink)}
+.chip[aria-pressed=false]{opacity:.65;text-decoration:line-through;text-decoration-color:rgba(61,52,49,.35)}
+.field{display:grid;gap:6px}
+.field input,.field textarea,.sheet textarea,.sheet input:not([type=checkbox]){font:400 16px/1.35 var(--serif);border:1.2px solid var(--line);border-radius:6px;padding:10px 12px;background:var(--paper);color:var(--paper-ink);width:100%}
+.field label{font:800 9.5px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft)}
+
+/* scrapbook shelf */
+.shelf{display:grid;grid-template-columns:1fr 1fr;gap:18px 16px;padding-top:4px}
+.bk{background:none;border:0;padding:0;cursor:pointer;color:var(--ink);text-align:center;font-size:11px}
+.bk .cover{position:relative;aspect-ratio:4/5;margin-bottom:6px;transition:transform .45s var(--spring)}
+.bk:hover .cover,.bk:focus-visible .cover{transform:rotate(-2.5deg) translateY(-3px)}
+.bk .name{position:absolute;left:24%;right:10%;top:22%;background:var(--paper);color:var(--paper-ink);border:1.2px solid var(--paper-ink);font:400 17px/1.1 var(--serif);padding:10px 4px;overflow-wrap:anywhere}
+.bk .st{display:block;color:var(--ink-soft)}
+
+/* notebook stage (part two) */
+.nb-stage{position:relative;height:300px}
+.nb{position:absolute;left:12%;top:0;width:66%;height:94%;perspective:1100px}
+.nb .cover{position:absolute;inset:0;transform-origin:0 50%;transition:transform .9s var(--spring);z-index:2;cursor:pointer;touch-action:none}
+.nb .inner{position:absolute;inset:3% 2% 3% 4%;background:var(--paper);border:1.3px solid var(--paper-ink);z-index:1;padding:18px;color:var(--paper-ink);font:400 16px/1.3 var(--serif)}
+.nb.open .cover{transform:rotateY(-160deg)}
+.nb-label{position:absolute;left:26%;top:28%;width:58%;background:var(--paper);border:1.3px solid var(--paper-ink);color:var(--paper-ink);padding:12px;font:400 17px/1.2 var(--serif)}
+.kbox{position:absolute;right:0;bottom:2%;width:118px;height:86px}
+.kind-row{display:flex;flex-wrap:wrap;gap:6px}
+
+/* scrapbook page */
+.page{position:relative;width:100%;background:var(--paper);color:var(--paper-ink);border:1.3px solid var(--paper-ink);box-shadow:5px 6px 0 -1px var(--n-pink),5px 6px 0 0 var(--paper-ink),0 12px 22px -12px var(--shadow);overflow:hidden;
+  background-image:repeating-linear-gradient(transparent 0 27px,rgba(61,52,49,.07) 27px 28px)}
+.page.drop{aspect-ratio:1/1.08}
+.bub{position:absolute;transform:translate(-50%,-50%) rotate(var(--r,0deg));width:min(64%,220px);background:var(--b,var(--paper));border:1.3px solid var(--paper-ink);padding:10px 12px 12px;font:400 16px/1.2 var(--serif);color:var(--paper-ink);touch-action:none;cursor:grab;filter:drop-shadow(0 3px 3px var(--shadow));z-index:2;transition:transform .35s var(--spring)}
+.bub::after{content:"";position:absolute;bottom:-9px;left:20px;width:15px;height:15px;background:var(--b,var(--paper));border-right:1.3px solid var(--paper-ink);border-bottom:1.3px solid var(--paper-ink);transform:rotate(45deg) skew(10deg,10deg)}
+.bub.me::after{left:auto;right:20px}
+.bub.pause{border-style:dashed;background:transparent;filter:none}
+.bub.pause::after{display:none}
+.bub .pr{color:var(--paper-soft);font-size:15px}
+.bub small{display:block;font:700 8.5px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--paper-soft);margin-top:6px}
+.bub.lifted{z-index:20;transform:translate(-50%,-50%) rotate(var(--r,0deg)) scale(1.05)}
+.tok{position:absolute;width:58px;transform:translate(-50%,-50%) rotate(var(--r,0deg));background:none;border:0;padding:0;cursor:grab;touch-action:none;color:var(--paper-ink);text-align:center;z-index:2;transition:transform .35s var(--spring)}
+.tok svg{width:54px;height:54px;display:block;margin:0 auto;filter:drop-shadow(0 3px 2px var(--shadow))}
+.tok span{font:600 10px/1.1 var(--serif);display:block;margin-top:1px}
+.tok.lifted{z-index:20;transform:translate(-50%,-50%) rotate(var(--r,0deg)) scale(1.15)}
+.tok .nt{position:absolute;right:-2px;top:-2px;width:10px;height:10px;border-radius:50%;background:var(--coral)}
+.tray{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:8px 4px}
+.tray button{background:none;border:0;padding:4px 2px;cursor:pointer;color:var(--paper-ink);border-radius:8px;touch-action:none;font:600 10px var(--serif)}
+.tray button svg{width:40px;height:40px;display:block;margin:0 auto 2px}
+.tray button[aria-pressed=true]{background:var(--n-butter);outline:1.2px solid var(--paper-ink)}
+
+/* then & now */
+.tn{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start}
+.tn .note-w:first-child{transform:rotate(-2deg)}
+.exp{background:var(--paper);color:var(--paper-ink);border:1.3px solid var(--paper-ink);padding:14px 12px;font:400 17px/1.2 var(--serif);transform:rotate(1.5deg);min-height:140px;box-shadow:0 6px 12px -8px var(--shadow)}
+.exp .ph{color:var(--paper-soft)}
+.exp small{display:block;font:400 11px/1.35 var(--sans);color:var(--paper-soft);margin-top:10px}
+.mini-known{display:flex;gap:10px;align-items:center;background:var(--paper);color:var(--paper-ink);border:1px dashed var(--line);border-radius:6px;padding:8px 10px;font-size:12px}
+.mini-known .ic{width:38px;height:38px;flex:none}
+.trail{display:grid;gap:4px;font-size:12px;color:var(--ink-soft)}
+.trail b{color:var(--ink);font-weight:700}
+
+/* next page */
+.np{position:relative;background:var(--paper);color:var(--paper-ink);border:1.3px solid var(--paper-ink);padding:18px 18px 18px 30px;box-shadow:0 10px 20px -12px var(--shadow)}
+.np::before{content:"";position:absolute;left:10px;top:12px;bottom:12px;width:8px;background:radial-gradient(circle at 4px 6px,transparent 3px,var(--paper-ink) 3.4px,transparent 4.4px) 0 0/8px 30px repeat-y}
+.np button{display:flex;gap:10px;align-items:center;width:100%;background:none;border:0;border-bottom:1px dotted rgba(61,52,49,.2);padding:11px 0;font:400 17px var(--serif);color:var(--paper-ink);cursor:pointer;text-align:left}
+.np button svg{width:16px;height:16px}
+.np .written{font:400 18px/1.3 var(--serif);padding:8px 0 4px;white-space:pre-wrap}
+.np .written small{display:block;font:800 9px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--paper-soft);margin-bottom:4px}
+.motto{text-align:center;font:400 15px/1.35 var(--serif);margin:4px 0 0;text-wrap:balance}
+
+/* book view */
+.book{position:relative;padding-right:34px}
+.tabs{position:absolute;right:0;top:16px;display:grid;gap:6px;z-index:3}
+.tabs button{width:36px;padding:8px 0;border:1.2px solid var(--paper-ink);border-left:0;border-radius:0 5px 5px 0;background:var(--n-blue);color:var(--paper-ink);font:800 10px var(--sans);cursor:pointer}
+.tabs button:nth-child(3n+2){background:var(--n-butter)} .tabs button:nth-child(3n){background:var(--n-sage)}
+.tabs button[aria-current=true]{transform:translateX(4px);box-shadow:2px 2px 0 var(--paper-ink)}
+.book .page{padding:18px 16px 18px 26px;min-height:340px}
+.book .page::before{content:"";position:absolute;left:8px;top:14px;bottom:14px;width:8px;background:radial-gradient(circle at 4px 6px,transparent 3px,var(--paper-ink) 3.4px,transparent 4.4px) 0 0/8px 34px repeat-y}
+.pg-h{font:400 24px/1.1 var(--serif);margin:0}
+.pg-m{font-size:11px;color:var(--paper-soft);margin:2px 0 12px}
+.sec{margin:12px 0 6px;font:800 9px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--paper-soft)}
+.items{display:flex;flex-wrap:wrap;gap:6px}
+.it{background:var(--n-cream);border:1.1px solid var(--paper-ink);padding:6px 9px;font:400 13.5px/1.25 var(--serif);color:var(--paper-ink);cursor:pointer;text-align:left;max-width:100%}
+.it.q{background:var(--n-butter)} .it.tk{background:var(--n-blue);border-radius:14px}
+.it .obs{display:block;font:400 12px/1.35 var(--sans);color:var(--paper-soft);margin-top:3px}
+.status{display:inline-flex;align-items:center;gap:6px;font:700 11px var(--sans);padding:4px 10px;border:1px solid var(--line);border-radius:20px;background:var(--paper);color:var(--paper-ink);align-self:flex-start}
+.evo{display:grid;gap:12px}
+.evo .q{font:400 16px/1.25 var(--serif)}
+.evo s{color:var(--paper-soft);font-size:13px;display:block}
+.evo ul{margin:4px 0 0;padding-left:16px;font-size:12px;color:var(--paper-soft)}
+.evo li b{color:var(--paper-ink)}
+.book.closing .page{animation:closeBook .7s ease forwards}
+@keyframes closeBook{to{transform:perspective(900px) rotateY(-70deg);opacity:0}}
+
+/* sheet */
+.sheet-bg{position:fixed;inset:0;z-index:50;background:rgba(40,32,28,.32);display:flex;align-items:flex-end;justify-content:center;opacity:0;transition:opacity .25s}
+.sheet-bg.in{opacity:1}
+.sheet{width:100%;max-width:440px;background:var(--cream-bg);color:var(--ink);border-radius:14px 14px 0 0;padding:20px max(18px,env(safe-area-inset-left,0px)) calc(18px + env(safe-area-inset-bottom,0px));display:grid;gap:12px;transform:translateY(30px);transition:transform .35s var(--spring);max-height:88vh;overflow:auto;box-shadow:0 -10px 30px rgba(0,0,0,.18)}
+.sheet-bg.in .sheet{transform:none}
+.sheet h3{font:400 22px/1.15 var(--serif);margin:0;text-wrap:balance}
+.sheet p{margin:0;font-size:13px;color:var(--ink-soft)}
+.sheet textarea{min-height:110px;resize:vertical}
+.tog{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:14px}
+.tog small{display:block;color:var(--ink-soft);font-size:11.5px}
+.sw{appearance:none;width:42px;height:24px;border-radius:12px;background:var(--line);position:relative;cursor:pointer;flex:none;transition:background .2s}
+.sw::after{content:"";position:absolute;left:3px;top:3px;width:18px;height:18px;border-radius:50%;background:var(--paper);transition:transform .3s var(--spring);box-shadow:0 1px 2px rgba(0,0,0,.2)}
+.sw:checked{background:var(--coral)}
+.sw:checked::after{transform:translateX(18px)}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg button{border:1.2px solid var(--line);background:var(--paper);color:var(--paper-ink);border-radius:20px;padding:7px 12px;font:700 12px var(--sans);cursor:pointer}
+.seg button[aria-pressed=true]{background:var(--n-butter);border-color:var(--paper-ink)}
+.swatches{display:flex;gap:8px}
+.swatches button{width:30px;height:30px;border-radius:50%;border:1.3px solid var(--paper-ink);cursor:pointer}
+.swatches button[aria-pressed=true]{box-shadow:0 0 0 3px var(--cream-bg),0 0 0 5px var(--coral)}
+.arch{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:13px;padding:6px 0}
+.toast{position:fixed;left:50%;bottom:calc(46px + env(safe-area-inset-bottom,0px));z-index:60;transform:translate(-50%,30px) rotate(-1deg);opacity:0;background:var(--paper);color:var(--paper-ink);border:1.2px solid var(--paper-ink);padding:9px 14px;font:400 14px/1.3 var(--serif);box-shadow:0 8px 16px -8px var(--shadow);transition:transform .45s var(--spring),opacity .3s;max-width:calc(100% - 32px)}
+.toast.in{transform:translate(-50%,0) rotate(-1deg);opacity:1}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+html.rm *,html.rm *::before,html.rm *::after{animation:none!important;transition-duration:.01ms!important}
+@media (prefers-reduced-motion: reduce){.float{animation:none}}
+</style>
+</head>
+<body data-tone="butter">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="wobble" x="-5%" y="-5%" width="110%" height="110%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="7" result="t"/>
+    <feDisplacementMap in="SourceGraphic" in2="t" scale="2.4" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</svg>
+<div class="app" id="app"></div>
+<div class="sr" aria-live="polite" id="live"></div>
+<script>
+(() => {
+'use strict';
+/* ---------- tiny helpers ---------- */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const uid = () => Math.random().toString(36).slice(2, 9);
+const pad = n => String(n).padStart(2, '0');
+const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+const rnd = (seed => () => (seed = (seed * 16807) % 2147483647) / 2147483647)(42);
+
+/* ---------- state (this browser only) ---------- */
+const KEY = 'plot-twist-v1';
+const fresh = () => ({v: 1, settings: {reduced: matchMedia('(prefers-reduced-motion: reduce)').matches, sound: true, haptics: true}, draft: null, archived: [], books: [], ui: {}});
+let S;
+try { S = JSON.parse(localStorage.getItem(KEY)); } catch (e) { S = null; }
+if (!S || S.v !== 1) S = fresh();
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} };
+const applyMotion = () => document.documentElement.classList.toggle('rm', !!S.settings.reduced);
+applyMotion();
+
+/* ---------- sound + haptics ---------- */
+let ac = null;
+function sfx(type) {
+  if (!S.settings.sound) return;
+  try {
+    ac = ac || new (window.AudioContext || window.webkitAudioContext)();
+    const dur = {lift: .12, drop: .07, open: .45, page: .3, tuck: .18}[type] || .12;
+    const buf = ac.createBuffer(1, Math.floor(ac.sampleRate * dur), ac.sampleRate);
+    const d = buf.getChannelData(0);
+    for (let i = 0; i < d.length; i++) {
+      const p = i / d.length;
+      d[i] = (Math.random() * 2 - 1) * Math.pow(1 - p, type === 'drop' ? 5 : 2) * (0.55 + 0.45 * Math.sin(p * 40 + Math.random()));
+    }
+    const src = ac.createBufferSource(); src.buffer = buf;
+    const f = ac.createBiquadFilter(); f.type = 'bandpass';
+    f.frequency.value = {lift: 2600, drop: 520, open: 1800, page: 3200, tuck: 900}[type] || 2000; f.Q.value = .8;
+    const g = ac.createGain(); g.gain.value = type === 'drop' ? .22 : .09;
+    src.connect(f).connect(g).connect(ac.destination); src.start();
+  } catch (e) {}
+}
+const buzz = (ms = 8) => { if (S.settings.haptics && navigator.vibrate) try { navigator.vibrate(ms); } catch (e) {} };
+
+/* ---------- illustration library ---------- */
+const INK = '#3D3431';
+const K = `stroke="${INK}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"`;
+const T = (w = 1.5) => `stroke="${INK}" stroke-width="${w}" stroke-linecap="round" fill="none"`;
+const svg = (inner, vb = '0 0 100 100') => `<svg class="ill" viewBox="${vb}" aria-hidden="true">${inner}</svg>`;
+const coins = () => { let s = ''; [82, 70, 58].forEach(y => { s += `<path d="M24 ${y - 8}v8a26 7 0 0 0 52 0v-8" fill="#E2BC5C" ${K}/><ellipse cx="50" cy="${y - 8}" rx="26" ry="7" fill="#F0D27E" ${K}/>`; }); return s + `<text x="50" y="53.5" text-anchor="middle" font-size="9" font-family="Nunito,sans-serif" font-weight="800" fill="#7d5f18">₹</text>`; };
+const listArt = () => { let s = `<g transform="rotate(4 50 50)"><path d="M22 14h46l12 12v60H22z" fill="#FFFCF5" ${K}/><path d="M68 14v12h12" fill="#F1E6D0" ${K}/>`; [38, 52, 66].forEach(y => { s += `<rect x="29" y="${y - 5}" width="8" height="8" rx="1" fill="#F3E2A6" ${T(1.6)}/><path d="M43 ${y - 1}h${y === 52 ? 22 : 28}" ${T(1.6)}/>`; }); return s + '</g>'; };
+const ART = {
+  briefcase: svg(`<path d="M38 33v-7c0-3 2-5 5-5h14c3 0 5 2 5 5v7" fill="none" ${K}/><rect x="13" y="33" width="74" height="50" rx="7" fill="#C9906C" ${K}/><path d="M13 53c25 5 49 5 74 0" fill="none" ${K}/><rect x="44" y="49" width="12" height="10" rx="2" fill="#F3E2A6" ${K}/>`),
+  scroll: svg(`<g transform="rotate(-16 50 50)"><rect x="12" y="38" width="76" height="24" rx="12" fill="#FFFCF5" ${K}/><ellipse cx="80" cy="50" rx="6" ry="12" fill="#F1E6D0" ${K}/><path d="M46 38v24M53 38v24" stroke="#C65A43" stroke-width="4"/></g><path d="M48 62l-7 22 7-4 5 6 1-22" fill="#C65A43" ${K}/>`),
+  coins: svg(coins()),
+  stamp: svg(`<rect x="20" y="70" width="60" height="11" rx="3" fill="#C65A43" ${K}/><rect x="27" y="60" width="46" height="11" rx="2" fill="#C9906C" ${K}/><path d="M43 60V40h14v20" fill="#C9906C" ${K}/><circle cx="50" cy="30" r="13" fill="#EDC3BC" ${K}/>`),
+  kundli: svg(`<rect x="15" y="15" width="70" height="70" rx="2" fill="#FFFCF5" ${K}/><path d="M50 15L85 50L50 85L15 50Z" fill="#F3E2A6" ${T(1.5)}/><path d="M15 15L85 85M85 15L15 85" ${T(1.4)}/><circle cx="50" cy="31" r="2.4" fill="#C65A43"/><circle cx="31" cy="50" r="1.8" fill="${INK}"/><circle cx="69" cy="62" r="1.8" fill="${INK}"/>`),
+  tape: svg(`<path d="M54 64h34v12H46" fill="#FFFCF5" ${K}/><path d="M60 64v5M66 64v3M72 64v5M78 64v3M84 64v5" ${T(1.4)}/><circle cx="40" cy="52" r="25" fill="#E2BC5C" ${K}/><circle cx="40" cy="52" r="8" fill="#FFFCF5" ${K}/>`),
+  photo: svg(`<g transform="rotate(-5 50 50)"><rect x="14" y="18" width="72" height="66" rx="2" fill="#FFFCF5" ${K}/><rect x="21" y="25" width="58" height="42" fill="#CFDDE8" ${K}/><path d="M28 67c1-9 17-9 18 0M41 67c1-12 17-12 18 0M54 67c1-9 17-9 18 0" fill="#C3D3B8" ${K}/><circle cx="37" cy="47" r="5" fill="#EDC3BC" ${K}/><circle cx="50" cy="43" r="6" fill="#EDC3BC" ${K}/><circle cx="63" cy="47" r="5" fill="#EDC3BC" ${K}/><path d="M50 18v66" stroke="${INK}" stroke-width="1.2" stroke-dasharray="3 3"/></g>`),
+  map: svg(`<path d="M12 25l25-7 26 7 25-7v58l-25 7-26-7-25 7z" fill="#DCE5CF" ${K}/><path d="M37 18v58M63 25v58" ${T(1.6)}/><path d="M22 62c10-14 22 4 32-8s18-6 26-18" fill="none" stroke="#C65A43" stroke-width="2" stroke-dasharray="3 4"/><circle cx="80" cy="34" r="4.5" fill="#C65A43" ${K}/>`),
+  book: svg(`<path d="M24 20h50c2 0 4 2 4 4v54H30c-3 0-6-3-6-6z" fill="#EDC3BC" ${K}/><path d="M78 78v6H30c-3 0-6-3-6-6v-6" fill="#FFFCF5" ${K}/><path d="M30 80h44" ${T(1)}/><rect x="36" y="32" width="30" height="12" rx="1.5" fill="#FFFCF5" ${K}/><path d="M64 20v18l4-3 4 3V20" fill="#C65A43" ${K}/>`),
+  football: svg(`<circle cx="50" cy="50" r="31" fill="#FFFCF5" ${K}/><path d="M50 38l11 8-4 13H43l-4-13z" fill="${INK}"/><path d="M50 38V20M61 46l17-5M57 59l11 14M43 59L32 73M39 46l-17-5" ${T(1.8)}/>`),
+  record: svg(`<circle cx="50" cy="50" r="33" fill="#3D3431" ${K}/><circle cx="50" cy="50" r="26" fill="none" stroke="#7d706a" stroke-width="1"/><circle cx="50" cy="50" r="20" fill="none" stroke="#7d706a" stroke-width="1"/><circle cx="50" cy="50" r="11" fill="#E98B6D" stroke="${INK}" stroke-width="1.5"/><circle cx="50" cy="50" r="2" fill="#FFFCF5"/>`),
+  tiffin: svg(`<path d="M32 30V18h36v12" fill="none" ${K}/><rect x="24" y="30" width="52" height="16" rx="5" fill="#CFDDE8" ${K}/><rect x="24" y="46" width="52" height="16" rx="5" fill="#C3D3B8" ${K}/><rect x="24" y="62" width="52" height="18" rx="5" fill="#CFDDE8" ${K}/>`),
+  list: svg(listArt()),
+  slip: svg(`<g transform="rotate(-6 50 50)"><rect x="20" y="30" width="60" height="44" rx="2" fill="#FFFCF5" ${K}/><path d="M28 42h40M28 50h34M28 58h38M28 66h22" stroke="#8b7e76" stroke-width="1.6" stroke-linecap="round"/></g><path d="M66 22v26c0 4-6 4-6 0V27" fill="none" stroke="#8a8f99" stroke-width="2.4" stroke-linecap="round"/>`),
+  bat: svg(`<g transform="rotate(35 50 50)"><rect x="46" y="8" width="8" height="26" rx="3" fill="#C9906C" ${K}/><path d="M41 34h18l1 48c0 4-20 4-20 0z" fill="#F0D9A8" ${K}/></g><circle cx="24" cy="76" r="8" fill="#C65A43" ${K}/>`),
+  suitcase: svg(`<path d="M40 30v-8h20v8" fill="none" ${K}/><rect x="18" y="30" width="64" height="48" rx="6" fill="#CFDDE8" ${K}/><path d="M34 30v48M66 30v48" ${T(2)}/><circle cx="30" cy="82" r="3" fill="${INK}"/><circle cx="70" cy="82" r="3" fill="${INK}"/>`),
+  ticket: svg(`<g transform="rotate(-10 50 50)"><path d="M14 34h72v10a6 6 0 0 0 0 12v10H14V56a6 6 0 0 0 0-12z" fill="#E98B6D" ${K}/><path d="M64 36v28" stroke="#FFFCF5" stroke-dasharray="3 3" stroke-width="2"/><text x="38" y="53" text-anchor="middle" font-size="8.5" font-weight="800" fill="${INK}" font-family="Nunito,sans-serif">ADMIT 1</text></g>`),
+  camera: svg(`<path d="M36 34l5-8h18l5 8" fill="#C9906C" ${K}/><rect x="16" y="34" width="68" height="44" rx="6" fill="#EDC3BC" ${K}/><circle cx="50" cy="56" r="14" fill="#FFFCF5" ${K}/><circle cx="50" cy="56" r="7" fill="#3D3431"/><rect x="70" y="40" width="7" height="5" rx="1" fill="#F3E2A6" ${T(1.2)}/>`),
+  pot: svg(`<path d="M40 22c-4 5 4 7 0 12M52 20c-4 5 4 7 0 12" ${T(1.6)}/><path d="M20 44h60l-5 32c-1 4-4 6-8 6H33c-4 0-7-2-8-6z" fill="#C3D3B8" ${K}/><path d="M14 46h10M76 46h10" ${T(2.2)}/><rect x="18" y="38" width="64" height="7" rx="3" fill="#C9906C" ${K}/>`),
+  brush: svg(`<path d="M20 78c10-2 22-12 30-22" fill="none" stroke="#C65A43" stroke-width="9" stroke-linecap="round" opacity=".55"/><g transform="rotate(40 50 50)"><rect x="46" y="8" width="8" height="46" rx="4" fill="#C9906C" ${K}/><rect x="45" y="52" width="10" height="9" fill="#bfc3c9" ${K}/><path d="M45 61h10l-2 18c-1 3-5 3-6 0z" fill="#3D3431" ${K}/></g>`),
+  plant: svg(`<path d="M50 60V30M50 44c-14 0-18-10-18-16 10 0 18 4 18 16zM50 38c12 0 16-8 16-14-9 0-16 4-16 14z" fill="#C3D3B8" ${K}/><path d="M32 60h36l-4 22H36z" fill="#C9906C" ${K}/>`),
+  envelope: '', notebook: '', box: '', pocket: ''
+};
+const tagArt = word => svg(`<g transform="rotate(-8 50 50)"><path d="M28 26h50v48H28L14 50z" fill="#F3E2A6" ${K}/><circle cx="24" cy="50" r="3" fill="#FFFCF5" ${K}/><path d="M21 50C10 40 8 30 14 22" ${T(1.4)}/><text x="52" y="54" text-anchor="middle" font-size="${word.length > 8 ? 8 : 10}" font-family="Fraunces,Georgia,serif" fill="${INK}">${esc(word.slice(0, 12))}</text></g>`);
+const artFor = o => o.kind === 'tag' ? tagArt(o.word || '?') : ART[o.kind];
+
+const ENV_BODY = svg(`<rect x="2" y="2" width="296" height="196" rx="3" fill="#D8B387" ${K}/>`, '0 0 300 200');
+const ENV_FRONT = svg(`<path d="M2 198L150 104L298 198" fill="#CFA676" ${K}/><path d="M2 4L118 112M298 4L182 112" stroke="${INK}" stroke-width="1.4" opacity=".5" fill="none"/><rect x="30" y="12" width="70" height="16" fill="#F3E2A6" opacity=".85" transform="rotate(-6 65 20)"/>`, '0 0 300 200');
+const ENV_FLAP = svg(`<path d="M4 4L150 112L296 4Z" fill="#CFA676" ${K}/>`, '0 0 300 120');
+const NOTEBOOK = (fill = '#E9B9B3', doodle = '') => svg(`<rect x="10" y="6" width="104" height="138" rx="5" fill="${fill}" ${K}/><path d="M22 6v138" ${T(1.6)}/>${[24, 52, 80, 108].map(y => `<ellipse cx="11" cy="${y}" rx="6" ry="3" fill="none" ${T(1.6)}/>`).join('')}<rect x="44" y="0" width="34" height="12" fill="#F3E2A6" opacity=".9" transform="rotate(-4 61 6)"/>${doodle}`, '0 0 120 150');
+const DOODLES = [
+  `<path d="M58 118c6-10 16-10 20-2-6 8-14 8-20 2zM62 128c8-4 14 0 14 6" ${T(1.4)}/>`,
+  `<circle cx="70" cy="122" r="8" ${T(1.4)}/>`,
+  `<circle cx="70" cy="124" r="7" ${T(1.4)}/>`,
+  `<path d="M62 116c10 12 18-4 8 6s10 14 0 10-14 4-8-4 0-12 0-12z" ${T(1.4)}/>`
+];
+const BOX = (label = 'still wondering') => `<div class="lid">${svg(`<path d="M8 40L24 6h182l16 34z" fill="#A9BFA0" ${K}/>`, '0 0 230 44')}</div>` + svg(`<path d="M12 40h206v110H12z" fill="#B5C7A9" ${K}/><path d="M12 40l14 14h178l14-14" fill="#7E6B5B" opacity=".35"/><rect x="80" y="78" width="70" height="24" fill="#FFFCF5" ${K}/><text x="115" y="94" text-anchor="middle" font-size="10" font-weight="700" font-family="Nunito,sans-serif" fill="${INK}">${esc(label)}</text>`, '0 0 230 160');
+const POCKET = (n) => svg(`<path d="M6 10h68v26c0 18-16 30-34 30S6 54 6 36z" fill="#A9BFA0" ${K}/><path d="M6 20h68" ${T(1.4)}/><path d="M12 26v10c0 14 12 24 28 24s28-10 28-24V26" fill="none" stroke="${INK}" stroke-width="1" stroke-dasharray="2 3"/>`, '0 0 80 72') + `<span class="cnt">${n ? n + ' in pocket' : 'pocket'}</span>`;
+
+/* moment tokens: neutral shapes, open to interpretation */
+const BLOBS = ['M12 9Q30 3 49 9Q56 29 51 48Q30 56 10 50Q4 30 12 9Z', 'M10 14Q28 4 48 12Q57 30 48 50Q27 57 12 47Q3 31 10 14Z', 'M14 8Q34 6 50 14Q54 34 46 51Q26 55 9 46Q6 26 14 8Z'];
+const TOKENS = {
+  laughter: {label: 'Laughter', fill: '#F3E2A6', face: `<circle cx="23" cy="25" r="1.6" fill="${INK}"/><circle cx="37" cy="25" r="1.6" fill="${INK}"/><path d="M19 33c5 7 17 7 22 0" ${T(1.8)}/>`},
+  curiosity: {label: 'Curiosity', fill: '#C3D3B8', face: `<ellipse cx="30" cy="31" rx="6" ry="4.5" ${T(1.8)}/>`},
+  silence: {label: 'Silence', fill: '#CFDDE8', face: `<path d="M20 30h6M34 30h6" ${T(1.8)}/>`},
+  discomfort: {label: 'Discomfort', fill: '#EDC3BC', face: `<path d="M18 38l4-14 5 12 4-12 5 12 4-12 3 14" ${T(1.6)}/>`},
+  surprise: {label: 'Surprise', fill: '#F3E2A6', face: `<path d="M30 18v13M22 22l3 8M38 22l-3 8" ${T(1.8)}/><circle cx="30" cy="38" r="1.8" fill="${INK}"/>`},
+  uncertainty: {label: 'Uncertainty', fill: '#CFDDE8', face: `<path d="M30 30c0-3 4-3 4 0s-4 6-8 3-3-10 4-11 11 5 9 11-9 9-14 6" ${T(1.6)}/>`},
+  affection: {label: 'Affection', fill: '#EDC3BC', face: `<path d="M20 27c3-3 6-3 8 0M32 27c3-3 6-3 8 0M25 36c3 2 7 2 10 0" ${T(1.6)}/>`},
+  custom: {label: 'Your own', fill: '#FFFCF5', face: `<path d="M30 22v16M22 30h16" ${T(1.8)}/>`}
+};
+const tokenSvg = (type, i = 0) => { const t = TOKENS[type] || TOKENS.custom; return `<svg class="ill" viewBox="0 0 60 60" aria-hidden="true"><path d="${BLOBS[i % 3]}" fill="${t.fill}" ${K}/>${type === 'custom' ? `<path d="M22 30h16" ${T(1.6)}/>` : t.face}</svg>`; };
+
+const IC = {
+  back: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>`,
+  sliders: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg>`,
+  lock: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>`,
+  plus: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>`,
+  pen: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l4-1 11-11-3-3L5 16z"/></svg>`,
+  arrow: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>`,
+  ccw: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4v6h6"/><path d="M5 14a8 8 0 1 0 2-7L4 10"/></svg>`,
+  cw: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 4v6h-6"/><path d="M19 14a8 8 0 1 1-2-7l3 3"/></svg>`,
+  squiggle: `<svg class="squiggle" viewBox="0 0 136 12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M3 8c14-5 24 4 38-1s24-4 38 0 26 3 40-2 10-1 14 0"/></svg>`
+};
+
+/* ---------- biodata → objects (only what the form actually says) ---------- */
+const SAMPLE = `Name: Rohan Deshpande
+Date of Birth: 14 March 1996
+Time of Birth: 06:42 AM
+Place of Birth: Pune
+Height: 5' 10"
+Complexion: Wheatish
+Education: B.E. (Mechanical), COEP Pune; MBA, IIM Indore
+Occupation: Product Manager at a fintech company, Bengaluru
+Annual Income: ₹24 LPA
+Religion: Hindu
+Caste: Deshastha Brahmin
+Gotra: Kashyap
+Rashi: Meen (Pisces)
+Nakshatra: Revati
+Manglik: No
+Diet: Vegetarian
+Father: Retired bank manager
+Mother: Homemaker
+Siblings: One elder sister, married, settled in Mumbai
+Native Place: Nashik
+Hobbies: Reading, football, music
+Expectations: Well-educated, family-oriented girl from a cultured family
+Contact: Father, +91 00000 00000`;
+
+const RULES = [
+  ['contact', /contact|phone|mobile|e-?mail|whats ?app|address|\bcell\b/i],
+  ['name', /^(full )?name/i],
+  ['community', /religion|caste|community|gotra|gothra|sect|mother tongue|language/i],
+  ['horoscope', /birth|dob|rashi|rasi|nakshatra|nakshtra|manglik|mangal|\bgan\b|nadi|horoscope|zodiac|charan/i],
+  ['height', /height/i],
+  ['education', /educat|qualif|degree|college|school|universit/i],
+  ['occupation', /occupation|profession|\bjob\b|work|employ|company|designation|career|business/i],
+  ['income', /income|salary|package|ctc|earning/i],
+  ['family', /father|mother|sibling|brother|sister|family|parent/i],
+  ['places', /native|resid|city|location|hometown|lives|settled/i],
+  ['hobbies', /hobb|interest|passion|likes|pastime/i],
+  ['diet', /diet|food/i],
+  ['expect', /expect|looking for|partner|preference|requirement/i]
+];
+const CITIES = ['Pune','Mumbai','Bengaluru','Bangalore','New Delhi','Delhi','Hyderabad','Chennai','Kolkata','Nashik','Nagpur','Indore','Ahmedabad','Jaipur','Lucknow','Kochi','Chandigarh','Bhopal','Surat','Vadodara','Coimbatore','Mysuru','Mysore','Goa','Noida','Gurugram','Gurgaon','Patna','Thane','Kolhapur','Aurangabad','Visakhapatnam','Thiruvananthapuram','Mangaluru','Udaipur','Varanasi','Dubai','London','Singapore','New York','Toronto','Sydney','Melbourne','San Francisco','Berlin'];
+const KIND = {
+  occupation: {art: 'briefcase', title: 'A tiny briefcase', about: 'their work', prompts: ['What part of their work would they happily talk about for an hour?', 'What does a good workday look like to them?']},
+  education: {art: 'scroll', title: 'A rolled-up degree', about: 'what they studied', prompts: ['What did they actually enjoy learning, degree aside?', 'Is there something they would study now, just for fun?']},
+  income: {art: 'coins', title: 'A neat stack of coins', about: 'money and plans', prompts: ['What do they think money is mostly for?', 'What would they do with a free month?']},
+  community: {art: 'stamp', title: 'An official-looking stamp', about: 'tradition', prompts: ['Which traditions, if any, matter to them day to day?', 'Which festival do they actually look forward to?']},
+  horoscope: {art: 'kundli', title: 'A horoscope chart', about: 'the horoscope', prompts: ['Do they read their horoscope, or did the family fill this part in?', 'Who in their family cares most about this chart?']},
+  height: {art: 'tape', title: 'A measuring tape', about: '', prompts: []},
+  family: {art: 'photo', title: 'A folded family photo', about: 'their family', prompts: ['Which family tradition would they keep?', 'Who in their family are they most like, by their own telling?']},
+  places: {art: 'map', title: 'A small map', about: 'the places they’ve lived', prompts: ['Which of these places feels most like home to them?', 'Where would they live if they could pick anywhere?']},
+  diet: {art: 'tiffin', title: 'A tiffin box', about: 'food', prompts: ['What is a meal they could eat every week?', 'Do they cook? Would they want to cook together?']},
+  expect: {art: 'list', title: 'A list of expectations', about: 'what they’re looking for', prompts: ['What might these words mean to them in daily life?', 'Who wrote this list: them, their family, or both?']},
+  fine: {art: 'slip', title: 'The fine print', about: '', prompts: []}
+};
+const HOBBY = [
+  [/read|book|novel|poetry/i, 'book', 'A tiny book', 'their reading', ['What would you want to ask about something they’ve read recently?', 'Which book would they hand to a friend?']],
+  [/football|soccer/i, 'football', 'A football', 'football', ['Do they play, watch, or both?', 'Which match do they still bring up?']],
+  [/music|sing|song|guitar|piano|tabla|violin/i, 'record', 'A record', 'their music', ['What do they listen to when nobody else is choosing?', 'Is there a song they connect with a particular place?']],
+  [/cricket/i, 'bat', 'A cricket bat', 'cricket', ['Do they play, watch, or argue about it?', 'Is there a match they remember exactly where they watched?']],
+  [/travel|trek|hik|explor/i, 'suitcase', 'A small suitcase', 'their travels', ['Which trip do they tell stories about?', 'Where would they go back to?']],
+  [/movie|film|cinema/i, 'ticket', 'A cinema ticket', 'films', ['Which film do they rewatch?', 'Do they like talking after a film, or sitting with it?']],
+  [/photo/i, 'camera', 'A camera', 'photography', ['What do they like to photograph?', 'Is there one picture they’re proud of?']],
+  [/cook|bak/i, 'pot', 'A cooking pot', 'cooking', ['What dish do they make when cooking for others?', 'Who taught them to cook?']],
+  [/paint|draw|art|sketch|craft/i, 'brush', 'A paintbrush', 'their art', ['What do they make when nobody asks them to?', 'Where do they find things to draw?']],
+  [/garden|plant/i, 'plant', 'A potted plant', 'their plants', ['What are they growing at the moment?', 'Which plant have they kept alive the longest?']]
+];
+
+function parseBiodata(text) {
+  const rows = [], groups = {}; let name = '';
+  text.split(/\r?\n/).forEach(line => {
+    const m = line.match(/^\s*([A-Za-z][^:：]{0,40}?)\s*[:：]\s*(.+?)\s*$/);
+    if (!m) return;
+    const k = m[1].replace(/\s+/g, ' ').trim(), v = m[2];
+    const cat = (RULES.find(([, re]) => re.test(k)) || ['fine'])[0];
+    if (cat === 'contact') { rows.push({k, v: 'left off the table', hide: true}); return; }
+    rows.push({k, v});
+    if (cat === 'name') { name = v.split(/\s+/)[0]; return; }
+    (groups[cat] = groups[cat] || []).push({k, v});
+  });
+  const objects = [];
+  const add = (o) => objects.push({id: 'o' + objects.length, ...o});
+  const lines = g => (groups[g] || []).map(r => `${r.k}: ${r.v}`);
+  const std = cat => { if (!groups[cat]) return; const d = KIND[cat]; add({kind: d.art, title: d.title, about: d.about, known: lines(cat), prompts: d.prompts}); };
+  std('occupation'); std('education');
+  (groups.hobbies || []).forEach(r => {
+    r.v.split(/,|;|\/|&|\band\b/i).map(s => s.trim()).filter(Boolean).forEach(h => {
+      const hit = HOBBY.find(([re]) => re.test(h));
+      const known = [`${cap(h.toLowerCase())} is listed as an interest.`];
+      if (hit) add({kind: hit[1], title: hit[2], about: hit[3], known, prompts: hit[4]});
+      else add({kind: 'tag', word: h.toLowerCase(), title: `A tag that says “${h.toLowerCase()}”`, about: h.toLowerCase(), known, prompts: [`What do they enjoy about ${h.toLowerCase()}?`, `How did ${h.toLowerCase()} start for them?`]});
+    });
+  });
+  std('family'); std('horoscope');
+  const cities = [];
+  rows.filter(r => !r.hide).forEach(r => CITIES.forEach(c => { if (new RegExp('\\b' + c + '\\b', 'i').test(r.v) && !cities.includes(c) && !(c === 'Delhi' && cities.includes('New Delhi'))) cities.push(c); }));
+  if (cities.length || groups.places) add({kind: 'map', title: KIND.places.title, about: KIND.places.about, known: [...(cities.length ? [`Places named on the form: ${cities.join(', ')}.`] : []), ...lines('places')], prompts: KIND.places.prompts});
+  std('community'); std('income'); std('diet'); std('height'); std('expect');
+  if (groups.fine) add({kind: 'slip', title: KIND.fine.title, about: '', known: lines('fine'), prompts: []});
+  return {name, rows, objects: objects.slice(0, 18)};
+}
+
+/* ---------- empty spaces: what a form can't hold ---------- */
+const SPACES = ['What makes them laugh?', 'What do they care deeply about?', 'What does independence mean to them?', 'What does an enjoyable relationship feel like to them?', 'What might we actually enjoy doing together?'];
+const NOTE_COLORS = ['', 'pink', 'blue', 'sage'];
+
+/* ---------- navigation ---------- */
+let cur = {name: 'title', opts: {}};
+const stack = [];
+function go(name, opts = {}, how = 'push') {
+  if (how === 'push') stack.push(cur);
+  if (how === 'reset') stack.length = 0;
+  cur = {name, opts};
+  sfx('page'); render();
+}
+function back() { const p = stack.pop(); cur = p || {name: 'title', opts: {}}; sfx('page'); render(); }
+const app = $('#app');
+let lastScene = '';
+function render() {
+  const sc = SCENES[cur.name](cur.opts || {});
+  document.body.dataset.tone = sc.tone;
+  app.innerHTML = `<header class="bar">${sc.back === false ? '' : `<button class="icon-btn back" data-a="back" aria-label="Back">${IC.back}</button>`}<span class="eyebrow">${sc.eyebrow}</span><button class="icon-btn" data-a="settings" aria-label="Privacy and comfort settings">${IC.sliders}</button></header><main class="scene" id="scene">${sc.html}</main><footer class="foot">${IC.lock} A private space. Nothing to prove.</footer>`;
+  $('[data-a=back]', app)?.addEventListener('click', back);
+  $('[data-a=settings]', app).addEventListener('click', openSettings);
+  const root = $('#scene');
+  sc.mount && sc.mount(root);
+  if (lastScene !== cur.name) {
+    window.scrollTo(0, 0);
+    const h = $('h1', root); if (h) { h.tabIndex = -1; try { h.focus({preventScroll: true}); } catch (e) {} }
+  } else root.style.animation = 'none';
+  lastScene = cur.name;
+  save();
+}
+const on = (root, sel, fn, ev = 'click') => $$(sel, root).forEach(el => el.addEventListener(ev, e => fn(e, el)));
+const say = msg => { $('#live').textContent = msg; };
+
+/* ---------- sheets + toasts ---------- */
+function sheet(html, bind) {
+  const bg = document.createElement('div'); bg.className = 'sheet-bg';
+  bg.innerHTML = `<div class="sheet" role="dialog" aria-modal="true">${html}</div>`;
+  document.body.append(bg);
+  const prev = document.activeElement;
+  const close = () => { bg.classList.remove('in'); document.removeEventListener('keydown', key); setTimeout(() => bg.remove(), 260); try { prev && prev.focus({preventScroll: true}); } catch (e) {} };
+  const key = e => { if (e.key === 'Escape') close(); };
+  document.addEventListener('keydown', key);
+  bg.addEventListener('click', e => { if (e.target === bg) close(); });
+  requestAnimationFrame(() => bg.classList.add('in'));
+  sfx('lift');
+  const sh = $('.sheet', bg);
+  bind && bind(sh, close);
+  setTimeout(() => ($('textarea,input:not([type=checkbox])', sh) || $('button', sh))?.focus(), 60);
+  return close;
+}
+function askText({title, sub = '', value = '', placeholder = '', ok = 'Keep it', extra = '', remove = null}, cb) {
+  sheet(`<h3>${title}</h3>${sub ? `<p>${sub}</p>` : ''}<textarea id="ask-t" placeholder="${esc(placeholder)}">${esc(value)}</textarea>${extra}<div class="row2"><button class="btn" data-x>${remove ? 'Remove' : 'Cancel'}</button><button class="btn primary" data-ok>${ok}</button></div>`, (sh, close) => {
+    $('[data-ok]', sh).onclick = () => { cb($('#ask-t', sh).value.trim(), sh); close(); };
+    $('[data-x]', sh).onclick = () => { if (remove) remove(); close(); };
+  });
+}
+function confirmSheet(title, body, ok, cb) {
+  sheet(`<h3>${title}</h3><p>${body}</p><div class="row2"><button class="btn" data-x>Keep it</button><button class="btn primary" data-ok>${ok}</button></div>`, (sh, close) => {
+    $('[data-ok]', sh).onclick = () => { close(); cb(); };
+    $('[data-x]', sh).onclick = close;
+  });
+}
+let toastT;
+function toast(msg) {
+  let t = $('.toast'); if (!t) { t = document.createElement('div'); t.className = 'toast'; document.body.append(t); }
+  t.textContent = msg; say(msg);
+  requestAnimationFrame(() => t.classList.add('in'));
+  clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('in'), 2600);
+}
+
+/* ---------- drag (pointer + keyboard alternative) ---------- */
+function drag(el, o) {
+  let pid = null, sx = 0, sy = 0, bx = 0, by = 0, moved = false, rect = null;
+  const lo = o.min ?? .05, hi = o.max ?? .95;
+  el.addEventListener('pointerdown', e => {
+    if (e.button > 0 || pid !== null) return;
+    pid = e.pointerId; try { el.setPointerCapture(pid); } catch (_) {}
+    rect = o.stage.getBoundingClientRect(); sx = e.clientX; sy = e.clientY;
+    const p = o.get(); bx = p.x; by = p.y; moved = false;
+  });
+  el.addEventListener('pointermove', e => {
+    if (e.pointerId !== pid) return;
+    const dx = e.clientX - sx, dy = e.clientY - sy;
+    if (!moved && Math.hypot(dx, dy) > 6) { moved = true; el.classList.add('lifted'); sfx('lift'); buzz(6); }
+    if (moved) { const x = clamp(bx + dx / rect.width, lo, hi), y = clamp(by + dy / rect.height, lo, hi); o.set(x, y); o.move && o.move(e); }
+  });
+  const end = e => {
+    if (e.pointerId !== pid) return; pid = null;
+    if (moved) { el.classList.remove('lifted'); sfx('drop'); buzz(4); const p = o.get(); o.end && o.end(p.x, p.y, e); }
+    else if (e.type === 'pointerup') o.tap && o.tap(e);
+  };
+  el.addEventListener('pointerup', end); el.addEventListener('pointercancel', end);
+  el.addEventListener('click', e => { if (e.detail === 0) { e.preventDefault(); } });
+  el.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); o.tap && o.tap(e); return; }
+    const d = {ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1]}[e.key];
+    if (!d) return; e.preventDefault();
+    const p = o.get(); const x = clamp(p.x + d[0] * .03, lo, hi), y = clamp(p.y + d[1] * .03, lo, hi);
+    o.set(x, y); o.end && o.end(x, y, null);
+  });
+}
+const place = (el, x, y) => { el.style.left = (x * 100) + '%'; el.style.top = (y * 100) + '%'; };
+const over = (e, target) => { if (!e || !target) return false; const r = target.getBoundingClientRect(); return e.clientX >= r.left - 10 && e.clientX <= r.right + 10 && e.clientY >= r.top - 10 && e.clientY <= r.bottom + 10; };
+
+/* ---------- draft helpers (Part One) ---------- */
+const draft = () => S.draft || (S.draft = {id: uid(), profile: null, opened: false, placed: {}, seen: [], pocket: [], spaces: false, kept: []});
+const objById = id => (S.draft?.profile?.objects || []).find(o => o.id === id);
+function tuck(text, src) {
+  const d = draft();
+  if (d.pocket.some(n => n.text === text)) return false;
+  const k = d.pocket.length;
+  d.pocket.push({id: uid(), text, src, c: NOTE_COLORS[k % 4], x: (k % 2 ? .64 : .36) + (rnd() - .5) * .08, y: .12 + (Math.floor(k / 2) % 5) * .19 + (k % 2) * .06, r: Math.round(rnd() * 8 - 4)});
+  save(); sfx('tuck'); buzz(10); return true;
+}
+function layoutTable(objs) {
+  const n = objs.length, cols = 4, rows = Math.max(3, Math.ceil((n + 2) / cols));
+  const cells = [];
+  for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
+    if (r === rows - 1 && (c === cols - 1 || c === 0)) continue; // pocket + empty space live here
+    cells.push([(c + .5) / cols, (r + .5) / rows]);
+  }
+  return {rows, cells};
+}
+
+/* ---------- scenes ---------- */
+const SCENES = {};
+
+SCENES.title = () => ({
+  tone: 'butter', back: false, eyebrow: 'A small game about getting to know',
+  html: `<h1 class="display">Plot<br>Twist</h1>${IC.squiggle}<p class="lede">People are more than their biodata.</p>
+  <div class="hero" aria-hidden="true">
+    <div class="float" style="left:44%;top:6px;width:120px;height:150px;--r:6deg;transform:rotate(6deg)">${NOTEBOOK()}</div>
+    <div style="left:0;top:40px;width:78%;"><div class="env" style="margin:0;width:100%">${'<div class="env-body">' + ENV_BODY + '</div><div class="env-front">' + ENV_FRONT + '</div><div class="env-flap" style="cursor:default">' + ENV_FLAP + '</div>'}<span class="env-label">a person,<br>not a form</span></div></div>
+    <div class="note-w float" style="right:2%;top:150px;width:118px;--r:8deg;transform:rotate(8deg);animation-delay:-2s"><div class="note" style="font-size:15px;padding:10px 18px 12px 10px">What makes you laugh?</div></div>
+  </div>
+  <div class="actions"><button class="btn primary" data-go>${IC.arrow} Begin</button>
+  <button class="card-btn" data-settings><b>Privacy &amp; comfort settings</b><span>Reduced motion · Sound · Haptics<br>Tap alternatives always available. Private by default.</span></button></div>`,
+  mount: r => { on(r, '[data-go]', () => go('chapters')); on(r, '[data-settings]', openSettings); }
+});
+
+SCENES.chapters = () => {
+  const d = S.draft;
+  const ch1 = d?.opened ? 'Return to the table' : 'What makes me curious enough to get to know this person?';
+  return {
+    tone: 'cream', eyebrow: 'The shape of the story',
+    html: `<h1 class="t">Two chapters.<br>Your pace.</h1><p class="sub">Curiosity first. Experience after.<br>Neither needs a conclusion.</p>
+    <button class="chapter" data-c="1"><div><h2>01 Filter In</h2><p>${ch1}</p></div><div class="pic">${'<div class="env" style="margin:0;width:100%;transform:rotate(8deg)"><div class="env-body">' + ENV_BODY + '</div><div class="env-front">' + ENV_FRONT + '</div><div class="env-flap">' + ENV_FLAP + '</div></div>'}</div></button>
+    <hr class="dash">
+    <button class="chapter flip" data-c="2"><div class="pic" style="width:96px">${NOTEBOOK()}</div><div><h2>02 Continue?</h2><p>What have I experienced, and do I want to explore further?</p></div></button>
+    <p class="hint" style="margin-top:auto">Tap the envelope or the scrapbook.<br>You can leave any page blank.</p>`,
+    mount: r => {
+      on(r, '[data-c="1"]', () => { const d = S.draft; go(d?.opened ? 'table' : 'arrival'); });
+      on(r, '[data-c="2"]', () => go('shelf'));
+    }
+  };
+};
+
+SCENES.arrival = () => ({
+  tone: 'butter', eyebrow: '01 Filter In · Arrival',
+  html: `<h1 class="t">Someone has arrived. Well, their paperwork has.</h1>
+  <div class="env" id="env" role="button" tabindex="0" aria-label="Parcel. Drag the flap up or press Enter to open">
+    <div class="env-body">${ENV_BODY}</div>
+    <div class="env-paper"><span style="font-size:11px">Biodata</span><i></i><i style="width:70%"></i><i style="width:85%"></i></div>
+    <div class="env-front">${ENV_FRONT}</div>
+    <span class="env-label">a person,<br>not a form</span>
+    <div class="env-flap" id="flap">${ENV_FLAP}</div>
+    <span class="pull" id="pull">pull</span>
+    <svg class="env-arc" viewBox="0 0 60 70" fill="none" stroke="currentColor" stroke-width="1.6" stroke-dasharray="3 4" stroke-linecap="round"><path d="M8 62C2 34 18 10 46 8"/><path d="M40 2l7 6-8 5"/></svg>
+  </div>
+  <p class="hint">A small beginning. No first impressions required.</p>
+  <div class="actions"><button class="btn primary" id="open">Open parcel</button><p class="hint">Drag the flap · or tap to open</p></div>`,
+  mount: r => {
+    const env = $('#env', r), flap = $('#flap', r);
+    let done = false;
+    const open = () => {
+      if (done) return; done = true;
+      env.classList.add('open'); $('#pull', r).style.opacity = 0; $('.env-arc', r).style.opacity = 0;
+      flap.style.transform = ''; sfx('open'); buzz(14);
+      draft().opened = true; save();
+      setTimeout(() => go('unfold', {}, 'replace'), S.settings.reduced ? 150 : 1100);
+    };
+    on(r, '#open', open);
+    env.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } });
+    let pid = null, sy = 0, moved = false;
+    env.addEventListener('pointerdown', e => { pid = e.pointerId; sy = e.clientY; moved = false; flap.classList.add('dragging'); try { env.setPointerCapture(pid); } catch (_) {} });
+    env.addEventListener('pointermove', e => {
+      if (e.pointerId !== pid) return;
+      const dy = sy - e.clientY; if (Math.abs(dy) > 5) moved = true;
+      const a = clamp(dy / 110 * 180, 0, 178);
+      flap.style.transform = `rotateX(${a}deg)`; if (a > 95) { flap.style.zIndex = 0; }
+    });
+    const up = e => {
+      if (e.pointerId !== pid) return; pid = null; flap.classList.remove('dragging');
+      const a = parseFloat((flap.style.transform.match(/[\d.]+/) || [0])[0]);
+      if (!moved || a > 70) open(); else { flap.style.transform = ''; flap.style.zIndex = ''; }
+    };
+    env.addEventListener('pointerup', up); env.addEventListener('pointercancel', up);
+  }
+});
+
+SCENES.unfold = () => {
+  const d = draft(), p = d.profile;
+  const rows = p ? p.rows : [];
+  const third = Math.ceil(rows.length / 3);
+  const rowHtml = rs => rs.map(x => `<div class="bd-row${x.hide ? ' hide' : ''}"><b>${esc(x.k)}</b><span>${esc(x.v)}</span></div>`).join('');
+  const paper = p
+    ? `<div class="fold" id="fold" role="button" tabindex="0" aria-label="Folded biodata. Tap or drag down to unfold"><span class="tape"></span>
+        <div class="panel"><p class="bd-om">॥ SHREE GANESHAYA NAMAH ॥</p><p class="bd-title">BIODATA</p>${rowHtml(rows.slice(0, third))}</div>
+        <div class="panel shut">${rowHtml(rows.slice(third, third * 2))}</div>
+        <div class="panel shut">${rowHtml(rows.slice(third * 2))}</div></div>`
+    : `<div class="fold"><span class="tape"></span><div class="panel"><div class="bd-empty">Your biodata<br>goes here</div></div><div class="panel"><b style="font:700 13px var(--sans)">No profile added yet</b><p style="font-size:11px;color:var(--paper-soft);margin:4px 0 8px">We won’t fill in the blanks.<br>Paperwork has enough opinions.</p></div></div>`;
+  return {
+    tone: 'cream', eyebrow: '01 Filter In · Unfold',
+    html: `<h1 class="t">Paperwork, unfolded.</h1><p class="sub">A form can make an entrance.<br>It can’t introduce a whole person.</p>${paper}
+    ${p ? `<p class="hint" id="fh">Tap the paper or drag it down to unfold</p><div class="actions"><button class="btn primary" id="unf">Unfold</button><button class="btn link" id="other">Use different paperwork</button></div>`
+        : `<p class="hint">Only add a document you have permission to use.</p><div class="actions"><button class="btn primary" id="sample">Unfold the sample biodata</button><button class="btn" id="paste">${IC.plus} Add biodata</button><button class="btn" id="none">Continue without it</button></div>`}`,
+    mount: r => {
+      on(r, '#sample', () => { d.profile = parseBiodata(SAMPLE); d.sample = true; save(); render(); });
+      on(r, '#paste', () => pasteSheet());
+      on(r, '#other', () => { d.profile = null; d.placed = {}; d.seen = []; save(); render(); });
+      on(r, '#none', () => { d.profile = null; save(); go('table', {}, 'replace'); });
+      const fold = $('#fold', r); if (!fold) return;
+      const btn = $('#unf', r);
+      const step = () => {
+        const shut = $('.panel.shut', fold);
+        if (shut) { shut.classList.remove('shut'); sfx('page'); buzz(8); }
+        if (!$('.panel.shut', fold)) { btn.textContent = 'Unpack it'; $('#fh', r).textContent = 'Every line here can become an object on the table.'; }
+      };
+      fold.addEventListener('click', step);
+      fold.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); step(); } });
+      let y0 = null; fold.addEventListener('pointerdown', e => { y0 = e.clientY; });
+      fold.addEventListener('pointerup', e => { if (y0 !== null && e.clientY - y0 > 30) step(); y0 = null; });
+      btn.onclick = () => { if ($('.panel.shut', fold)) { step(); return; } go('table', {arriving: true}, 'replace'); };
+    }
+  };
+};
+
+function pasteSheet() {
+  sheet(`<h3>Add a biodata</h3><p>Paste its text, one detail per line, like <i>Hobbies: reading, music</i>. Only what’s written becomes an object. Phone numbers, emails and addresses are skipped and never kept. Everything stays in this browser.</p>
+  <textarea id="bt" placeholder="Name: …&#10;Occupation: …&#10;Hobbies: …" style="min-height:180px"></textarea>
+  <label class="tog" style="border:0;padding:0"><span>I have permission to use this document.</span><input type="checkbox" class="sw" id="perm"></label>
+  <div class="row2"><button class="btn" data-x>Cancel</button><button class="btn primary" data-ok>Fold it up</button></div>`, (sh, close) => {
+    $('[data-x]', sh).onclick = close;
+    $('[data-ok]', sh).onclick = () => {
+      const t = $('#bt', sh).value;
+      if (!$('#perm', sh).checked) { toast('Tick the permission box first.'); return; }
+      const p = parseBiodata(t);
+      if (!p.rows.length) { toast('No “Label: detail” lines found. Try one detail per line.'); return; }
+      const d = draft(); d.profile = p; d.sample = false; d.placed = {}; d.seen = []; save(); close(); render();
+    };
+  });
+}
+
+SCENES.table = (o) => {
+  const d = draft(), objs = d.profile?.objects || [];
+  const {rows, cells} = layoutTable(objs);
+  objs.forEach((ob, i) => { if (!d.placed[ob.id]) { const c = cells[i % cells.length]; d.placed[ob.id] = {x: c[0] + (rnd() - .5) * .08, y: c[1] + (rnd() - .5) * .06, r: Math.round(rnd() * 26 - 13)}; } });
+  if (!objs.length) d.spaces = true;
+  const pk = d.pocket.length;
+  const known = objs.length ? `Known · ${objs.length} things from the form` : 'Known · no details added';
+  return {
+    tone: 'butter', eyebrow: '01 Filter In · The table',
+    html: `<h1 class="t">A little room<br>for curiosity.</h1><p class="sub">${objs.length ? 'Pick anything up. Drag it around.<br>Tap to look closer.' : 'No source, no assumptions.<br>Questions can still find a place.'}</p>
+    <p class="label">${known}</p>
+    <div class="tabletop" id="tbl" style="aspect-ratio:4/${rows * 1.02}">
+      ${objs.length ? '' : `<button class="source" id="src"><small>Source paper</small>Add a biodata to unpack its details</button>`}
+      ${objs.map(ob => `<button class="obj${d.seen.includes(ob.id) ? ' seen' : ''}${o.arriving ? ' packed' : ''}" data-id="${ob.id}" aria-label="${esc(ob.title)}. Tap to inspect, arrow keys to move." style="left:${d.placed[ob.id].x * 100}%;top:${d.placed[ob.id].y * 100}%;--r:${d.placed[ob.id].r}deg">${artFor(ob)}</button>`).join('')}
+      ${d.spaces ? `<button class="space" id="space" style="left:${objs.length ? 12.5 : 70}%;top:${objs.length ? (rows - .5) / rows * 100 : 30}%" aria-label="An empty space. Some things don’t fit on a form.">?</button>` : ''}
+      <button class="pocket" id="pocket" style="right:3%;bottom:2%" aria-label="Your pocket, ${pk} questions. Open the curiosity board.">${POCKET(pk)}</button>
+    </div>
+    <p class="hint">${objs.length ? 'Drag to arrange · tap to inspect · drop a thing on the pocket to keep its question' : 'Tap the empty space, or open your pocket'}</p>
+    <div class="actions">
+      <button class="btn primary" id="board">Follow a thread</button>
+      <div class="${d.spaces ? 'row2' : ''}">${d.spaces ? '<button class="btn" id="spaces">Things a form can’t hold</button>' : ''}<button class="btn" id="done" style="width:100%">Done unpacking</button></div>
+    </div>`,
+    mount: r => {
+      const tbl = $('#tbl', r), pocket = $('#pocket', r);
+      if (o.arriving) {
+        const els = $$('.obj', r);
+        els.forEach((el, i) => { el.style.left = '50%'; el.style.top = '40%'; });
+        requestAnimationFrame(() => els.forEach((el, i) => setTimeout(() => { const p = d.placed[el.dataset.id]; place(el, p.x, p.y); el.classList.remove('packed'); if (i % 3 === 0) sfx('lift'); }, 120 + i * 90)));
+        cur.opts = {};
+      }
+      $$('.obj', r).forEach(el => {
+        const id = el.dataset.id;
+        drag(el, {stage: tbl, get: () => d.placed[id], set: (x, y) => { d.placed[id].x = x; d.placed[id].y = y; place(el, x, y); },
+          move: e => pocket.classList.toggle('hot', over(e, pocket)),
+          end: (x, y, e) => {
+            pocket.classList.remove('hot');
+            if (over(e, pocket)) {
+              const ob = objById(id);
+              if (ob.prompts.length && tuck(ob.prompts[0], id)) { toast('Tucked: “' + ob.prompts[0] + '”'); }
+              else toast(ob.prompts.length ? 'That question is already in your pocket.' : 'Nothing to ask here. Some details are just details.');
+              d.placed[id].y = Math.max(.08, y - .14); place(el, x, d.placed[id].y);
+              $('.cnt', pocket).textContent = d.pocket.length + ' in pocket';
+            }
+            save();
+          },
+          tap: () => go('inspect', {id})});
+      });
+      on(r, '#pocket', () => go('board'));
+      on(r, '#board', () => go('board'));
+      on(r, '#spaces', () => go('spaces'));
+      on(r, '#space', () => go('spaces'));
+      on(r, '#src', () => go('unfold'));
+      on(r, '#done', () => go('pack'));
+    }
+  };
+};
+
+SCENES.inspect = (o) => {
+  const d = draft(), ob = objById(o.id);
+  if (!ob) return SCENES.table({});
+  if (!d.seen.includes(ob.id)) d.seen.push(ob.id);
+  const firstReveal = !d.spaces && d.seen.length >= 3;
+  if (firstReveal) d.spaces = true;
+  let pi = 0;
+  const pos = d.placed[ob.id] || {r: 0};
+  return {
+    tone: 'butter', eyebrow: '01 Filter In · Pick something up',
+    html: `<h1 class="t">${esc(ob.title)}</h1><p class="sub">Known is what the form says.<br>Wondering is yours, and optional.</p>
+    <div class="inspect">
+      <div class="big" id="big" style="--r:${pos.r}deg" aria-hidden="true">${artFor(ob)}</div>
+      <div class="rot"><button class="icon-btn" id="ccw" aria-label="Turn left">${IC.ccw}</button><button class="icon-btn" id="cw" aria-label="Turn right">${IC.cw}</button></div>
+      <div class="known"><p class="label">Known · from the form</p><ul>${ob.known.map(k => `<li>${esc(k)}</li>`).join('')}</ul></div>
+      <p class="label w">Wondering · a question, not a clue</p>
+      <div class="wrow"><div class="note-w" id="wn" tabindex="0" aria-label="Question note. Drag to the pocket or use Save to pocket."><div class="note" id="wt"></div></div>
+      <button class="pocket" id="pk" aria-label="Pocket">${POCKET(d.pocket.length)}</button></div>
+    </div>
+    <p class="hint" id="ih">Lift the paper into the pocket · or tap a choice below</p>
+    <div class="actions">
+      <button class="btn primary" id="save">Save to pocket</button>
+      <div class="row2"><button class="btn" id="own">${IC.pen} Write my own</button><button class="btn" id="another">Another question</button></div>
+      <button class="btn link" id="leave">Leave it here</button>
+    </div>`,
+    mount: r => {
+      const big = $('#big', r), wt = $('#wt', r), wn = $('#wn', r), pk = $('#pk', r);
+      const show = () => {
+        const q = ob.prompts[pi];
+        wt.innerHTML = q ? esc(q) : 'No question needed.<small>Some details are just details.</small>';
+        const inPocket = q && d.pocket.some(n => n.text === q);
+        $('#save', r).textContent = inPocket ? 'In your pocket' : 'Save to pocket';
+        $('#save', r).disabled = !q || inPocket; $('#save', r).style.opacity = (!q || inPocket) ? .55 : 1;
+        $('#another', r).hidden = ob.prompts.length < 2;
+      };
+      show();
+      if (firstReveal) setTimeout(() => toast('Something new on the table: an empty space.'), 500);
+      const turn = deg => { pos.r = ((pos.r || 0) + deg); big.style.setProperty('--r', pos.r + 'deg'); sfx('lift'); save(); };
+      on(r, '#ccw', () => turn(-30)); on(r, '#cw', () => turn(30));
+      let px = null, r0 = 0;
+      big.addEventListener('pointerdown', e => { px = e.clientX; r0 = pos.r || 0; big.classList.add('dragging'); try { big.setPointerCapture(e.pointerId); } catch (_) {} });
+      big.addEventListener('pointermove', e => { if (px === null) return; pos.r = Math.round(r0 + (e.clientX - px) * .8); big.style.setProperty('--r', pos.r + 'deg'); });
+      const up = () => { if (px === null) return; px = null; big.classList.remove('dragging'); save(); };
+      big.addEventListener('pointerup', up); big.addEventListener('pointercancel', up);
+      const keep = () => {
+        const q = ob.prompts[pi]; if (!q) return;
+        if (tuck(q, ob.id)) { toast('Saved to your pocket.'); $('.cnt', pk).textContent = d.pocket.length + ' in pocket'; pk.classList.add('hot'); setTimeout(() => pk.classList.remove('hot'), 350); }
+        show();
+      };
+      on(r, '#save', keep);
+      on(r, '#another', () => { pi = (pi + 1) % ob.prompts.length; wn.style.transform = 'rotate(4deg) translateY(-6px)'; setTimeout(() => wn.style.transform = '', 220); sfx('page'); show(); });
+      on(r, '#own', () => askText({title: 'Write your own question', sub: 'It stays a question. It won’t be treated as a fact about them.', placeholder: 'I wonder…', ok: 'Tuck it in'}, t => { if (t && tuck(t, ob.id)) { toast('Your question is in the pocket.'); $('.cnt', pk).textContent = d.pocket.length + ' in pocket'; } }));
+      on(r, '#leave', back);
+      // drag the note into the pocket
+      let sx = 0, sy = 0, pid = null;
+      wn.style.touchAction = 'none';
+      wn.addEventListener('pointerdown', e => { pid = e.pointerId; sx = e.clientX; sy = e.clientY; try { wn.setPointerCapture(pid); } catch (_) {} wn.classList.add('lifted'); });
+      wn.addEventListener('pointermove', e => { if (e.pointerId !== pid) return; wn.style.transform = `translate(${e.clientX - sx}px,${e.clientY - sy}px) rotate(-5deg)`; pk.classList.toggle('hot', over(e, pk)); });
+      const wup = e => { if (e.pointerId !== pid) return; pid = null; wn.classList.remove('lifted'); wn.style.transform = ''; pk.classList.remove('hot'); if (over(e, pk)) keep(); };
+      wn.addEventListener('pointerup', wup); wn.addEventListener('pointercancel', wup);
+      wn.addEventListener('keydown', e => { if (e.key === 'Enter') keep(); });
+    }
+  };
+};
+
+SCENES.board = () => {
+  const d = draft();
+  return {
+    tone: 'sage', eyebrow: '01 Filter In · Follow a thread',
+    html: `<h1 class="t">Let curiosity wander.</h1><p class="sub">Keep what feels worth asking.<br>There’s no set to complete.</p>
+    <p class="label">Wondering · player-chosen</p>
+    <div class="board" id="bd">${d.pocket.length ? d.pocket.map(n => `<div class="pin" data-id="${n.id}" tabindex="0" role="button" aria-label="${esc(n.text)}. Tap to edit, arrow keys to move." style="left:${n.x * 100}%;top:${n.y * 100}%;--r:${n.r}deg"><div class="note-w"><div class="note ${n.c}">${esc(n.text)}${n.src && objById(n.src) ? `<small>from ${esc(objById(n.src).title.replace(/^An? /, '').toLowerCase())}</small>` : n.src === 'space' ? '<small>from an empty space</small>' : ''}</div></div></div>`).join('')
+      : `<div class="empty">Nothing pinned yet.<br>Pick something up from the table, or write your own.</div>`}</div>
+    <p class="hint">Drag a scrap anywhere · tap it to edit or let it go</p>
+    <div class="actions"><button class="btn primary" id="carry">Carry these questions</button>
+    <div class="row2"><button class="btn" id="own">${IC.pen} Write my own</button><button class="btn" id="tbl">Back to the table</button></div></div>`,
+    mount: r => {
+      const bd = $('#bd', r);
+      $$('.pin', r).forEach(el => {
+        const n = d.pocket.find(x => x.id === el.dataset.id);
+        drag(el, {stage: bd, min: .1, max: .9, get: () => n, set: (x, y) => { n.x = x; n.y = y; place(el, x, y); }, end: save,
+          tap: () => sheet(`<h3>Edit this question</h3><textarea id="et">${esc(n.text)}</textarea><div class="swatches">${NOTE_COLORS.map((c, i) => `<button aria-label="Colour ${i + 1}" data-c="${c}" aria-pressed="${n.c === c}" style="background:var(--n-${c || 'butter'})"></button>`).join('')}</div><div class="row2"><button class="btn" data-rm>Let it go</button><button class="btn primary" data-ok>Keep it</button></div>`, (sh, close) => {
+            on(sh, '[data-c]', (e, b) => { n.c = b.dataset.c; $$('[data-c]', sh).forEach(x => x.setAttribute('aria-pressed', x === b)); });
+            $('[data-ok]', sh).onclick = () => { const t = $('#et', sh).value.trim(); if (t) n.text = t; close(); render(); };
+            $('[data-rm]', sh).onclick = () => { d.pocket = d.pocket.filter(x => x !== n); d.kept = (d.kept || []).filter(t => t !== n.text); close(); render(); };
+          })});
+      });
+      on(r, '#own', () => askText({title: 'Write your own question', placeholder: 'I wonder…', ok: 'Pin it'}, t => { if (t) { tuck(t, 'own'); render(); } }));
+      on(r, '#tbl', () => go('table'));
+      on(r, '#carry', () => go('pack'));
+    }
+  };
+};
+
+SCENES.spaces = () => {
+  const d = draft(); d.kept = d.kept || [];
+  return {
+    tone: 'sage', eyebrow: '01 Filter In · Room for the unwritten',
+    html: `<h1 class="t">Some things don’t fit in a form.</h1><p class="sub">Not missing fields.<br>Invitations to wonder.</p>
+    <p class="label">Wondering</p>
+    <div class="sil-wrap">${SPACES.map((q, i) => `<button class="sil${d.kept.includes(q) ? ' kept' : ''}" data-i="${i}" aria-pressed="${d.kept.includes(q)}">${esc(q)}<small>${d.kept.includes(q) ? 'kept in your pocket' : 'an empty space'}</small></button>`).join('')}</div>
+    <p class="hint">No answers needed here.<br>Tap a silhouette to keep its question, or leave it.</p>
+    <div class="actions row2"><button class="btn" id="keep">Keep wondering</button><button class="btn" id="skip">Skip freely</button></div>`,
+    mount: r => {
+      on(r, '.sil', (e, b) => {
+        const q = SPACES[+b.dataset.i];
+        if (d.kept.includes(q)) { d.kept = d.kept.filter(x => x !== q); d.pocket = d.pocket.filter(n => n.text !== q); b.classList.remove('kept'); b.setAttribute('aria-pressed', false); $('small', b).textContent = 'an empty space'; sfx('page'); }
+        else { d.kept.push(q); tuck(q, 'space'); b.classList.add('kept'); b.setAttribute('aria-pressed', true); $('small', b).textContent = 'kept in your pocket'; }
+        save();
+      });
+      on(r, '#keep', () => go('board'));
+      on(r, '#skip', () => go('table'));
+    }
+  };
+};
+
+SCENES.pack = (o) => {
+  const d = draft();
+  const packing = o.packing;
+  const top = d.pocket[0];
+  d.packSel = d.packSel || d.pocket.map(n => n.id);
+  return {
+    tone: 'butter', eyebrow: '01 Filter In · Packing up',
+    html: `<h1 class="t">A question to carry.</h1><p class="sub">${packing ? 'Choose what goes in the keepsake box.<br>Leave anything out.' : 'You can keep your curiosity<br>without deciding what comes next.'}</p>
+    <p class="label">Wondering · saved to pocket</p>
+    <div class="boxstage" id="bs">${top ? `<div class="note-w"><div class="note ${top.c}" style="font-size:17px">${esc(top.text)}</div></div>` : ''}<div class="box">${BOX(d.pocket.length ? 'still wondering' : 'nothing yet')}</div></div>
+    ${packing ? `<div class="chips">${d.pocket.map(n => `<button class="chip" data-id="${n.id}" aria-pressed="${d.packSel.includes(n.id)}">${esc(n.text)}</button>`).join('') || '<p class="hint">Your pocket is empty. The box can travel empty too.</p>'}</div>
+      <div class="field"><label for="bkname">Name on the scrapbook</label><input id="bkname" value="${esc(d.profile?.name || '')}" placeholder="A first name, initials, anything"></div>
+      <div class="actions"><button class="btn primary" id="close">Close the box</button></div>`
+    : `<p class="hint">Your questions stay yours, whichever path you take.</p>
+      <div class="actions"><button class="btn" id="leave">Leave for now</button><button class="btn" id="arch">Archive</button><button class="btn" id="know">Get to know them</button></div>`}`,
+    mount: r => {
+      on(r, '#leave', () => { toast('Left on the table. It’ll be here.'); go('chapters', {}, 'reset'); });
+      on(r, '#arch', () => {
+        S.archived.unshift({id: d.id, name: d.profile?.name || 'Unnamed paperwork', at: Date.now(), draft: d});
+        S.draft = null; save(); toast('Archived. Find it in settings.'); go('chapters', {}, 'reset');
+      });
+      on(r, '#know', () => { d.packSel = d.pocket.map(n => n.id); go('pack', {packing: true}, 'replace'); });
+      on(r, '.chip', (e, b) => {
+        const id = b.dataset.id, i = d.packSel.indexOf(id);
+        if (i >= 0) d.packSel.splice(i, 1); else d.packSel.push(id);
+        b.setAttribute('aria-pressed', i < 0); b.style.transform = i < 0 ? 'translateY(-4px) rotate(-2deg)' : ''; setTimeout(() => b.style.transform = '', 250);
+        sfx('tuck'); save();
+      });
+      on(r, '#close', () => {
+        const name = ($('#bkname', r).value.trim() || 'Someone').slice(0, 24);
+        const qs = d.pocket.filter(n => d.packSel.includes(n.id)).map(n => {
+          const ob = objById(n.src);
+          return {id: n.id, text: n.text, history: [], obj: ob ? {kind: ob.kind, word: ob.word, title: ob.title, about: ob.about, known: ob.known} : null};
+        });
+        const book = {id: uid(), name, created: Date.now(), status: 'unfinished', questions: qs, pages: []};
+        S.books.unshift(book);
+        S.draft = null; // the paperwork itself isn't kept: only what you chose to carry
+        $('#bs', r).classList.add('closed'); sfx('open'); buzz(14);
+        setTimeout(() => { toast('Packed. The paperwork stays behind.'); go('after', {book: book.id}, 'reset'); }, S.settings.reduced ? 100 : 900);
+      });
+    }
+  };
+};
+
+/* ---------- Part Two ---------- */
+const bookById = id => S.books.find(b => b.id === id);
+const COVERS = ['#E9B9B3', '#B5C7A9', '#F0DC9A', '#BCD0E0'];
+const statusText = s => ({unfinished: 'Still unfinished', continuing: 'You chose to continue', paused: 'Paused', closed: 'Chapter closed'}[s] || 'Still unfinished');
+
+SCENES.shelf = () => ({
+  tone: 'pink', eyebrow: '02 Continue? · Your books',
+  html: `<h1 class="t">Your scrapbooks.</h1><p class="sub">One connection, one book.<br>Room for every encounter.</p>
+  ${S.books.length ? `<p class="label" style="font-weight:600;letter-spacing:.02em;text-transform:none">Tap a book to open</p><div class="shelf">${S.books.map((b, i) => `<button class="bk" data-id="${b.id}"><div class="cover">${NOTEBOOK(COVERS[i % 4], DOODLES[i % 4])}<span class="name">${esc(b.name)}</span></div>${b.pages.length} encounter${b.pages.length === 1 ? '' : 's'}<span class="st">${b.example ? 'Example · ' : ''}${statusText(b.status)}</span></button>`).join('')}</div>`
+    : `<div class="nb-stage" style="height:220px"><div class="nb" style="left:24%;width:52%">${'<div class="cover">' + NOTEBOOK() + '</div>'}</div></div><p class="hint">No scrapbooks yet. Chapter One packs a keepsake box into one,<br>or you can start a book without any paperwork.</p>`}
+  <div class="actions"><button class="btn primary" id="add">${IC.plus} Add a scrapbook</button>
+  ${S.books.some(b => b.example) ? '' : '<button class="btn" id="ex">Peek at an example book</button>'}
+  <button class="btn link" id="priv">Privacy &amp; deleting scrapbooks</button></div>`,
+  mount: r => {
+    on(r, '.bk', (e, b) => { S.ui.tab = 0; go('book', {book: b.dataset.id}); });
+    on(r, '#add', () => askText({title: 'A new scrapbook', sub: 'No paperwork needed. What should the cover say?', placeholder: 'A first name or initials', ok: 'Make the book'}, t => {
+      const b = {id: uid(), name: (t || 'Someone').slice(0, 24), created: Date.now(), status: 'unfinished', questions: [], pages: []};
+      S.books.unshift(b); save(); go('after', {book: b.id});
+    }));
+    on(r, '#ex', () => { S.books.push(exampleBook()); save(); render(); });
+    on(r, '#priv', openSettings);
+  }
+});
+
+SCENES.after = (o) => {
+  const b = bookById(o.book); if (!b) return SCENES.shelf();
+  const q = b.questions[0];
+  return {
+    tone: 'pink', eyebrow: '02 Continue? · After the encounter',
+    html: `<h1 class="t">So, what happened?</h1><p class="sub">After a real conversation, call or date.<br>Optional, private, and in your own words.</p>
+    <div class="nb-stage"><div class="nb" id="nb"><div class="inner"><span class="label" style="color:var(--paper-soft)">Encounter ${pad(b.pages.length + 1)}</span><br>A page for what you experienced.</div><div class="cover" id="cv" role="button" tabindex="0" aria-label="Open the scrapbook">${NOTEBOOK('#E9B9B3')}<span class="nb-label">${esc(b.name)}:<br>an encounter, unfolding</span></div></div>
+    ${q ? `<div class="note-w" style="position:absolute;left:0;bottom:22%;width:150px;transform:rotate(-12deg);z-index:3"><div class="note" style="font-size:14px;padding:10px 18px 12px 10px">${esc(q.text)}</div></div>` : ''}
+    <div class="kbox">${BOX(b.questions.length ? b.questions.length + ' question' + (b.questions.length > 1 ? 's' : '') : 'keepsakes')}</div></div>
+    <p class="label">What kind of encounter? · optional</p>
+    <div class="seg" id="kind">${['A call', 'Messages', 'A conversation', 'A date', 'Something else'].map(k => `<button aria-pressed="false">${k}</button>`).join('')}</div>
+    <p class="hint">A page for what you experienced.<br>Not a verdict on who they are.</p>
+    <div class="actions"><button class="btn primary" id="start">Start a page</button><button class="btn" id="blank">Leave blank</button></div>`,
+    mount: r => {
+      let kind = '';
+      on(r, '#kind button', (e, btn) => { const was = btn.getAttribute('aria-pressed') === 'true'; $$('#kind button', r).forEach(x => x.setAttribute('aria-pressed', 'false')); btn.setAttribute('aria-pressed', String(!was)); kind = was ? '' : btn.textContent; });
+      const nb = $('#nb', r), cv = $('#cv', r);
+      const start = () => {
+        nb.classList.add('open'); sfx('open'); buzz(10);
+        const pg = {id: uid(), kind, date: Date.now(), fragments: defaultFragments(), tokens: [], revisits: {}, next: null, notes: []};
+        b.pages.push(pg); S.ui.page = b.pages.length - 1; S.ui.q = 0; save();
+        setTimeout(() => go('fragments', {book: b.id}), S.settings.reduced ? 80 : 800);
+      };
+      on(r, '#start', start);
+      cv.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); start(); } });
+      let x0 = null; cv.addEventListener('pointerdown', e => { x0 = e.clientX; });
+      cv.addEventListener('pointerup', e => { if (x0 === null) return; const dx = e.clientX - x0; x0 = null; if (dx < -20 || Math.abs(dx) < 6) start(); });
+      on(r, '#blank', () => { S.ui.tab = Math.max(0, b.pages.length - 1); go('book', {book: b.id}, 'replace'); });
+    }
+  };
+};
+const defaultFragments = () => [
+  {id: uid(), prompt: 'What part stayed with you?', text: '', who: 'them', x: .4, y: .2, r: -2, b: ''},
+  {id: uid(), prompt: 'Something you didn’t ask?', text: '', who: 'me', x: .6, y: .52, r: 2, b: 'var(--n-butter)'},
+  {id: uid(), prompt: 'Anything surprising?', text: '', who: 'them', x: .4, y: .82, r: -1, b: 'var(--n-blue)'}
+];
+const curPage = b => b.pages[clamp(S.ui.page ?? b.pages.length - 1, 0, b.pages.length - 1)];
+
+SCENES.fragments = (o) => {
+  const b = bookById(o.book), pg = b && curPage(b); if (!pg) return SCENES.shelf();
+  const bub = f => `<div class="bub ${f.who === 'me' ? 'me' : ''}${f.who === 'pause' ? ' pause' : ''}" data-id="${f.id}" tabindex="0" role="button" aria-label="${esc(f.text || f.prompt)}. Tap to write, arrow keys to move." style="left:${f.x * 100}%;top:${f.y * 100}%;--r:${f.r}deg;${f.b ? `--b:${f.b}` : ''}">${f.who === 'pause' && !f.text ? '<span class="pr">…a pause</span>' : f.text ? esc(f.text) : `<span class="pr">${esc(f.prompt)}</span>`}${f.text && f.prompt ? `<small>${esc(f.prompt)}</small>` : ''}</div>`;
+  return {
+    tone: 'pink', eyebrow: '02 Continue? · Words that linger',
+    html: `<h1 class="t">Keep a fragment.<br>Or a pause.</h1><p class="sub">Only your words belong on this page.<br>A little is enough. Blank is, too.</p>
+    <p class="label">Experienced · your words</p>
+    <div class="page drop" id="pg">${pg.fragments.map(bub).join('')}</div>
+    <p class="hint">Move a bubble · tap it to write what you remember</p>
+    <div class="actions"><button class="btn primary" id="next">Keep this page</button><div class="row2"><button class="btn" id="add">${IC.plus} Add my fragment</button><button class="btn" id="skip">Leave blank</button></div></div>`,
+    mount: r => {
+      const st = $('#pg', r);
+      $$('.bub', r).forEach(el => {
+        const f = pg.fragments.find(x => x.id === el.dataset.id);
+        drag(el, {stage: st, min: .2, max: .86, get: () => f, set: (x, y) => { f.x = x; f.y = y; place(el, x, y); }, end: save,
+          tap: () => editFragment(f)});
+      });
+      on(r, '#add', () => { pg.fragments.push({id: uid(), prompt: '', text: '', who: 'me', x: .5, y: .5, r: Math.round(rnd() * 6 - 3), b: ''}); editFragment(pg.fragments[pg.fragments.length - 1], true); });
+      on(r, '#next', () => go('moments', {book: b.id}));
+      on(r, '#skip', () => go('moments', {book: b.id}));
+    }
+  };
+  function editFragment(f, isNew) {
+    sheet(`<h3>${esc(f.prompt || 'A fragment')}</h3><p>Write it the way you remember it. A word is plenty.</p><textarea id="ft" placeholder="They said… / I said… / We both…">${esc(f.text)}</textarea>
+    <div class="seg" id="who">${[['them', 'Their words'], ['me', 'My words'], ['pause', 'A pause']].map(([k, l]) => `<button data-w="${k}" aria-pressed="${f.who === k}">${l}</button>`).join('')}</div>
+    <div class="row2"><button class="btn" data-rm>Remove</button><button class="btn primary" data-ok>Keep it</button></div>`, (sh, close) => {
+      on(sh, '[data-w]', (e, x) => { f.who = x.dataset.w; $$('[data-w]', sh).forEach(y => y.setAttribute('aria-pressed', y === x)); });
+      $('[data-ok]', sh).onclick = () => { f.text = $('#ft', sh).value.trim(); close(); save(); render(); };
+      $('[data-rm]', sh).onclick = () => { pg.fragments = pg.fragments.filter(x => x !== f); close(); save(); render(); };
+    });
+  }
+};
+
+SCENES.moments = (o) => {
+  const b = bookById(o.book), pg = b && curPage(b); if (!pg) return SCENES.shelf();
+  let sel = null;
+  const tokHtml = (t, i) => `<button class="tok" data-id="${t.id}" aria-label="${esc(t.label)}${t.note ? ': ' + esc(t.note) : ''}. Tap to add a note, arrow keys to move." style="left:${t.x * 100}%;top:${t.y * 100}%;--r:${t.r}deg">${tokenSvg(t.type, i)}<span>${esc(t.label)}</span>${t.note ? '<i class="nt"></i>' : ''}</button>`;
+  return {
+    tone: 'pink', eyebrow: '02 Continue? · A moment has many shapes',
+    html: `<h1 class="t">What shape was the moment?</h1><p class="sub">Choose a token if it helps.<br>Every feeling gets the same room.</p>
+    <p class="label">Experienced · optional moment tokens</p>
+    <div class="page drop" id="mp" style="aspect-ratio:1/.82">${pg.tokens.map(tokHtml).join('')}${pg.tokens.length ? '' : '<div class="empty" style="font-size:14px">Your page. Place a moment anywhere.</div>'}</div>
+    <div class="tray" id="tray">${Object.keys(TOKENS).map((k, i) => `<button data-t="${k}" aria-pressed="false">${tokenSvg(k, i)}${TOKENS[k].label}</button>`).join('')}</div>
+    <p class="hint" id="mh">Drag a token onto the page · or tap a token, then tap the page.<br>An arrangement can change. Writing is optional.</p>
+    <div class="actions row2"><button class="btn primary" id="next">Keep this page</button><button class="btn" id="skip">Leave blank</button></div>`,
+    mount: r => {
+      const mp = $('#mp', r), mh = $('#mh', r);
+      let sel_label = '';
+      const bindTok = el => {
+        const t = pg.tokens.find(x => x.id === el.dataset.id);
+        drag(el, {stage: mp, min: .08, max: .92, get: () => t, set: (x, y) => { t.x = x; t.y = y; place(el, x, y); }, end: save,
+          tap: () => askText({title: t.label, sub: 'What was this moment? Optional.', value: t.note || '', placeholder: 'When…', ok: 'Keep note', remove: () => { pg.tokens = pg.tokens.filter(x => x !== t); save(); render(); }}, txt => { t.note = txt; save(); render(); })});
+      };
+      $$('.tok', r).forEach(bindTok);
+      const addTok = (type, x, y, label) => {
+        const t = {id: uid(), type, label: label || TOKENS[type].label, note: '', x, y, r: Math.round(rnd() * 16 - 8)};
+        pg.tokens.push(t); save();
+        $('.empty', mp)?.remove();
+        mp.insertAdjacentHTML('beforeend', tokHtml(t, pg.tokens.length - 1));
+        const el = mp.lastElementChild; bindTok(el); sfx('drop'); buzz(6);
+        return el;
+      };
+      const choose = (type, then) => {
+        if (type !== 'custom') return then(TOKENS[type].label);
+        askText({title: 'A custom moment', sub: 'Name it in your own words.', placeholder: 'e.g. the long walk back', ok: 'Make token'}, t => { if (t) then(t.slice(0, 22)); });
+      };
+      $$('#tray button', r).forEach(btn => {
+        const type = btn.dataset.t; let pid = null, sx = 0, sy = 0, ghost = null;
+        btn.addEventListener('pointerdown', e => { pid = e.pointerId; sx = e.clientX; sy = e.clientY; try { btn.setPointerCapture(pid); } catch (_) {} });
+        btn.addEventListener('pointermove', e => {
+          if (e.pointerId !== pid) return;
+          if (!ghost && Math.hypot(e.clientX - sx, e.clientY - sy) > 8 && type !== 'custom') {
+            ghost = document.createElement('div'); ghost.className = 'tok lifted'; ghost.style.position = 'fixed'; ghost.style.zIndex = 40; ghost.style.pointerEvents = 'none';
+            ghost.innerHTML = tokenSvg(type) + `<span>${TOKENS[type].label}</span>`; document.body.append(ghost); sfx('lift');
+          }
+          if (ghost) { ghost.style.left = e.clientX + 'px'; ghost.style.top = e.clientY + 'px'; }
+        });
+        const up = e => {
+          if (e.pointerId !== pid) return; pid = null;
+          if (ghost) {
+            ghost.remove(); ghost = null;
+            if (over(e, mp)) { const rc = mp.getBoundingClientRect(); addTok(type, clamp((e.clientX - rc.left) / rc.width, .08, .92), clamp((e.clientY - rc.top) / rc.height, .08, .92)); }
+            return;
+          }
+          if (e.type !== 'pointerup') return;
+          const was = sel === type;
+          $$('#tray button', r).forEach(x => x.setAttribute('aria-pressed', 'false'));
+          if (was) { sel = null; mh.innerHTML = 'Tap a token, then tap the page.'; return; }
+          choose(type, label => { sel = type; sel_label = label; btn.setAttribute('aria-pressed', 'true'); mh.textContent = `Now tap the page to place “${label}”.`; });
+        };
+        btn.addEventListener('pointerup', up); btn.addEventListener('pointercancel', up);
+        btn.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); choose(type, label => { addTok(type, .2 + rnd() * .6, .2 + rnd() * .6, label); say(label + ' placed on the page.'); }); } });
+      });
+      mp.addEventListener('click', e => {
+        if (!sel || e.target.closest('.tok')) return;
+        const rc = mp.getBoundingClientRect();
+        addTok(sel, clamp((e.clientX - rc.left) / rc.width, .08, .92), clamp((e.clientY - rc.top) / rc.height, .08, .92), sel_label);
+        sel = null; $$('#tray button', r).forEach(x => x.setAttribute('aria-pressed', 'false')); mh.textContent = 'Placed. Drag it anywhere, or tap it to add a note.';
+      });
+      on(r, '#next', () => { S.ui.q = 0; go('thennow', {book: b.id}); });
+      on(r, '#skip', () => { S.ui.q = 0; go('thennow', {book: b.id}); });
+    }
+  };
+};
+
+SCENES.thennow = (o) => {
+  const b = bookById(o.book), pg = b && curPage(b); if (!pg) return SCENES.shelf();
+  const qs = b.questions, pIdx = b.pages.indexOf(pg);
+  if (!qs.length) return {
+    tone: 'pink', eyebrow: '02 Continue? · Expectation & reality',
+    html: `<h1 class="t">Then, and now.</h1><p class="sub">Nothing was carried over from Chapter One.<br>That’s fine. You can add a question to carry forward.</p>
+    <div class="actions"><button class="btn" id="addq">${IC.pen} Add a question to carry</button><button class="btn primary" id="next">Turn the page</button></div>`,
+    mount: r => { on(r, '#addq', () => askText({title: 'A question to carry', placeholder: 'I wonder…', ok: 'Carry it'}, t => { if (t) { b.questions.push({id: uid(), text: t, history: [], obj: null}); save(); render(); } })); on(r, '#next', () => go('nextpage', {book: b.id})); }
+  };
+  const qi = clamp(S.ui.q || 0, 0, qs.length - 1), q = qs[qi];
+  const rv = pg.revisits[q.id] || {};
+  const lead = q.obj?.about ? `You were curious about ${esc(q.obj.about)}.` : `You wondered: “${esc(q.text)}”`;
+  const earlier = b.pages.map((p, i) => ({i, v: p.revisits[q.id]})).filter(x => x.i !== pIdx && x.v && x.v.note);
+  return {
+    tone: 'pink', eyebrow: '02 Continue? · Expectation & reality',
+    html: `<h1 class="t">Then, and now.</h1><p class="sub">${lead} Did anything you experienced change what you imagined?</p>
+    ${q.obj ? `<div class="mini-known"><div class="ic">${artFor(q.obj)}</div><div><span class="label">Known · from the form</span><br>${esc(q.obj.known[0] || '')}</div></div>` : ''}
+    <div class="tn"><div><p class="label w" style="margin-bottom:8px">Wondering</p><div class="note-w"><div class="note" style="font-size:16px">${esc(q.text)}${q.history.length ? `<small>revised ${q.history.length}×</small>` : ''}</div></div></div>
+    <div><p class="label" style="margin-bottom:8px">Experienced</p><div class="exp">${rv.note ? esc(rv.note) : rv.open ? '<span class="ph">Left unanswered, for now.</span>' : '<span class="ph">Your observation goes here.</span>'}<small>${rv.note ? 'In your words, from encounter ' + pad(pIdx + 1) + '.' : 'Reflect on what you experienced. Nothing assumed.'}</small></div></div></div>
+    ${earlier.length ? `<div class="trail"><span class="label">Earlier pages</span>${earlier.map(x => `<span><b>Encounter ${pad(x.i + 1)}:</b> ${esc(x.v.note)}</span>`).join('')}</div>` : ''}
+    <p class="hint">A question can change. Or stay a question.${qs.length > 1 ? ` (${qi + 1} of ${qs.length})` : ''}</p>
+    <div class="actions"><div class="row2"><button class="btn" id="obs">Add observation</button><button class="btn" id="rev">Revise note</button></div>
+    <button class="btn" id="open">Leave unanswered</button>
+    <button class="btn primary" id="next">${qi < qs.length - 1 ? 'Next question' : 'Turn the page'}</button></div>`,
+    mount: r => {
+      on(r, '#obs', () => askText({title: 'What did you notice?', sub: 'What you experienced, in your words. Not a conclusion about them.', value: rv.note || '', placeholder: 'When we talked about…', ok: 'Keep it'}, t => { pg.revisits[q.id] = {note: t, open: !t}; save(); render(); }));
+      on(r, '#rev', () => askText({title: 'Revise the question', sub: 'The earlier version is kept, so you can see how it changed.', value: q.text, ok: 'Revise'}, t => { if (t && t !== q.text) { q.history.push({text: q.text, page: pIdx}); q.text = t; save(); render(); } }));
+      on(r, '#open', () => { pg.revisits[q.id] = {note: '', open: true}; save(); advance(); });
+      on(r, '#next', advance);
+      function advance() { if (qi < qs.length - 1) { S.ui.q = qi + 1; render(); } else go('nextpage', {book: b.id}); }
+    }
+  };
+};
+
+SCENES.nextpage = (o) => {
+  const b = bookById(o.book), pg = b && curPage(b); if (!pg) return SCENES.shelf();
+  const n = pg.next;
+  return {
+    tone: 'sage', eyebrow: '02 Continue? · The next blank page',
+    html: `<h1 class="t">What, if anything, would you like to discover next?</h1><p class="sub">An unfinished chapter can stay unfinished.</p>
+    <div class="np">${n && n.text ? `<div class="written"><small>${n.type === 'question' ? 'A question for next time' : 'A memory'}</small>${esc(n.text)}</div>` : ''}
+      <button id="wq">${IC.pen} ${n?.type === 'question' ? 'Rewrite the question' : 'Write a question'}</button>
+      <button id="am">${IC.plus} Add a memory</button>
+      <button id="lb">${IC.arrow} Leave blank</button></div>
+    <p class="motto">Unpack the person. Unpack the encounter.<br>Write your own story.</p>
+    <div class="actions"><button class="btn" data-s="continuing">Continue</button><button class="btn" data-s="paused">Pause</button><button class="btn" data-s="closed">Close the chapter</button><button class="btn link" data-s="later">Decide later</button></div>`,
+    mount: r => {
+      on(r, '#wq', () => askText({title: 'A question for next time', value: n?.type === 'question' ? n.text : '', placeholder: 'Next time I’d like to ask…', ok: 'Write it'}, t => { pg.next = t ? {type: 'question', text: t} : null; save(); render(); }));
+      on(r, '#am', () => askText({title: 'Add a memory', value: n?.type === 'memory' ? n.text : '', placeholder: 'I want to remember…', ok: 'Keep it'}, t => { pg.next = t ? {type: 'memory', text: t} : null; save(); render(); }));
+      on(r, '#lb', () => { pg.next = null; save(); toast('Left blank.'); });
+      on(r, '[data-s]', (e, btn) => {
+        const s = btn.dataset.s;
+        if (s !== 'later') b.status = s;
+        save(); sfx('page'); toast(s === 'later' ? 'Nothing decided. That’s allowed.' : statusText(s) + '.');
+        S.ui.tab = b.pages.indexOf(pg);
+        go('book', {book: b.id, closing: true}, 'reset'); stack.push({name: 'shelf', opts: {}});
+      });
+    }
+  };
+};
+
+SCENES.book = (o) => {
+  const b = bookById(o.book); if (!b) return SCENES.shelf();
+  const n = b.pages.length;
+  let tab = S.ui.tab ?? 0; if (tab !== 'time') tab = clamp(+tab || 0, 0, Math.max(0, n - 1));
+  const pg = tab === 'time' ? null : b.pages[tab];
+  const qLine = q => { const v = pg.revisits[q.id]; return `<button class="it q" data-q="${q.id}">${esc(q.text)}${v?.note ? `<span class="obs">Experienced: ${esc(v.note)}</span>` : v?.open ? '<span class="obs">Left unanswered</span>' : ''}</button>`; };
+  const pageHtml = pg ? `<h2 class="pg-h">Encounter ${pad(tab + 1)}</h2><p class="pg-m">${esc(pg.kind || 'An encounter')} · ${new Date(pg.date).toLocaleDateString(undefined, {day: 'numeric', month: 'short'})}</p>
+    ${b.questions.length ? `<p class="sec">Questions carried forward</p><div class="items">${b.questions.map(qLine).join('')}</div>` : ''}
+    <p class="sec">Moments · tap to annotate or move</p><div class="items">${pg.tokens.map(t => `<button class="it tk" data-k="tokens" data-id="${t.id}">${esc(t.label)}${t.note ? `<span class="obs">${esc(t.note)}</span>` : ''}</button>`).join('') || '<span class="pg-m">None placed.</span>'}</div>
+    <p class="sec">Fragments</p><div class="items">${pg.fragments.filter(f => f.text).map(f => `<button class="it" data-k="fragments" data-id="${f.id}">“${esc(f.text)}”<span class="obs">${f.who === 'me' ? 'my words' : f.who === 'pause' ? 'a pause' : 'their words'}</span></button>`).join('') || '<span class="pg-m">Blank, and that’s fine.</span>'}</div>
+    ${pg.next?.text ? `<p class="sec">${pg.next.type === 'question' ? 'To discover next' : 'A memory'}</p><div class="items"><button class="it q" data-next>${esc(pg.next.text)}</button></div>` : ''}
+    <p class="sec">Margin notes</p><div class="items">${pg.notes.map(t => `<button class="it" data-k="notes" data-id="${t.id}">${esc(t.text)}</button>`).join('')}<button class="it" id="ann" style="border-style:dashed">${'+ annotate'}</button></div>`
+    : tab === 'time' ? `<h2 class="pg-h">How questions changed</h2><p class="pg-m">Across ${n} encounter${n === 1 ? '' : 's'}. No score, no verdict.</p>
+      <div class="evo">${b.questions.map(q => `<div>${q.history.map(h => `<s>${esc(h.text)}</s>`).join('')}<div class="q">${esc(q.text)}</div><ul>${b.pages.map((p, i) => p.revisits[q.id] ? `<li><b>Encounter ${pad(i + 1)}:</b> ${p.revisits[q.id].note ? esc(p.revisits[q.id].note) : 'left unanswered'}</li>` : '').join('') || '<li>Still a question.</li>'}</ul></div>`).join('') || '<p class="pg-m">No questions carried yet.</p>'}</div>`
+    : `<h2 class="pg-h">No pages yet</h2><p class="pg-m">This book is waiting for its first encounter, whenever that happens.</p>`;
+  return {
+    tone: 'pink', eyebrow: '02 Continue? · Across encounters',
+    html: `<h1 class="t">A story can change shape.</h1><p class="sub">Revisit moments. Revise questions.<br>Leave room for what you don’t know.</p>
+    <span class="status">${esc(b.name)} · ${statusText(b.status)}${b.example ? ' · example' : ''}</span>
+    <div class="book" id="book"><div class="tabs">${b.pages.map((p, i) => `<button data-tab="${i}" aria-current="${tab === i}" aria-label="Encounter ${i + 1}">${pad(i + 1)}</button>`).join('')}${n ? `<button data-tab="time" aria-current="${tab === 'time'}" aria-label="How questions changed">≈</button>` : ''}</div><div class="page">${pageHtml}</div></div>
+    <p class="hint">Encounter tabs on the right. Private by default.<br>Nothing shared. No conclusion required.</p>
+    <div class="actions"><div class="row2"><button class="btn" id="add">${IC.plus} Add a page</button><button class="btn" id="turn">Turn the page</button></div>
+    ${pg ? '<button class="btn" id="reopen">Revisit this encounter</button>' : ''}
+    <button class="btn" id="where">Where this goes</button>
+    <button class="btn primary" id="close">Close the book</button>
+    <button class="btn link" id="del">Delete this scrapbook</button></div>`,
+    mount: r => {
+      on(r, '[data-tab]', (e, t) => { S.ui.tab = t.dataset.tab === 'time' ? 'time' : +t.dataset.tab; sfx('page'); render(); });
+      on(r, '#turn', () => { const order = [...b.pages.map((_, i) => i), 'time']; const i = order.indexOf(tab); S.ui.tab = order[(i + 1) % order.length]; sfx('page'); render(); });
+      on(r, '#add', () => go('after', {book: b.id}));
+      on(r, '#reopen', () => { S.ui.page = tab; S.ui.q = 0; go('fragments', {book: b.id}); });
+      on(r, '#close', () => { const bk = $('#book', r); bk.classList.add('closing'); sfx('open'); setTimeout(() => { go('shelf', {}, 'reset'); stack.push({name: 'chapters', opts: {}}); }, S.settings.reduced ? 50 : 650); });
+      on(r, '#where', () => sheet(`<h3>Where does this go?</h3><p>Your decision, in your time. Every choice is quiet here, and a book can stay unfinished for as long as you like.</p>
+        <div class="seg">${['continuing', 'paused', 'closed', 'unfinished'].map(s => `<button data-s="${s}" aria-pressed="${b.status === s}">${{continuing: 'Continue', paused: 'Pause', closed: 'Close the chapter', unfinished: 'Leave it unfinished'}[s]}</button>`).join('')}</div>`, (sh, close) => {
+          on(sh, '[data-s]', (e, x) => { b.status = x.dataset.s; save(); close(); render(); });
+        }));
+      on(r, '#del', () => confirmSheet('Delete this scrapbook?', `Every page about ${esc(b.name)} will be erased from this browser. This can’t be undone.`, 'Delete it', () => { S.books = S.books.filter(x => x !== b); save(); toast('Deleted.'); go('shelf', {}, 'reset'); }));
+      on(r, '#ann', () => askText({title: 'A margin note', sub: 'Annotate this page. Earlier pages stay as they were.', placeholder: 'Looking back…', ok: 'Add note'}, t => { if (t) { pg.notes.push({id: uid(), text: t}); save(); render(); } }));
+      on(r, '[data-q]', (e, el) => { const q = b.questions.find(x => x.id === el.dataset.q); const v = pg.revisits[q.id] || {}; askText({title: q.text, sub: 'What you experienced on this encounter.', value: v.note || '', ok: 'Keep it'}, t => { pg.revisits[q.id] = {note: t, open: !t}; save(); render(); }); });
+      on(r, '[data-next]', () => go('nextpage', {book: b.id}));
+      on(r, '[data-k]', (e, el) => {
+        const kind = el.dataset.k, item = pg[kind].find(x => x.id === el.dataset.id);
+        const label = kind === 'tokens' ? item.label : (item.text || '');
+        const others = b.pages.map((p, i) => ({p, i})).filter(x => x.p !== pg);
+        sheet(`<h3>${esc(label)}</h3>${kind !== 'notes' ? `<textarea id="nt" placeholder="${kind === 'tokens' ? 'What was this moment?' : 'Your words'}">${esc(kind === 'tokens' ? item.note || '' : item.text)}</textarea>` : `<textarea id="nt">${esc(item.text)}</textarea>`}
+          ${others.length ? `<p>Move to another page</p><div class="seg">${others.map(x => `<button data-mv="${x.i}">Encounter ${pad(x.i + 1)}</button>`).join('')}</div>` : ''}
+          <div class="row2"><button class="btn" data-rm>Remove</button><button class="btn primary" data-ok>Keep</button></div>`, (sh, close) => {
+          $('[data-ok]', sh).onclick = () => { const v = $('#nt', sh).value.trim(); if (kind === 'tokens') item.note = v; else item.text = v; save(); close(); render(); };
+          $('[data-rm]', sh).onclick = () => { pg[kind] = pg[kind].filter(x => x !== item); save(); close(); render(); };
+          on(sh, '[data-mv]', (e2, m) => { const to = b.pages[+m.dataset.mv]; pg[kind] = pg[kind].filter(x => x !== item); to[kind].push(item); save(); close(); toast(`Moved to encounter ${pad(+m.dataset.mv + 1)}.`); render(); });
+        });
+      });
+    }
+  };
+};
+
+/* ---------- example book for a first look ---------- */
+function exampleBook() {
+  const p = parseBiodata(SAMPLE), book = p.objects.find(x => x.kind === 'book'), fam = p.objects.find(x => x.kind === 'photo');
+  const q1 = {id: uid(), text: 'What has he read recently that he couldn’t put down?', history: [{text: 'What would you want to ask about something they’ve read recently?', page: 0}], obj: {kind: 'book', title: book.title, about: book.about, known: book.known}};
+  const q2 = {id: uid(), text: 'What makes them laugh?', history: [], obj: null};
+  const q3 = {id: uid(), text: 'Which family tradition would they keep?', history: [], obj: {kind: 'photo', title: fam.title, about: fam.about, known: fam.known}};
+  const day = 864e5, now = Date.now();
+  const pg = (kind, ago, frags, toks, rev, next) => ({id: uid(), kind, date: now - ago * day, fragments: frags.map((f, i) => ({id: uid(), prompt: '', text: f[0], who: f[1], x: .45 + (i % 2) * .1, y: .2 + i * .3, r: i % 2 ? 2 : -2, b: ''})), tokens: toks.map((t, i) => ({id: uid(), type: t[0], label: TOKENS[t[0]].label, note: t[1] || '', x: .2 + i * .25, y: .35 + (i % 2) * .3, r: 0})), revisits: rev, next, notes: []});
+  return {id: uid(), name: 'Rohan', example: true, created: now - 20 * day, status: 'unfinished', questions: [q1, q2, q3], pages: [
+    pg('A call', 14, [['I’ve been rereading the same three books since college.', 'them'], ['A long pause after I asked about Bengaluru.', 'pause']], [['curiosity', 'When he talked about the books'], ['silence'], ['uncertainty', 'Whether the pause meant anything']], {[q1.id]: {note: 'He mentioned rereading old favourites more than finding new ones.'}, [q2.id]: {note: '', open: true}}, {type: 'question', text: 'What keeps him going back to the same books?'}),
+    pg('A conversation', 5, [['My sister would like you.', 'them'], ['I laughed harder than I expected to.', 'me']], [['laughter', 'The story about the football trophy'], ['surprise'], ['affection']], {[q2.id]: {note: 'A badly told story about a football trophy. Mostly the telling.'}, [q3.id]: {note: 'Sunday lunches at his parents’. He said it without being asked.'}}, {type: 'memory', text: 'Walking out and both of us forgetting which way the car was.'})
+  ]};
+}
+
+/* ---------- settings + privacy ---------- */
+function openSettings() {
+  const st = S.settings;
+  sheet(`<h3>Privacy &amp; comfort</h3>
+  <label class="tog"><span>Reduced motion<small>Calmer transitions. Everything still works by tapping.</small></span><input type="checkbox" class="sw" id="s-rm" ${st.reduced ? 'checked' : ''}></label>
+  <label class="tog"><span>Paper sounds<small>Soft rustles when things move.</small></span><input type="checkbox" class="sw" id="s-snd" ${st.sound ? 'checked' : ''}></label>
+  <label class="tog"><span>Haptics<small>Small taps on supported phones.</small></span><input type="checkbox" class="sw" id="s-hap" ${st.haptics ? 'checked' : ''}></label>
+  <p><b>What’s kept, and where.</b> Everything stays in this browser on this device. Nothing is sent anywhere or shared. Contact details from a biodata are never kept, and once you pack a keepsake box the paperwork itself is let go: only the questions and objects you chose travel on.</p>
+  ${S.archived.length ? `<p class="label">Archived paperwork</p>${S.archived.map(a => `<div class="arch"><span>${esc(a.name)} · ${new Date(a.at).toLocaleDateString()}</span><span class="seg"><button data-ro="${a.id}">Reopen</button><button data-da="${a.id}">Delete</button></span></div>`).join('')}` : ''}
+  ${S.books.length ? `<p class="label">Scrapbooks</p>${S.books.map(b => `<div class="arch"><span>${esc(b.name)} · ${b.pages.length} page${b.pages.length === 1 ? '' : 's'}</span><span class="seg"><button data-db="${b.id}">Delete</button></span></div>`).join('')}` : ''}
+  <div class="row2"><button class="btn" id="s-all">Delete everything</button><button class="btn primary" data-x>Done</button></div>`, (sh, close) => {
+    $('#s-rm', sh).onchange = e => { st.reduced = e.target.checked; applyMotion(); save(); };
+    $('#s-snd', sh).onchange = e => { st.sound = e.target.checked; save(); if (st.sound) sfx('page'); };
+    $('#s-hap', sh).onchange = e => { st.haptics = e.target.checked; save(); buzz(10); };
+    $('[data-x]', sh).onclick = close;
+    on(sh, '[data-ro]', (e, x) => { const a = S.archived.find(y => y.id === x.dataset.ro); if (S.draft && S.draft.profile) { toast('There’s already paperwork on the table. Pack or archive it first.'); return; } S.draft = a.draft; S.archived = S.archived.filter(y => y !== a); save(); close(); go('table'); });
+    on(sh, '[data-da]', (e, x) => { S.archived = S.archived.filter(y => y.id !== x.dataset.da); save(); x.closest('.arch').remove(); toast('Deleted.'); });
+    on(sh, '[data-db]', (e, x) => { const b = bookById(x.dataset.db); close(); confirmSheet('Delete this scrapbook?', `Every page about ${esc(b.name)} will be erased from this browser.`, 'Delete it', () => { S.books = S.books.filter(y => y !== b); save(); toast('Deleted.'); go('shelf', {}, 'reset'); }); });
+    $('#s-all', sh).onclick = () => { close(); confirmSheet('Delete everything?', 'Paperwork, pockets, archived profiles and every scrapbook will be erased from this browser. This can’t be undone.', 'Delete everything', () => { const keep = S.settings; S = fresh(); S.settings = keep; try { localStorage.removeItem(KEY); } catch (e) {} save(); toast('Everything is gone.'); go('title', {}, 'reset'); }); };
+  });
+}
+
+render();
+})();
+</script>
+</body>
+</html>
