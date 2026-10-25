@@ -298,7 +298,7 @@ h1.t{font:400 clamp(28px,8.4vw,35px)/1.08 var(--serif);letter-spacing:-.015em;ma
 .swatches button{width:30px;height:30px;border-radius:50%;border:1.3px solid var(--paper-ink);cursor:pointer}
 .swatches button[aria-pressed=true]{box-shadow:0 0 0 3px var(--cream-bg),0 0 0 5px var(--coral)}
 .arch{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:13px;padding:6px 0}
-.toast{position:fixed;left:50%;bottom:calc(46px + env(safe-area-inset-bottom,0px));z-index:60;transform:translate(-50%,30px) rotate(-1deg);opacity:0;background:var(--paper);color:var(--paper-ink);border:1.2px solid var(--paper-ink);padding:9px 14px;font:400 14px/1.3 var(--serif);box-shadow:0 8px 16px -8px var(--shadow);transition:transform .45s var(--spring),opacity .3s;max-width:calc(100% - 32px)}
+.toast{position:fixed;left:50%;top:calc(58px + env(safe-area-inset-top,0px));z-index:60;pointer-events:none;transform:translate(-50%,-20px) rotate(-1deg);opacity:0;background:var(--paper);color:var(--paper-ink);border:1.2px solid var(--paper-ink);padding:9px 14px;font:400 14px/1.3 var(--serif);box-shadow:0 8px 16px -8px var(--shadow);transition:transform .45s var(--spring),opacity .3s;max-width:calc(100% - 32px)}
 .toast.in{transform:translate(-50%,0) rotate(-1deg);opacity:1}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 
@@ -671,7 +671,7 @@ SCENES.title = () => ({
     <div class="note-w float" style="right:2%;top:150px;width:118px;--r:8deg;transform:rotate(8deg);animation-delay:-2s"><div class="note" style="font-size:15px;padding:10px 18px 12px 10px">What makes you laugh?</div></div>
   </div>
   <div class="actions"><button class="btn primary" data-go>${IC.arrow} Begin</button>
-  <button class="card-btn" data-settings><b>Privacy &amp; comfort settings</b><span>Reduced motion · Sound · Haptics<br>Tap alternatives always available. Private by default.</span></button></div>`,
+  <button class="card-btn" data-settings><b>Privacy &amp; comfort settings</b><span>Motion · Sound · Haptics</span></button></div>`,
   mount: r => { on(r, '[data-go]', () => go('chapters')); on(r, '[data-settings]', openSettings); }
 });
 
@@ -680,11 +680,11 @@ SCENES.chapters = () => {
   const ch1 = d?.opened ? 'Return to the table' : 'What makes me curious enough to get to know this person?';
   return {
     tone: 'cream', eyebrow: 'The shape of the story',
-    html: `<h1 class="t">Two chapters.<br>Your pace.</h1><p class="sub">Curiosity first. Experience after.<br>Neither needs a conclusion.</p>
+    html: `<h1 class="t">Two chapters.<br>Your pace.</h1><p class="sub">Curiosity first. Experience after.</p>
     <button class="chapter" data-c="1"><div><h2>01 Filter In</h2><p>${ch1}</p></div><div class="pic">${'<div class="env" style="margin:0;width:100%;transform:rotate(8deg)"><div class="env-body">' + ENV_BODY + '</div><div class="env-front">' + ENV_FRONT + '</div><div class="env-flap">' + ENV_FLAP + '</div></div>'}</div></button>
     <hr class="dash">
     <button class="chapter flip" data-c="2"><div class="pic" style="width:96px">${NOTEBOOK()}</div><div><h2>02 Continue?</h2><p>What have I experienced, and do I want to explore further?</p></div></button>
-    <p class="hint" style="margin-top:auto">Tap the envelope or the scrapbook.<br>You can leave any page blank.</p>`,
+    `,
     mount: r => {
       on(r, '[data-c="1"]', () => { const d = S.draft; go(d?.opened ? 'table' : 'arrival'); });
       on(r, '[data-c="2"]', () => go('shelf'));
@@ -704,8 +704,7 @@ SCENES.arrival = () => ({
     <span class="pull" id="pull">pull</span>
     <svg class="env-arc" viewBox="0 0 60 70" fill="none" stroke="currentColor" stroke-width="1.6" stroke-dasharray="3 4" stroke-linecap="round"><path d="M8 62C2 34 18 10 46 8"/><path d="M40 2l7 6-8 5"/></svg>
   </div>
-  <p class="hint">A small beginning. No first impressions required.</p>
-  <div class="actions"><button class="btn primary" id="open">Open parcel</button><p class="hint">Drag the flap · or tap to open</p></div>`,
+    <div class="actions"><button class="btn primary" id="open">Open parcel</button><p class="hint">Drag the flap or tap</p></div>`,
   mount: r => {
     const env = $('#env', r), flap = $('#flap', r);
     let done = false;
@@ -748,8 +747,8 @@ SCENES.unfold = () => {
     : `<div class="fold"><span class="tape"></span><div class="panel"><div class="bd-empty">Your biodata<br>goes here</div></div><div class="panel"><b style="font:700 13px var(--sans)">No profile added yet</b><p style="font-size:11px;color:var(--paper-soft);margin:4px 0 8px">We won’t fill in the blanks.<br>Paperwork has enough opinions.</p></div></div>`;
   return {
     tone: 'cream', eyebrow: '01 Filter In · Unfold',
-    html: `<h1 class="t">Paperwork, unfolded.</h1><p class="sub">A form can make an entrance.<br>It can’t introduce a whole person.</p>${paper}
-    ${p ? `<p class="hint" id="fh">Tap the paper or drag it down to unfold</p><div class="actions"><button class="btn primary" id="unf">Unfold</button><button class="btn link" id="other">Use different paperwork</button></div>`
+    html: `<h1 class="t">Paperwork, unfolded.</h1><p class="sub">A form can’t introduce a whole person.</p>${paper}
+    ${p ? `<p class="hint" id="fh">Tap to unfold</p><div class="actions"><button class="btn primary" id="unf">Unfold</button><button class="btn link" id="other">Use different paperwork</button></div>`
         : `<p class="hint">Only add a document you have permission to use.</p><div class="actions"><button class="btn primary" id="sample">Unfold the sample biodata</button><button class="btn" id="paste">${IC.plus} Add biodata</button><button class="btn" id="none">Continue without it</button></div>`}`,
     mount: r => {
       on(r, '#sample', () => { d.profile = parseBiodata(SAMPLE); d.sample = true; save(); render(); });
@@ -761,7 +760,7 @@ SCENES.unfold = () => {
       const step = () => {
         const shut = $('.panel.shut', fold);
         if (shut) { shut.classList.remove('shut'); sfx('page'); buzz(8); }
-        if (!$('.panel.shut', fold)) { btn.textContent = 'Unpack it'; $('#fh', r).textContent = 'Every line here can become an object on the table.'; }
+        if (!$('.panel.shut', fold)) { btn.textContent = 'Unpack it'; $('#fh', r).textContent = 'Ready to unpack.'; }
       };
       fold.addEventListener('click', step);
       fold.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); step(); } });
@@ -773,7 +772,7 @@ SCENES.unfold = () => {
 };
 
 function pasteSheet() {
-  sheet(`<h3>Add a biodata</h3><p>Paste its text, one detail per line, like <i>Hobbies: reading, music</i>. Only what’s written becomes an object. Phone numbers, emails and addresses are skipped and never kept. Everything stays in this browser.</p>
+  sheet(`<h3>Add a biodata</h3><p>One detail per line, like <i>Hobbies: reading</i>. Contact details are skipped.</p>
   <textarea id="bt" placeholder="Name: …&#10;Occupation: …&#10;Hobbies: …" style="min-height:180px"></textarea>
   <label class="tog" style="border:0;padding:0"><span>I have permission to use this document.</span><input type="checkbox" class="sw" id="perm"></label>
   <div class="row2"><button class="btn" data-x>Cancel</button><button class="btn primary" data-ok>Fold it up</button></div>`, (sh, close) => {
@@ -797,7 +796,7 @@ SCENES.table = (o) => {
   const known = objs.length ? `Known · ${objs.length} things from the form` : 'Known · no details added';
   return {
     tone: 'butter', eyebrow: '01 Filter In · The table',
-    html: `<h1 class="t">A little room<br>for curiosity.</h1><p class="sub">${objs.length ? 'Pick anything up. Drag it around.<br>Tap to look closer.' : 'No source, no assumptions.<br>Questions can still find a place.'}</p>
+    html: `<h1 class="t">A little room<br>for curiosity.</h1><p class="sub">${objs.length ? 'Drag, turn, tap to look closer.' : 'No source, no assumptions.'}</p>
     <p class="label">${known}</p>
     <div class="tabletop" id="tbl" style="aspect-ratio:4/${rows * 1.02}">
       ${objs.length ? '' : `<button class="source" id="src"><small>Source paper</small>Add a biodata to unpack its details</button>`}
@@ -805,8 +804,7 @@ SCENES.table = (o) => {
       ${d.spaces ? `<button class="space" id="space" style="left:${objs.length ? 12.5 : 70}%;top:${objs.length ? (rows - .5) / rows * 100 : 30}%" aria-label="An empty space. Some things don’t fit on a form.">?</button>` : ''}
       <button class="pocket" id="pocket" style="right:3%;bottom:2%" aria-label="Your pocket, ${pk} questions. Open the curiosity board.">${POCKET(pk)}</button>
     </div>
-    <p class="hint">${objs.length ? 'Drag to arrange · tap to inspect · drop a thing on the pocket to keep its question' : 'Tap the empty space, or open your pocket'}</p>
-    <div class="actions">
+        <div class="actions">
       <button class="btn primary" id="board">Follow a thread</button>
       <div class="${d.spaces ? 'row2' : ''}">${d.spaces ? '<button class="btn" id="spaces">Things a form can’t hold</button>' : ''}<button class="btn" id="done" style="width:100%">Done unpacking</button></div>
     </div>`,
@@ -855,7 +853,7 @@ SCENES.inspect = (o) => {
   const pos = d.placed[ob.id] || {r: 0};
   return {
     tone: 'butter', eyebrow: '01 Filter In · Pick something up',
-    html: `<h1 class="t">${esc(ob.title)}</h1><p class="sub">Known is what the form says.<br>Wondering is yours, and optional.</p>
+    html: `<h1 class="t">${esc(ob.title)}</h1>
     <div class="inspect">
       <div class="big" id="big" style="--r:${pos.r}deg" aria-hidden="true">${artFor(ob)}</div>
       <div class="rot"><button class="icon-btn" id="ccw" aria-label="Turn left">${IC.ccw}</button><button class="icon-btn" id="cw" aria-label="Turn right">${IC.cw}</button></div>
@@ -864,8 +862,7 @@ SCENES.inspect = (o) => {
       <div class="wrow"><div class="note-w" id="wn" tabindex="0" aria-label="Question note. Drag to the pocket or use Save to pocket."><div class="note" id="wt"></div></div>
       <button class="pocket" id="pk" aria-label="Pocket">${POCKET(d.pocket.length)}</button></div>
     </div>
-    <p class="hint" id="ih">Lift the paper into the pocket · or tap a choice below</p>
-    <div class="actions">
+        <div class="actions">
       <button class="btn primary" id="save">Save to pocket</button>
       <div class="row2"><button class="btn" id="own">${IC.pen} Write my own</button><button class="btn" id="another">Another question</button></div>
       <button class="btn link" id="leave">Leave it here</button>
@@ -914,11 +911,11 @@ SCENES.board = () => {
   const d = draft();
   return {
     tone: 'sage', eyebrow: '01 Filter In · Follow a thread',
-    html: `<h1 class="t">Let curiosity wander.</h1><p class="sub">Keep what feels worth asking.<br>There’s no set to complete.</p>
+    html: `<h1 class="t">Let curiosity wander.</h1><p class="sub">No set to complete.</p>
     <p class="label">Wondering · player-chosen</p>
     <div class="board" id="bd">${d.pocket.length ? d.pocket.map(n => `<div class="pin" data-id="${n.id}" tabindex="0" role="button" aria-label="${esc(n.text)}. Tap to edit, arrow keys to move." style="left:${n.x * 100}%;top:${n.y * 100}%;--r:${n.r}deg"><div class="note-w"><div class="note ${n.c}">${esc(n.text)}${n.src && objById(n.src) ? `<small>from ${esc(objById(n.src).title.replace(/^An? /, '').toLowerCase())}</small>` : n.src === 'space' ? '<small>from an empty space</small>' : ''}</div></div></div>`).join('')
       : `<div class="empty">Nothing pinned yet.<br>Pick something up from the table, or write your own.</div>`}</div>
-    <p class="hint">Drag a scrap anywhere · tap it to edit or let it go</p>
+    <p class="hint">Drag anywhere · tap to edit</p>
     <div class="actions"><button class="btn primary" id="carry">Carry these questions</button>
     <div class="row2"><button class="btn" id="own">${IC.pen} Write my own</button><button class="btn" id="tbl">Back to the table</button></div></div>`,
     mount: r => {
@@ -943,10 +940,10 @@ SCENES.spaces = () => {
   const d = draft(); d.kept = d.kept || [];
   return {
     tone: 'sage', eyebrow: '01 Filter In · Room for the unwritten',
-    html: `<h1 class="t">Some things don’t fit in a form.</h1><p class="sub">Not missing fields.<br>Invitations to wonder.</p>
+    html: `<h1 class="t">Some things don’t fit in a form.</h1><p class="sub">Invitations, not missing fields.</p>
     <p class="label">Wondering</p>
     <div class="sil-wrap">${SPACES.map((q, i) => `<button class="sil${d.kept.includes(q) ? ' kept' : ''}" data-i="${i}" aria-pressed="${d.kept.includes(q)}">${esc(q)}<small>${d.kept.includes(q) ? 'kept in your pocket' : 'an empty space'}</small></button>`).join('')}</div>
-    <p class="hint">No answers needed here.<br>Tap a silhouette to keep its question, or leave it.</p>
+    <p class="hint">Tap one to keep it.</p>
     <div class="actions row2"><button class="btn" id="keep">Keep wondering</button><button class="btn" id="skip">Skip freely</button></div>`,
     mount: r => {
       on(r, '.sil', (e, b) => {
@@ -968,14 +965,13 @@ SCENES.pack = (o) => {
   d.packSel = d.packSel || d.pocket.map(n => n.id);
   return {
     tone: 'butter', eyebrow: '01 Filter In · Packing up',
-    html: `<h1 class="t">A question to carry.</h1><p class="sub">${packing ? 'Choose what goes in the keepsake box.<br>Leave anything out.' : 'You can keep your curiosity<br>without deciding what comes next.'}</p>
+    html: `<h1 class="t">A question to carry.</h1><p class="sub">${packing ? 'Leave anything out.' : 'No need to decide what comes next.'}</p>
     <p class="label">Wondering · saved to pocket</p>
     <div class="boxstage" id="bs">${top ? `<div class="note-w"><div class="note ${top.c}" style="font-size:17px">${esc(top.text)}</div></div>` : ''}<div class="box">${BOX(d.pocket.length ? 'still wondering' : 'nothing yet')}</div></div>
     ${packing ? `<div class="chips">${d.pocket.map(n => `<button class="chip" data-id="${n.id}" aria-pressed="${d.packSel.includes(n.id)}">${esc(n.text)}</button>`).join('') || '<p class="hint">Your pocket is empty. The box can travel empty too.</p>'}</div>
       <div class="field"><label for="bkname">Name on the scrapbook</label><input id="bkname" value="${esc(d.profile?.name || '')}" placeholder="A first name, initials, anything"></div>
       <div class="actions"><button class="btn primary" id="close">Close the box</button></div>`
-    : `<p class="hint">Your questions stay yours, whichever path you take.</p>
-      <div class="actions"><button class="btn" id="leave">Leave for now</button><button class="btn" id="arch">Archive</button><button class="btn" id="know">Get to know them</button></div>`}`,
+    : `      <div class="actions"><button class="btn" id="leave">Leave for now</button><button class="btn" id="arch">Archive</button><button class="btn" id="know">Get to know them</button></div>`}`,
     mount: r => {
       on(r, '#leave', () => { toast('Left on the table. It’ll be here.'); go('chapters', {}, 'reset'); });
       on(r, '#arch', () => {
@@ -1012,9 +1008,9 @@ const statusText = s => ({unfinished: 'Still unfinished', continuing: 'You chose
 
 SCENES.shelf = () => ({
   tone: 'pink', eyebrow: '02 Continue? · Your books',
-  html: `<h1 class="t">Your scrapbooks.</h1><p class="sub">One connection, one book.<br>Room for every encounter.</p>
-  ${S.books.length ? `<p class="label" style="font-weight:600;letter-spacing:.02em;text-transform:none">Tap a book to open</p><div class="shelf">${S.books.map((b, i) => `<button class="bk" data-id="${b.id}"><div class="cover">${NOTEBOOK(COVERS[i % 4], DOODLES[i % 4])}<span class="name">${esc(b.name)}</span></div>${b.pages.length} encounter${b.pages.length === 1 ? '' : 's'}<span class="st">${b.example ? 'Example · ' : ''}${statusText(b.status)}</span></button>`).join('')}</div>`
-    : `<div class="nb-stage" style="height:220px"><div class="nb" style="left:24%;width:52%">${'<div class="cover">' + NOTEBOOK() + '</div>'}</div></div><p class="hint">No scrapbooks yet. Chapter One packs a keepsake box into one,<br>or you can start a book without any paperwork.</p>`}
+  html: `<h1 class="t">Your scrapbooks.</h1><p class="sub">One connection, one book.</p>
+  ${S.books.length ? `<div class="shelf">${S.books.map((b, i) => `<button class="bk" data-id="${b.id}"><div class="cover">${NOTEBOOK(COVERS[i % 4], DOODLES[i % 4])}<span class="name">${esc(b.name)}</span></div>${b.pages.length} encounter${b.pages.length === 1 ? '' : 's'}<span class="st">${b.example ? 'Example · ' : ''}${statusText(b.status)}</span></button>`).join('')}</div>`
+    : `<div class="nb-stage" style="height:220px"><div class="nb" style="left:24%;width:52%">${'<div class="cover">' + NOTEBOOK() + '</div>'}</div></div><p class="hint">No scrapbooks yet.</p>`}
   <div class="actions"><button class="btn primary" id="add">${IC.plus} Add a scrapbook</button>
   ${S.books.some(b => b.example) ? '' : '<button class="btn" id="ex">Peek at an example book</button>'}
   <button class="btn link" id="priv">Privacy &amp; deleting scrapbooks</button></div>`,
@@ -1034,14 +1030,13 @@ SCENES.after = (o) => {
   const q = b.questions[0];
   return {
     tone: 'pink', eyebrow: '02 Continue? · After the encounter',
-    html: `<h1 class="t">So, what happened?</h1><p class="sub">After a real conversation, call or date.<br>Optional, private, and in your own words.</p>
+    html: `<h1 class="t">So, what happened?</h1><p class="sub">Optional, private, in your own words.</p>
     <div class="nb-stage"><div class="nb" id="nb"><div class="inner"><span class="label" style="color:var(--paper-soft)">Encounter ${pad(b.pages.length + 1)}</span><br>A page for what you experienced.</div><div class="cover" id="cv" role="button" tabindex="0" aria-label="Open the scrapbook">${NOTEBOOK('#E9B9B3')}<span class="nb-label">${esc(b.name)}:<br>an encounter, unfolding</span></div></div>
     ${q ? `<div class="note-w" style="position:absolute;left:0;bottom:22%;width:150px;transform:rotate(-12deg);z-index:3"><div class="note" style="font-size:14px;padding:10px 18px 12px 10px">${esc(q.text)}</div></div>` : ''}
     <div class="kbox">${BOX(b.questions.length ? b.questions.length + ' question' + (b.questions.length > 1 ? 's' : '') : 'keepsakes')}</div></div>
     <p class="label">What kind of encounter? · optional</p>
     <div class="seg" id="kind">${['A call', 'Messages', 'A conversation', 'A date', 'Something else'].map(k => `<button aria-pressed="false">${k}</button>`).join('')}</div>
-    <p class="hint">A page for what you experienced.<br>Not a verdict on who they are.</p>
-    <div class="actions"><button class="btn primary" id="start">Start a page</button><button class="btn" id="blank">Leave blank</button></div>`,
+        <div class="actions"><button class="btn primary" id="start">Start a page</button><button class="btn" id="blank">Leave blank</button></div>`,
     mount: r => {
       let kind = '';
       on(r, '#kind button', (e, btn) => { const was = btn.getAttribute('aria-pressed') === 'true'; $$('#kind button', r).forEach(x => x.setAttribute('aria-pressed', 'false')); btn.setAttribute('aria-pressed', String(!was)); kind = was ? '' : btn.textContent; });
@@ -1072,10 +1067,10 @@ SCENES.fragments = (o) => {
   const bub = f => `<div class="bub ${f.who === 'me' ? 'me' : ''}${f.who === 'pause' ? ' pause' : ''}" data-id="${f.id}" tabindex="0" role="button" aria-label="${esc(f.text || f.prompt)}. Tap to write, arrow keys to move." style="left:${f.x * 100}%;top:${f.y * 100}%;--r:${f.r}deg;${f.b ? `--b:${f.b}` : ''}">${f.who === 'pause' && !f.text ? '<span class="pr">…a pause</span>' : f.text ? esc(f.text) : `<span class="pr">${esc(f.prompt)}</span>`}${f.text && f.prompt ? `<small>${esc(f.prompt)}</small>` : ''}</div>`;
   return {
     tone: 'pink', eyebrow: '02 Continue? · Words that linger',
-    html: `<h1 class="t">Keep a fragment.<br>Or a pause.</h1><p class="sub">Only your words belong on this page.<br>A little is enough. Blank is, too.</p>
+    html: `<h1 class="t">Keep a fragment.<br>Or a pause.</h1><p class="sub">A little is enough. Blank is, too.</p>
     <p class="label">Experienced · your words</p>
     <div class="page drop" id="pg">${pg.fragments.map(bub).join('')}</div>
-    <p class="hint">Move a bubble · tap it to write what you remember</p>
+    <p class="hint">Tap a bubble to write</p>
     <div class="actions"><button class="btn primary" id="next">Keep this page</button><div class="row2"><button class="btn" id="add">${IC.plus} Add my fragment</button><button class="btn" id="skip">Leave blank</button></div></div>`,
     mount: r => {
       const st = $('#pg', r);
@@ -1106,11 +1101,11 @@ SCENES.moments = (o) => {
   const tokHtml = (t, i) => `<button class="tok" data-id="${t.id}" aria-label="${esc(t.label)}${t.note ? ': ' + esc(t.note) : ''}. Tap to add a note, arrow keys to move." style="left:${t.x * 100}%;top:${t.y * 100}%;--r:${t.r}deg">${tokenSvg(t.type, i)}<span>${esc(t.label)}</span>${t.note ? '<i class="nt"></i>' : ''}</button>`;
   return {
     tone: 'pink', eyebrow: '02 Continue? · A moment has many shapes',
-    html: `<h1 class="t">What shape was the moment?</h1><p class="sub">Choose a token if it helps.<br>Every feeling gets the same room.</p>
+    html: `<h1 class="t">What shape was the moment?</h1><p class="sub">Every feeling gets the same room.</p>
     <p class="label">Experienced · optional moment tokens</p>
     <div class="page drop" id="mp" style="aspect-ratio:1/.82">${pg.tokens.map(tokHtml).join('')}${pg.tokens.length ? '' : '<div class="empty" style="font-size:14px">Your page. Place a moment anywhere.</div>'}</div>
     <div class="tray" id="tray">${Object.keys(TOKENS).map((k, i) => `<button data-t="${k}" aria-pressed="false">${tokenSvg(k, i)}${TOKENS[k].label}</button>`).join('')}</div>
-    <p class="hint" id="mh">Drag a token onto the page · or tap a token, then tap the page.<br>An arrangement can change. Writing is optional.</p>
+    <p class="hint" id="mh">Drag a token onto the page, or tap then place.</p>
     <div class="actions row2"><button class="btn primary" id="next">Keep this page</button><button class="btn" id="skip">Leave blank</button></div>`,
     mount: r => {
       const mp = $('#mp', r), mh = $('#mh', r);
@@ -1177,7 +1172,7 @@ SCENES.thennow = (o) => {
   const qs = b.questions, pIdx = b.pages.indexOf(pg);
   if (!qs.length) return {
     tone: 'pink', eyebrow: '02 Continue? · Expectation & reality',
-    html: `<h1 class="t">Then, and now.</h1><p class="sub">Nothing was carried over from Chapter One.<br>That’s fine. You can add a question to carry forward.</p>
+    html: `<h1 class="t">Then, and now.</h1><p class="sub">Nothing was carried over. That’s fine.</p>
     <div class="actions"><button class="btn" id="addq">${IC.pen} Add a question to carry</button><button class="btn primary" id="next">Turn the page</button></div>`,
     mount: r => { on(r, '#addq', () => askText({title: 'A question to carry', placeholder: 'I wonder…', ok: 'Carry it'}, t => { if (t) { b.questions.push({id: uid(), text: t, history: [], obj: null}); save(); render(); } })); on(r, '#next', () => go('nextpage', {book: b.id})); }
   };
@@ -1187,12 +1182,12 @@ SCENES.thennow = (o) => {
   const earlier = b.pages.map((p, i) => ({i, v: p.revisits[q.id]})).filter(x => x.i !== pIdx && x.v && x.v.note);
   return {
     tone: 'pink', eyebrow: '02 Continue? · Expectation & reality',
-    html: `<h1 class="t">Then, and now.</h1><p class="sub">${lead} Did anything you experienced change what you imagined?</p>
+    html: `<h1 class="t">Then, and now.</h1><p class="sub">${lead} Did anything change?</p>
     ${q.obj ? `<div class="mini-known"><div class="ic">${artFor(q.obj)}</div><div><span class="label">Known · from the form</span><br>${esc(q.obj.known[0] || '')}</div></div>` : ''}
     <div class="tn"><div><p class="label w" style="margin-bottom:8px">Wondering</p><div class="note-w"><div class="note" style="font-size:16px">${esc(q.text)}${q.history.length ? `<small>revised ${q.history.length}×</small>` : ''}</div></div></div>
     <div><p class="label" style="margin-bottom:8px">Experienced</p><div class="exp">${rv.note ? esc(rv.note) : rv.open ? '<span class="ph">Left unanswered, for now.</span>' : '<span class="ph">Your observation goes here.</span>'}<small>${rv.note ? 'In your words, from encounter ' + pad(pIdx + 1) + '.' : 'Reflect on what you experienced. Nothing assumed.'}</small></div></div></div>
     ${earlier.length ? `<div class="trail"><span class="label">Earlier pages</span>${earlier.map(x => `<span><b>Encounter ${pad(x.i + 1)}:</b> ${esc(x.v.note)}</span>`).join('')}</div>` : ''}
-    <p class="hint">A question can change. Or stay a question.${qs.length > 1 ? ` (${qi + 1} of ${qs.length})` : ''}</p>
+    ${qs.length > 1 ? `<p class="hint">${qi + 1} of ${qs.length}</p>` : ''}
     <div class="actions"><div class="row2"><button class="btn" id="obs">Add observation</button><button class="btn" id="rev">Revise note</button></div>
     <button class="btn" id="open">Leave unanswered</button>
     <button class="btn primary" id="next">${qi < qs.length - 1 ? 'Next question' : 'Turn the page'}</button></div>`,
@@ -1241,7 +1236,7 @@ SCENES.book = (o) => {
   const qLine = q => { const v = pg.revisits[q.id]; return `<button class="it q" data-q="${q.id}">${esc(q.text)}${v?.note ? `<span class="obs">Experienced: ${esc(v.note)}</span>` : v?.open ? '<span class="obs">Left unanswered</span>' : ''}</button>`; };
   const pageHtml = pg ? `<h2 class="pg-h">Encounter ${pad(tab + 1)}</h2><p class="pg-m">${esc(pg.kind || 'An encounter')} · ${new Date(pg.date).toLocaleDateString(undefined, {day: 'numeric', month: 'short'})}</p>
     ${b.questions.length ? `<p class="sec">Questions carried forward</p><div class="items">${b.questions.map(qLine).join('')}</div>` : ''}
-    <p class="sec">Moments · tap to annotate or move</p><div class="items">${pg.tokens.map(t => `<button class="it tk" data-k="tokens" data-id="${t.id}">${esc(t.label)}${t.note ? `<span class="obs">${esc(t.note)}</span>` : ''}</button>`).join('') || '<span class="pg-m">None placed.</span>'}</div>
+    <p class="sec">Moments</p><div class="items">${pg.tokens.map(t => `<button class="it tk" data-k="tokens" data-id="${t.id}">${esc(t.label)}${t.note ? `<span class="obs">${esc(t.note)}</span>` : ''}</button>`).join('') || '<span class="pg-m">None placed.</span>'}</div>
     <p class="sec">Fragments</p><div class="items">${pg.fragments.filter(f => f.text).map(f => `<button class="it" data-k="fragments" data-id="${f.id}">“${esc(f.text)}”<span class="obs">${f.who === 'me' ? 'my words' : f.who === 'pause' ? 'a pause' : 'their words'}</span></button>`).join('') || '<span class="pg-m">Blank, and that’s fine.</span>'}</div>
     ${pg.next?.text ? `<p class="sec">${pg.next.type === 'question' ? 'To discover next' : 'A memory'}</p><div class="items"><button class="it q" data-next>${esc(pg.next.text)}</button></div>` : ''}
     <p class="sec">Margin notes</p><div class="items">${pg.notes.map(t => `<button class="it" data-k="notes" data-id="${t.id}">${esc(t.text)}</button>`).join('')}<button class="it" id="ann" style="border-style:dashed">${'+ annotate'}</button></div>`
@@ -1250,11 +1245,10 @@ SCENES.book = (o) => {
     : `<h2 class="pg-h">No pages yet</h2><p class="pg-m">This book is waiting for its first encounter, whenever that happens.</p>`;
   return {
     tone: 'pink', eyebrow: '02 Continue? · Across encounters',
-    html: `<h1 class="t">A story can change shape.</h1><p class="sub">Revisit moments. Revise questions.<br>Leave room for what you don’t know.</p>
+    html: `<h1 class="t">A story can change shape.</h1><p class="sub">Revisit moments. Revise questions.</p>
     <span class="status">${esc(b.name)} · ${statusText(b.status)}${b.example ? ' · example' : ''}</span>
     <div class="book" id="book"><div class="tabs">${b.pages.map((p, i) => `<button data-tab="${i}" aria-current="${tab === i}" aria-label="Encounter ${i + 1}">${pad(i + 1)}</button>`).join('')}${n ? `<button data-tab="time" aria-current="${tab === 'time'}" aria-label="How questions changed">≈</button>` : ''}</div><div class="page">${pageHtml}</div></div>
-    <p class="hint">Encounter tabs on the right. Private by default.<br>Nothing shared. No conclusion required.</p>
-    <div class="actions"><div class="row2"><button class="btn" id="add">${IC.plus} Add a page</button><button class="btn" id="turn">Turn the page</button></div>
+        <div class="actions"><div class="row2"><button class="btn" id="add">${IC.plus} Add a page</button><button class="btn" id="turn">Turn the page</button></div>
     ${pg ? '<button class="btn" id="reopen">Revisit this encounter</button>' : ''}
     <button class="btn" id="where">Where this goes</button>
     <button class="btn primary" id="close">Close the book</button>
@@ -1307,10 +1301,10 @@ function exampleBook() {
 function openSettings() {
   const st = S.settings;
   sheet(`<h3>Privacy &amp; comfort</h3>
-  <label class="tog"><span>Reduced motion<small>Calmer transitions. Everything still works by tapping.</small></span><input type="checkbox" class="sw" id="s-rm" ${st.reduced ? 'checked' : ''}></label>
-  <label class="tog"><span>Paper sounds<small>Soft rustles when things move.</small></span><input type="checkbox" class="sw" id="s-snd" ${st.sound ? 'checked' : ''}></label>
-  <label class="tog"><span>Haptics<small>Small taps on supported phones.</small></span><input type="checkbox" class="sw" id="s-hap" ${st.haptics ? 'checked' : ''}></label>
-  <p><b>What’s kept, and where.</b> Everything stays in this browser on this device. Nothing is sent anywhere or shared. Contact details from a biodata are never kept, and once you pack a keepsake box the paperwork itself is let go: only the questions and objects you chose travel on.</p>
+  <label class="tog"><span>Reduced motion</span><input type="checkbox" class="sw" id="s-rm" ${st.reduced ? 'checked' : ''}></label>
+  <label class="tog"><span>Paper sounds</span><input type="checkbox" class="sw" id="s-snd" ${st.sound ? 'checked' : ''}></label>
+  <label class="tog"><span>Haptics</span><input type="checkbox" class="sw" id="s-hap" ${st.haptics ? 'checked' : ''}></label>
+  <p>Everything stays in this browser. Contact details are never kept. Packed paperwork is let go.</p>
   ${S.archived.length ? `<p class="label">Archived paperwork</p>${S.archived.map(a => `<div class="arch"><span>${esc(a.name)} · ${new Date(a.at).toLocaleDateString()}</span><span class="seg"><button data-ro="${a.id}">Reopen</button><button data-da="${a.id}">Delete</button></span></div>`).join('')}` : ''}
   ${S.books.length ? `<p class="label">Scrapbooks</p>${S.books.map(b => `<div class="arch"><span>${esc(b.name)} · ${b.pages.length} page${b.pages.length === 1 ? '' : 's'}</span><span class="seg"><button data-db="${b.id}">Delete</button></span></div>`).join('')}` : ''}
   <div class="row2"><button class="btn" id="s-all">Delete everything</button><button class="btn primary" data-x>Done</button></div>`, (sh, close) => {
