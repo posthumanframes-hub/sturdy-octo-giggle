@@ -427,6 +427,29 @@ button.flagmark{cursor:pointer}
 .clipline .ic{width:44px;height:44px}
 .none{margin:0;font-size:12.5px;color:var(--ink-soft)}
 .sheet .bd-row b{color:var(--ink-soft)}
+.points{display:grid;gap:3px;background:var(--paper);color:var(--paper-ink);border:1.2px dashed rgba(61,52,49,.35);border-radius:4px;padding:8px 10px;font:400 12.5px/1.35 var(--sans);transform:rotate(-.6deg)}
+.points b{font:800 9px/1.3 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--paper-soft);margin-bottom:2px}
+.points em{font-style:normal;color:var(--coral)}
+.points span{display:flex;gap:6px} .points i{font-style:normal;font-weight:800;width:12px;flex:none}
+.points i.ok{color:#4F6B45} .points i.no{color:#B4462F}
+/* idle motion for inspected objects */
+.big[data-anim=spin] > *{animation:spin 7s linear infinite}
+.big[data-anim=turn] > *{animation:spin 40s linear infinite}
+.big[data-anim=sway] > *{transform-origin:50% 15%;animation:sway 4.2s ease-in-out infinite}
+.big[data-anim=swing] > *{transform-origin:50% 95%;animation:sway 3.4s ease-in-out infinite}
+.big[data-anim=hang] > *{transform-origin:12% 50%;animation:sway 3.8s ease-in-out infinite}
+.big[data-anim=bob] > *{animation:bob 3.6s ease-in-out infinite}
+.big[data-anim=press] > *{transform-origin:50% 100%;animation:press 3.4s ease-in-out infinite}
+.big[data-anim=breathe] > *{animation:breathe 4.5s ease-in-out infinite}
+.big[data-anim=roll] > *{animation:roll 5.5s ease-in-out infinite}
+.big[data-anim=float] > *{animation:floaty 5s ease-in-out infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes sway{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@keyframes press{0%,55%,100%{transform:none}68%{transform:translateY(7px) scaleY(.9)}80%{transform:none}}
+@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+@keyframes roll{0%,100%{transform:translateX(-10px) rotate(-35deg)}50%{transform:translateX(10px) rotate(35deg)}}
+@keyframes floaty{0%,100%{transform:translateY(0) rotate(-1.5deg)}50%{transform:translateY(-5px) rotate(1.5deg)}}
 /* auto layout: the main visual takes the free space between the heading and the buttons */
 .scene > .hero,.scene > .env,.scene > .fold,.scene > .boxstage,.scene > .nb-stage,.scene > .np,.scene > .sil-wrap{margin-block:auto}
 .scene > .onb-art{margin-top:auto}
@@ -1219,6 +1242,18 @@ SCENES.table = (o) => {
   };
 };
 
+// Which preference theme each object question could shed light on.
+const PROMPT_THEME = {"What do they like about their work?": "curious", "What’s a good workday for them?": "autonomy", "What did they enjoy studying?": "curious", "Anything they’d learn now just for fun?": "curious", "What do they like spending on?": "new", "What would they do with a month off?": "new", "Which traditions matter to them?": "decide", "Favourite festival?": "decide", "Do they care about horoscopes?": "decide", "Who in the family cares about this?": "decide", "Who are they closest to?": "feel", "Which family tradition would they keep?": "decide", "Which place feels like home?": "living", "Where would they live if they could pick?": "living", "Favourite meal?": "care", "Do they cook?": "roles", "What do these words mean to them?": "roles", "Did they write this, or family?": "decide", "What would they add to this?": "feel", "What would a friend say about them?": "kind", "What are they reading now?": "curious", "A book they’d recommend?": "curious", "Play or watch?": "new", "Favourite team?": "humour", "What do they listen to?": "arts", "A song on repeat right now?": "arts", "Best match they’ve seen?": "humour", "Best trip so far?": "new", "Where next?": "new", "A film they rewatch?": "arts", "Favourite kind of film?": "feel", "What do they like to shoot?": "arts", "A favourite photo?": "arts", "Their best dish?": "care", "Who taught them?": "roles", "What do they like to make?": "arts", "Where do they get ideas?": "curious", "What are they growing?": "care", "Oldest plant?": "care", "What makes them laugh?": "humour", "What do they care about most?": "kind", "What does independence mean to them?": "autonomy", "What do they want from a relationship?": "feel", "What could we enjoy doing together?": "new"};
+const themeOfPrompt = q => PROMPT_THEME[q] || (/like about|get into/i.test(q) ? 'curious' : null);
+// What a question could point to: the player's own preference on that theme if they have one.
+function pointsTo(q) {
+  const tid = themeOfPrompt(q), th = THEME[tid]; if (!th) return '';
+  const pref = mine().find(x => x.theme === tid && x.cat);
+  const d = pref ? dirFor(pref) : th.dir;
+  return `<div class="points"><b>Could point to · ${esc(pref ? pref.text : th.pos)}${pref ? ` <em>${CATL[pref.cat]}</em>` : ''}</b><span><i class="ok">✓</i>${esc(d.fits)}</span><span><i class="no">✕</i>${esc(d.clash)}</span></div>`;
+}
+// A slow idle movement for each object while it's being inspected.
+const IDLE = {record: 'spin', football: 'roll', briefcase: 'sway', kundli: 'turn', map: 'breathe', coins: 'bob', stamp: 'press', tape: 'breathe', photo: 'sway', tiffin: 'bob', scroll: 'sway', bat: 'swing', suitcase: 'bob', ticket: 'sway', camera: 'breathe', pot: 'bob', brush: 'sway', plant: 'swing', tag: 'hang', picture: 'sway'};
 SCENES.inspect = (o) => {
   const d = draft(), ob = objById(o.id);
   if (!ob) return SCENES.table({});
@@ -1232,11 +1267,12 @@ SCENES.inspect = (o) => {
     tone: 'butter', eyebrow: '01 Filter In · Inspect',
     html: `<h1 class="t">${esc(ob.title)}</h1>
     <div class="inspect">
-      <div class="big" id="big" style="--r:${pos.r}deg" tabindex="0" role="img" aria-label="${esc(ob.title)}. Drag or twist to turn; arrow keys turn it too.">${artFor(ob, d.profile.photo)}</div>
+      <div class="big" id="big" data-anim="${IDLE[ob.kind] || 'float'}" style="--r:${pos.r}deg" tabindex="0" role="img" aria-label="${esc(ob.title)}. Drag or twist to turn; arrow keys turn it too.">${artFor(ob, d.profile.photo)}</div>
       <p class="label">From the form</p><div class="clips">${ob.known.map((k, n) => clipHtml(k, n)).join('')}</div>
       <p class="label w">A question</p>
       <div class="wrow"><div class="note-w" id="wn" tabindex="0" aria-label="Question note. ${many ? 'Swipe sideways or press the arrow keys for another. ' : ''}Drop it in the pocket, tap the pocket, or press Enter to save."><div class="note" id="wt"></div></div>
       <button class="pocket" id="pk" aria-label="Pocket. Tap to save the question.">${POCKET(d.pocket.length)}</button></div>
+      <div id="pts" aria-live="polite"></div>
       <p class="hint" id="gh">${many ? 'Swipe for another · drop in the pocket to save' : 'Drop in the pocket to save'}</p>
     </div>
     <div class="actions">
@@ -1250,6 +1286,7 @@ SCENES.inspect = (o) => {
         const inPocket = q && d.pocket.some(n => n.text === q);
         wt.innerHTML = q ? esc(q) + (inPocket ? '<small>saved</small>' : '') : 'Nothing to ask here.';
         if (!q) $('#gh', r).hidden = true;
+        $('#pts', r).innerHTML = q ? pointsTo(q) : '';
       };
       show();
       if (firstReveal) setTimeout(() => toast('New on the table'), 500);
