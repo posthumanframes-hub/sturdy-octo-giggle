@@ -302,6 +302,28 @@ h1.t{font:400 clamp(28px,8.4vw,35px)/1.08 var(--serif);letter-spacing:-.015em;ma
 .toast.in{transform:translate(-50%,0) rotate(-1deg);opacity:1}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 
+/* first read + filters */
+.readpaper{cursor:default}
+.readpaper .panel{max-height:190px;-webkit-mask-image:linear-gradient(#000 65%,transparent);mask-image:linear-gradient(#000 65%,transparent)}
+.stamp-mark{position:absolute;right:7%;top:42%;border:3px double var(--sc);color:var(--sc);font:800 17px/1 var(--sans);letter-spacing:.14em;padding:9px 12px;transform:rotate(-12deg);background:rgba(255,252,245,.7);animation:stampIn .55s var(--spring) .25s both}
+@keyframes stampIn{from{transform:rotate(-12deg) scale(2.4);opacity:0}}
+.suff{display:flex;justify-content:space-between;align-items:center;gap:8px;background:var(--paper);color:var(--paper-ink);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:13px}
+.suff span{color:var(--paper-soft);font-size:12px;text-align:right}
+.suff.thin b{color:#B4462F}
+.checks{display:grid;gap:6px}
+.ck{display:grid;grid-template-columns:22px 1fr auto;gap:8px;align-items:center;background:var(--paper);color:var(--paper-ink);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:13px}
+.ck i{font-style:normal;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font:800 12px var(--sans);border:1.2px solid var(--paper-ink)}
+.ck.ok i{background:var(--n-sage)} .ck.no i{background:var(--n-pink)} .ck.un i{background:var(--n-butter)}
+.ck span{color:var(--paper-soft);font-size:11.5px;display:block}
+.ck em{font:800 9px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--paper-soft);font-style:normal}
+.pref{background:var(--paper);color:var(--paper-ink);border:1px solid var(--line);border-radius:8px;padding:10px 12px;display:grid;gap:8px}
+.pref-h{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.pref-h b{font:400 17px var(--serif)}
+.imp{flex-wrap:nowrap}
+.imp button{padding:4px 9px;font-size:11px}
+.pref input,.pref select{font:400 15px var(--sans);border:1.2px solid var(--line);border-radius:6px;padding:8px 10px;background:var(--paper);color:var(--paper-ink);width:100%;min-width:0}
+.pref.off > :not(.pref-h){opacity:.55}
+button.status{cursor:pointer}
 html.rm *,html.rm *::before,html.rm *::after{animation:none!important;transition-duration:.01ms!important}
 @media (prefers-reduced-motion: reduce){.float{animation:none}}
 </style>
@@ -500,13 +522,86 @@ const HOBBY = [
   [/garden|plant/i, 'plant', 'A potted plant', 'their plants', ['What are they growing at the moment?', 'Which plant have they kept alive the longest?']]
 ];
 
+const catOf = k => (RULES.find(([, re]) => re.test(k)) || ['fine'])[0];
+function citiesIn(rows) {
+  const cities = [];
+  rows.filter(r => !r.hide).forEach(r => CITIES.forEach(c => { if (new RegExp('\\b' + c + '\\b', 'i').test(r.v) && !cities.includes(c) && !(c === 'Delhi' && cities.includes('New Delhi'))) cities.push(c); }));
+  return cities;
+}
+
+/* ---------- first read: the form vs. the player's own filters ---------- */
+const DIETS = ['Vegetarian', 'Eggetarian', 'Non-vegetarian', 'Vegan', 'Jain'];
+const HEIGHTS = []; for (let i = 54; i <= 80; i++) HEIGHTS.push(Math.round(i * 2.54));
+const fmtH = cm => { const i = Math.round(cm / 2.54); return `${Math.floor(i / 12)}'${i % 12}"`; };
+const defaultPrefs = () => ({age: {imp: 'off', min: '', max: ''}, height: {imp: 'off', min: '', max: ''}, diet: {imp: 'off', ok: []}, place: {imp: 'off', list: ''}, edu: {imp: 'off', list: ''}, comm: {imp: 'off', list: ''}, manglik: {imp: 'off', want: 'No'}, interests: {imp: 'off', list: ''}});
+const prefs = () => S.prefs || (S.prefs = defaultPrefs());
+function ageFrom(v) {
+  let t = Date.parse(v.replace(/(\d)(st|nd|rd|th)\b/i, '$1'));
+  const m = v.match(/(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{4})/);
+  if (m) t = new Date(+m[3], +m[2] - 1, +m[1]).getTime();
+  if (isNaN(t)) return null;
+  const b = new Date(t), n = new Date();
+  let a = n.getFullYear() - b.getFullYear();
+  if (n.getMonth() < b.getMonth() || (n.getMonth() === b.getMonth() && n.getDate() < b.getDate())) a--;
+  return a > 15 && a < 90 ? a : null;
+}
+function heightCm(v) {
+  const cm = v.match(/(\d{3})\s*cm/i); if (cm) return +cm[1];
+  const ft = v.match(/(\d)\s*(?:'|’|ft|feet|foot)\s*(\d{1,2})?/i);
+  return ft ? Math.round((+ft[1] * 12 + (+ft[2] || 0)) * 2.54) : null;
+}
+const dietOf = v => /vegan/i.test(v) ? 'Vegan' : /jain/i.test(v) ? 'Jain' : /egg/i.test(v) ? 'Eggetarian' : /non[\s-]?veg/i.test(v) ? 'Non-vegetarian' : /veg/i.test(v) ? 'Vegetarian' : null;
+function factsOf(p) {
+  const f = {text: {}, cats: new Set(), age: null, heightCm: null, diet: null, manglik: null};
+  p.rows.filter(r => !r.hide).forEach(r => {
+    const cat = catOf(r.k); f.cats.add(cat);
+    f.text[cat] = (f.text[cat] || '') + ' ' + r.v;
+    if (/^age\b/i.test(r.k)) { const m = r.v.match(/\d{2}/); if (m) f.age = +m[0]; }
+    if (/date of birth|^dob|birth ?date/i.test(r.k) && f.age == null) f.age = ageFrom(r.v);
+    if (cat === 'height') f.heightCm = heightCm(r.v);
+    if (cat === 'diet') f.diet = dietOf(r.v);
+    if (/manglik|mangal/i.test(r.k)) f.manglik = /\b(yes|anshik|partial)/i.test(r.v) ? 'Yes' : /\b(no|non)/i.test(r.v) ? 'No' : null;
+  });
+  f.cities = citiesIn(p.rows);
+  f.all = p.rows.filter(r => !r.hide).map(r => r.v).join(' ');
+  return f;
+}
+const words = s => String(s || '').split(/,|;|\//).map(x => x.trim()).filter(Boolean);
+const findAny = (list, text) => list.find(w => new RegExp('\\b' + w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i').test(text || ''));
+function evaluate(p, P) {
+  const f = factsOf(p);
+  const basics = [['age', f.age != null], ['height', f.heightCm != null], ['education', f.cats.has('education')], ['work', f.cats.has('occupation')], ['location', f.cities.length > 0 || f.cats.has('places')], ['family', f.cats.has('family')], ['diet', f.cats.has('diet')], ['interests', f.cats.has('hobbies')], ['community', f.cats.has('community')]];
+  const missing = basics.filter(b => !b[1]).map(b => b[0]);
+  const checks = [];
+  const add = (key, label, status, detail) => { if (P[key].imp !== 'off') checks.push({label, imp: P[key].imp, status, detail}); };
+  const range = (v, lo, hi) => (lo === '' || v >= +lo) && (hi === '' || v <= +hi);
+  if (P.age.min !== '' || P.age.max !== '') add('age', 'Age', f.age == null ? 'un' : range(f.age, P.age.min, P.age.max) ? 'ok' : 'no', f.age == null ? 'Not on the form' : `${f.age} · you: ${P.age.min || 'any'}–${P.age.max || 'any'}`);
+  if (P.height.min !== '' || P.height.max !== '') add('height', 'Height', f.heightCm == null ? 'un' : range(f.heightCm, P.height.min, P.height.max) ? 'ok' : 'no', f.heightCm == null ? 'Not on the form' : `${fmtH(f.heightCm)} · you: ${P.height.min ? fmtH(P.height.min) : 'any'}–${P.height.max ? fmtH(P.height.max) : 'any'}`);
+  if (P.diet.ok.length) add('diet', 'Diet', !f.diet ? 'un' : P.diet.ok.includes(f.diet) ? 'ok' : 'no', f.diet ? f.diet : 'Not on the form');
+  const kw = (key, label, list, text, none) => { if (!list.length) return; const hit = text && findAny(list, text); add(key, label, !text ? 'un' : hit ? 'ok' : 'no', !text ? none : hit ? `Mentions ${hit}` : `None of: ${list.join(', ')}`); };
+  kw('place', 'Location', words(P.place.list), (f.cities.length || f.cats.has('places')) ? f.all : null, 'Not on the form');
+  kw('edu', 'Education', words(P.edu.list), f.text.education, 'Not on the form');
+  kw('comm', 'Community', words(P.comm.list), f.text.community, 'Not on the form');
+  add('manglik', 'Manglik', f.manglik == null ? 'un' : f.manglik === P.manglik.want ? 'ok' : 'no', f.manglik == null ? 'Not on the form' : `${f.manglik} · you: ${P.manglik.want}`);
+  kw('interests', 'Interests', words(P.interests.list), f.text.hobbies, 'No hobbies listed');
+  const must = checks.filter(c => c.imp === 'must');
+  const verdict = !checks.length ? 'noprefs' : must.some(c => c.status === 'no') ? 'fail' : must.some(c => c.status === 'un') ? 'unclear' : 'pass';
+  return {present: basics.length - missing.length, total: basics.length, missing, sufficient: missing.length <= 3 && !must.some(c => c.status === 'un'), checks, verdict};
+}
+const VERDICT = {
+  pass: {t: 'Likely passes your filters.', stamp: 'LIKELY PASS', short: 'Likely pass', c: '#4F6B45'},
+  fail: {t: 'Likely doesn’t pass.', stamp: 'LIKELY FAIL', short: 'Likely fail', c: '#B4462F'},
+  unclear: {t: 'Can’t tell yet.', stamp: 'NOT ENOUGH INFO', short: 'Unclear', c: '#7A6D66'},
+  noprefs: {t: 'No filters set yet.', stamp: 'UNSORTED', short: 'No filters set', c: '#7A6D66'}
+};
+
 function parseBiodata(text) {
   const rows = [], groups = {}; let name = '';
   text.split(/\r?\n/).forEach(line => {
     const m = line.match(/^\s*([A-Za-z][^:：]{0,40}?)\s*[:：]\s*(.+?)\s*$/);
     if (!m) return;
     const k = m[1].replace(/\s+/g, ' ').trim(), v = m[2];
-    const cat = (RULES.find(([, re]) => re.test(k)) || ['fine'])[0];
+    const cat = catOf(k);
     if (cat === 'contact') { rows.push({k, v: 'left off the table', hide: true}); return; }
     rows.push({k, v});
     if (cat === 'name') { name = v.split(/\s+/)[0]; return; }
@@ -526,8 +621,7 @@ function parseBiodata(text) {
     });
   });
   std('family'); std('horoscope');
-  const cities = [];
-  rows.filter(r => !r.hide).forEach(r => CITIES.forEach(c => { if (new RegExp('\\b' + c + '\\b', 'i').test(r.v) && !cities.includes(c) && !(c === 'Delhi' && cities.includes('New Delhi'))) cities.push(c); }));
+  const cities = citiesIn(rows);
   if (cities.length || groups.places) add({kind: 'map', title: KIND.places.title, about: KIND.places.about, known: [...(cities.length ? [`Places named on the form: ${cities.join(', ')}.`] : []), ...lines('places')], prompts: KIND.places.prompts});
   std('community'); std('income'); std('diet'); std('height'); std('expect');
   if (groups.fine) add({kind: 'slip', title: KIND.fine.title, about: '', known: lines('fine'), prompts: []});
@@ -748,10 +842,12 @@ SCENES.unfold = () => {
   return {
     tone: 'cream', eyebrow: '01 Filter In · Unfold',
     html: `<h1 class="t">Paperwork, unfolded.</h1><p class="sub">A form can’t introduce a whole person.</p>${paper}
-    ${p ? `<p class="hint" id="fh">Tap to unfold</p><div class="actions"><button class="btn primary" id="unf">Unfold</button><button class="btn link" id="other">Use different paperwork</button></div>`
-        : `<p class="hint">Only add a document you have permission to use.</p><div class="actions"><button class="btn primary" id="sample">Unfold the sample biodata</button><button class="btn" id="paste">${IC.plus} Add biodata</button><button class="btn" id="none">Continue without it</button></div>`}`,
+    ${p ? `<p class="hint" id="fh">Tap to unfold</p><div class="actions"><button class="btn primary" id="unf">Unfold</button><div class="row2"><button class="btn link" id="fr">First read</button><button class="btn link" id="other">Different paperwork</button></div></div>`
+        : `<p class="hint">Only add a document you have permission to use.</p><div class="actions"><button class="btn primary" id="sample">Unfold the sample biodata</button><button class="btn" id="paste">${IC.plus} Add biodata</button><button class="btn" id="none">Continue without it</button><button class="btn link" id="filters">Set your filters</button></div>`}`,
     mount: r => {
-      on(r, '#sample', () => { d.profile = parseBiodata(SAMPLE); d.sample = true; save(); render(); });
+      on(r, '#sample', () => { d.profile = parseBiodata(SAMPLE); d.sample = true; d.placed = {}; d.seen = []; save(); go('read'); });
+      on(r, '#filters', () => go('prefs'));
+      on(r, '#fr', () => go('read'));
       on(r, '#paste', () => pasteSheet());
       on(r, '#other', () => { d.profile = null; d.placed = {}; d.seen = []; save(); render(); });
       on(r, '#none', () => { d.profile = null; save(); go('table', {}, 'replace'); });
@@ -782,7 +878,7 @@ function pasteSheet() {
       if (!$('#perm', sh).checked) { toast('Tick the permission box first.'); return; }
       const p = parseBiodata(t);
       if (!p.rows.length) { toast('No “Label: detail” lines found. Try one detail per line.'); return; }
-      const d = draft(); d.profile = p; d.sample = false; d.placed = {}; d.seen = []; save(); close(); render();
+      const d = draft(); d.profile = p; d.sample = false; d.placed = {}; d.seen = []; save(); close(); go('read');
     };
   });
 }
@@ -797,6 +893,7 @@ SCENES.table = (o) => {
   return {
     tone: 'butter', eyebrow: '01 Filter In · The table',
     html: `<h1 class="t">A little room<br>for curiosity.</h1><p class="sub">${objs.length ? 'Drag, turn, tap to look closer.' : 'No source, no assumptions.'}</p>
+    ${objs.length ? `<button class="status" id="rd">Your filters · ${VERDICT[evaluate(d.profile, prefs()).verdict].short}</button>` : ''}
     <p class="label">${known}</p>
     <div class="tabletop" id="tbl" style="aspect-ratio:4/${rows * 1.02}">
       ${objs.length ? '' : `<button class="source" id="src"><small>Source paper</small>Add a biodata to unpack its details</button>`}
@@ -839,6 +936,7 @@ SCENES.table = (o) => {
       on(r, '#space', () => go('spaces'));
       on(r, '#src', () => go('unfold'));
       on(r, '#done', () => go('pack'));
+      on(r, '#rd', () => go('read'));
     }
   };
 };
@@ -974,10 +1072,7 @@ SCENES.pack = (o) => {
     : `      <div class="actions"><button class="btn" id="leave">Leave for now</button><button class="btn" id="arch">Archive</button><button class="btn" id="know">Get to know them</button></div>`}`,
     mount: r => {
       on(r, '#leave', () => { toast('Left on the table. It’ll be here.'); go('chapters', {}, 'reset'); });
-      on(r, '#arch', () => {
-        S.archived.unshift({id: d.id, name: d.profile?.name || 'Unnamed paperwork', at: Date.now(), draft: d});
-        S.draft = null; save(); toast('Archived. Find it in settings.'); go('chapters', {}, 'reset');
-      });
+      on(r, '#arch', archiveDraft);
       on(r, '#know', () => { d.packSel = d.pocket.map(n => n.id); go('pack', {packing: true}, 'replace'); });
       on(r, '.chip', (e, b) => {
         const id = b.dataset.id, i = d.packSel.indexOf(id);
@@ -997,6 +1092,70 @@ SCENES.pack = (o) => {
         $('#bs', r).classList.add('closed'); sfx('open'); buzz(14);
         setTimeout(() => { toast('Packed. The paperwork stays behind.'); go('after', {book: book.id}, 'reset'); }, S.settings.reduced ? 100 : 900);
       });
+    }
+  };
+};
+
+function archiveDraft() {
+  const d = draft();
+  S.archived.unshift({id: d.id, name: d.profile?.name || 'Unnamed paperwork', at: Date.now(), draft: d});
+  S.draft = null; save(); toast('Archived. Find it in settings.'); go('chapters', {}, 'reset');
+}
+
+SCENES.read = () => {
+  const d = draft(), p = d.profile;
+  if (!p) return SCENES.unfold();
+  const ev = evaluate(p, prefs()), v = VERDICT[ev.verdict];
+  const mark = {ok: '✓', no: '✕', un: '?'};
+  return {
+    tone: 'butter', eyebrow: '01 Filter In · First read',
+    html: `<h1 class="t">${v.t}</h1><p class="sub">Your filters against what the form says. Nothing inferred.</p>
+    <div class="fold readpaper"><span class="tape"></span><div class="panel"><p class="bd-om">॥ SHREE GANESHAYA NAMAH ॥</p><p class="bd-title">BIODATA</p>${p.rows.slice(0, 7).map(x => `<div class="bd-row${x.hide ? ' hide' : ''}"><b>${esc(x.k)}</b><span>${esc(x.v)}</span></div>`).join('')}</div><span class="stamp-mark" style="--sc:${v.c}">${v.stamp}</span></div>
+    <div class="suff${ev.sufficient ? '' : ' thin'}"><b>${ev.sufficient ? 'Enough to go on' : 'Thin paperwork'}</b><span>${ev.present} of ${ev.total} basics${ev.missing.length ? `<br>missing ${ev.missing.join(', ')}` : ''}</span></div>
+    ${ev.checks.length ? `<p class="label">Your filters</p><div class="checks">${ev.checks.map(c => `<div class="ck ${c.status}"><i>${mark[c.status]}</i><div>${c.label}<span>${esc(c.detail)}</span></div><em>${c.imp === 'must' ? 'Must' : 'Nice'}</em></div>`).join('')}</div>` : ''}
+    <div class="actions">${ev.verdict === 'noprefs'
+      ? `<button class="btn primary" id="pf">Set your filters</button><button class="btn" id="go">Unfold &amp; unpack</button>`
+      : `<button class="btn primary" id="go">Unfold &amp; unpack</button><div class="row2"><button class="btn" id="pf">Edit filters</button><button class="btn" id="ar">Archive</button></div>`}
+      <button class="btn link" id="other">Different paperwork</button></div>`,
+    mount: r => {
+      if (!S.settings.reduced) setTimeout(() => { sfx('drop'); buzz(20); }, 450);
+      say(v.t);
+      on(r, '#go', () => go('unfold', {}, 'replace'));
+      on(r, '#pf', () => go('prefs'));
+      on(r, '#ar', archiveDraft);
+      on(r, '#other', () => { d.profile = null; d.placed = {}; d.seen = []; save(); go('unfold', {}, 'replace'); });
+    }
+  };
+};
+
+SCENES.prefs = () => {
+  const P = prefs();
+  const imp = k => `<div class="seg imp" data-k="${k}">${['off', 'nice', 'must'].map(x => `<button data-imp="${x}" aria-pressed="${P[k].imp === x}">${{off: 'Off', nice: 'Nice', must: 'Must'}[x]}</button>`).join('')}</div>`;
+  const card = (k, label, body) => `<div class="pref${P[k].imp === 'off' ? ' off' : ''}" data-card="${k}"><div class="pref-h"><b>${label}</b>${imp(k)}</div>${body}</div>`;
+  const hsel = (f, val, ph) => `<select data-f="${f}" aria-label="${ph}"><option value="">${ph}</option>${HEIGHTS.map(c => `<option value="${c}"${String(val) === String(c) ? ' selected' : ''}>${fmtH(c)}</option>`).join('')}</select>`;
+  const txt = (f, val, ph) => `<input data-f="${f}" value="${esc(val)}" placeholder="${ph}" aria-label="${ph}">`;
+  return {
+    tone: 'cream', eyebrow: '01 Filter In · Your filters',
+    html: `<h1 class="t">Your filters.</h1><p class="sub">Set by you. Kept on this device.</p>
+    ${card('age', 'Age', `<div class="row2"><input type="number" inputmode="numeric" data-f="age.min" value="${P.age.min}" placeholder="From" aria-label="Age from"><input type="number" inputmode="numeric" data-f="age.max" value="${P.age.max}" placeholder="To" aria-label="Age to"></div>`)}
+    ${card('height', 'Height', `<div class="row2">${hsel('height.min', P.height.min, 'From')}${hsel('height.max', P.height.max, 'To')}</div>`)}
+    ${card('diet', 'Diet', `<div class="seg">${DIETS.map(x => `<button data-diet="${x}" aria-pressed="${P.diet.ok.includes(x)}">${x}</button>`).join('')}</div>`)}
+    ${card('place', 'Location', txt('place.list', P.place.list, 'Pune, Mumbai'))}
+    ${card('edu', 'Education', txt('edu.list', P.edu.list, 'MBA, B.Tech'))}
+    ${card('comm', 'Community', txt('comm.list', P.comm.list, 'Any words to look for'))}
+    ${card('manglik', 'Manglik', `<div class="seg">${['No', 'Yes'].map(x => `<button data-mg="${x}" aria-pressed="${P.manglik.want === x}">${x}</button>`).join('')}</div>`)}
+    ${card('interests', 'Interests', txt('interests.list', P.interests.list, 'reading, music'))}
+    <div class="actions"><button class="btn primary" id="done">Done</button></div>`,
+    mount: r => {
+      const setImp = (k, x) => { P[k].imp = x; $$(`[data-k="${k}"] button`, r).forEach(b => b.setAttribute('aria-pressed', b.dataset.imp === x)); $(`[data-card="${k}"]`, r).classList.toggle('off', x === 'off'); save(); };
+      const wake = k => { if (P[k].imp === 'off') setImp(k, k === 'interests' ? 'nice' : 'must'); };
+      on(r, '[data-imp]', (e, b) => setImp(b.parentElement.dataset.k, b.dataset.imp));
+      $$('[data-f]', r).forEach(el => el.addEventListener(el.tagName === 'SELECT' ? 'change' : 'input', () => {
+        const [k, f] = el.dataset.f.split('.'); P[k][f] = el.value.trim(); if (el.value.trim()) wake(k); save();
+      }));
+      on(r, '[data-diet]', (e, b) => { const x = b.dataset.diet, i = P.diet.ok.indexOf(x); if (i >= 0) P.diet.ok.splice(i, 1); else P.diet.ok.push(x); b.setAttribute('aria-pressed', i < 0); if (P.diet.ok.length) wake('diet'); save(); });
+      on(r, '[data-mg]', (e, b) => { P.manglik.want = b.dataset.mg; $$('[data-mg]', r).forEach(x => x.setAttribute('aria-pressed', x === b)); wake('manglik'); save(); });
+      on(r, '#done', back);
     }
   };
 };
@@ -1307,11 +1466,13 @@ function openSettings() {
   <p>Everything stays in this browser. Contact details are never kept. Packed paperwork is let go.</p>
   ${S.archived.length ? `<p class="label">Archived paperwork</p>${S.archived.map(a => `<div class="arch"><span>${esc(a.name)} · ${new Date(a.at).toLocaleDateString()}</span><span class="seg"><button data-ro="${a.id}">Reopen</button><button data-da="${a.id}">Delete</button></span></div>`).join('')}` : ''}
   ${S.books.length ? `<p class="label">Scrapbooks</p>${S.books.map(b => `<div class="arch"><span>${esc(b.name)} · ${b.pages.length} page${b.pages.length === 1 ? '' : 's'}</span><span class="seg"><button data-db="${b.id}">Delete</button></span></div>`).join('')}` : ''}
+  <button class="btn" id="s-f">Your filters</button>
   <div class="row2"><button class="btn" id="s-all">Delete everything</button><button class="btn primary" data-x>Done</button></div>`, (sh, close) => {
     $('#s-rm', sh).onchange = e => { st.reduced = e.target.checked; applyMotion(); save(); };
     $('#s-snd', sh).onchange = e => { st.sound = e.target.checked; save(); if (st.sound) sfx('page'); };
     $('#s-hap', sh).onchange = e => { st.haptics = e.target.checked; save(); buzz(10); };
     $('[data-x]', sh).onclick = close;
+    $('#s-f', sh).onclick = () => { close(); go('prefs'); };
     on(sh, '[data-ro]', (e, x) => { const a = S.archived.find(y => y.id === x.dataset.ro); if (S.draft && S.draft.profile) { toast('There’s already paperwork on the table. Pack or archive it first.'); return; } S.draft = a.draft; S.archived = S.archived.filter(y => y !== a); save(); close(); go('table'); });
     on(sh, '[data-da]', (e, x) => { S.archived = S.archived.filter(y => y.id !== x.dataset.da); save(); x.closest('.arch').remove(); toast('Deleted.'); });
     on(sh, '[data-db]', (e, x) => { const b = bookById(x.dataset.db); close(); confirmSheet('Delete this scrapbook?', `Every page about ${esc(b.name)} will be erased from this browser.`, 'Delete it', () => { S.books = S.books.filter(y => y !== b); save(); toast('Deleted.'); go('shelf', {}, 'reset'); }); });
