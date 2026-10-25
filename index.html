@@ -427,7 +427,14 @@ button.flagmark{cursor:pointer}
 .clipline .ic{width:44px;height:44px}
 .none{margin:0;font-size:12.5px;color:var(--ink-soft)}
 .sheet .bd-row b{color:var(--ink-soft)}
-.points{display:grid;gap:3px;background:var(--paper);color:var(--paper-ink);border:1.2px dashed rgba(61,52,49,.35);border-radius:4px;padding:8px 10px;font:400 12.5px/1.35 var(--sans);transform:rotate(-.6deg)}
+.pts-d{display:grid;gap:10px;justify-items:start}
+.pts-d summary{list-style:none;transform:rotate(-1.5deg)}
+.pts-d summary::-webkit-details-marker{display:none}
+.pts-d summary::after{content:" ▸";font-size:10px}
+.pts-d[open] summary::after{content:" ▾"}
+.pts-d .clip-w{width:100%;animation:fadeIn .35s ease both}
+.points{font:400 16px/1.3 var(--serif)}
+.points b{margin:4px 0 0}
 .points b{font:800 9px/1.3 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--paper-soft);margin-bottom:2px}
 .points em{font-style:normal;color:var(--coral)}
 .points span{display:flex;gap:6px} .points i{font-style:normal;font-weight:800;width:12px;flex:none}
@@ -1249,8 +1256,8 @@ const themeOfPrompt = q => PROMPT_THEME[q] || (/like about|get into/i.test(q) ? 
 function pointsTo(q) {
   const tid = themeOfPrompt(q), th = THEME[tid]; if (!th) return '';
   const pref = mine().find(x => x.theme === tid && x.cat);
-  const d = pref ? dirFor(pref) : th.dir;
-  return `<div class="points"><b>Could point to · ${esc(pref ? pref.text : th.pos)}${pref ? ` <em>${CATL[pref.cat]}</em>` : ''}</b><span><i class="ok">✓</i>${esc(d.fits)}</span><span><i class="no">✕</i>${esc(d.clash)}</span></div>`;
+  // Folded away as a paper tag; opens into a taped clipping.
+  return `<details class="pts-d"><summary class="tagbtn">Could point to</summary><div class="clip-w" style="--r:-.8deg"><span class="tape"></span><div class="clip points">${esc(pref ? pref.text : th.pos)}${pref ? `<b>${CATL[pref.cat]}</b>` : ''}</div></div></details>`;
 }
 // A slow idle movement for each object while it's being inspected.
 const IDLE = {record: 'spin', football: 'roll', briefcase: 'sway', kundli: 'turn', map: 'breathe', coins: 'bob', stamp: 'press', tape: 'breathe', photo: 'sway', tiffin: 'bob', scroll: 'sway', bat: 'swing', suitcase: 'bob', ticket: 'sway', camera: 'breathe', pot: 'bob', brush: 'sway', plant: 'swing', tag: 'hang', picture: 'sway'};
@@ -1281,12 +1288,14 @@ SCENES.inspect = (o) => {
     </div>`,
     mount: r => {
       const big = $('#big', r), wt = $('#wt', r), wn = $('#wn', r), pk = $('#pk', r);
+      let ptsOpen = false;
       const show = () => {
         const q = ob.prompts[pi];
         const inPocket = q && d.pocket.some(n => n.text === q);
         wt.innerHTML = q ? esc(q) + (inPocket ? '<small>saved</small>' : '') : 'Nothing to ask here.';
         if (!q) $('#gh', r).hidden = true;
         $('#pts', r).innerHTML = q ? pointsTo(q) : '';
+        const pd = $('.pts-d', r); if (pd) { pd.open = ptsOpen; pd.addEventListener('toggle', () => { ptsOpen = pd.open; sfx('page'); }); }
       };
       show();
       if (firstReveal) setTimeout(() => toast('New on the table'), 500);
