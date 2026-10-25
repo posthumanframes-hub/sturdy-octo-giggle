@@ -90,7 +90,10 @@ h1.t{font:400 clamp(28px,8.4vw,35px)/1.08 var(--serif);letter-spacing:-.015em;ma
 .hero > *{position:absolute}
 .float{animation:float 6s ease-in-out infinite}
 @keyframes float{50%{transform:translateY(-5px) rotate(var(--r,0deg))}}
-.squiggle{width:136px;height:12px;color:var(--coral);margin-top:-2px}
+.squiggle{width:136px;height:14px;color:var(--coral);margin-top:-2px;overflow:visible}
+.squiggle path{stroke-dasharray:1;stroke-dashoffset:1;animation:drawIn .9s ease-out .2s forwards}
+@keyframes drawIn{to{stroke-dashoffset:0}}
+html.rm .squiggle path{stroke-dashoffset:0}
 .display{font:400 clamp(54px,17vw,72px)/.92 var(--serif);letter-spacing:-.03em;margin:22px 0 0;outline:none}
 .lede{font-size:15px;margin:0}
 .card-btn{display:block;text-align:left;background:var(--paper);color:var(--paper-ink);border:1px solid var(--line);border-radius:8px;padding:11px 13px;cursor:pointer;font-size:11px;line-height:1.5;box-shadow:0 1px 2px var(--shadow)}
@@ -610,7 +613,7 @@ const IC = {
   arrow: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>`,
   ccw: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4v6h6"/><path d="M5 14a8 8 0 1 0 2-7L4 10"/></svg>`,
   cw: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 4v6h-6"/><path d="M19 14a8 8 0 1 1-2-7l3 3"/></svg>`,
-  squiggle: `<svg class="squiggle" viewBox="0 0 136 12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M3 8c14-5 24 4 38-1s24-4 38 0 26 3 40-2 10-1 14 0"/></svg>`
+  squiggle: `<svg class="squiggle" viewBox="0 0 136 14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path pathLength="1" d="M3 8c14-5 24 4 38-1s24-4 38 0 26 3 40-2 10-1 14 0"/></svg>`
 };
 
 /* ---------- biodata → objects (only what the form actually says) ---------- */
@@ -1012,7 +1015,7 @@ const SCENES = {};
 
 SCENES.title = () => ({
   tone: 'butter', back: false, eyebrow: '',
-  html: `<h1 class="display">Plot<br>Twist</h1>${IC.squiggle}<p class="lede">Check profiles against what matters to you.</p>
+  html: `<h1 class="display">Plot<br>Twist</h1>${S.settings.reduced ? IC.squiggle : IC.squiggle.replace('"/></svg>', '"><animate attributeName="d" dur="2.6s" begin="0.9s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines=".45 0 .55 1;.45 0 .55 1" values="M3 8c14-5 24 4 38-1s24-4 38 0 26 3 40-2 10-1 14 0;M3 8c14 5 24-4 38 1s24 4 38 0 26-3 40 2 10 1 14 0;M3 8c14-5 24 4 38-1s24-4 38 0 26 3 40-2 10-1 14 0"/></path></svg>')}<p class="lede">Check profiles against what matters to you.</p>
   <div class="hero" aria-hidden="true">
     <div class="float" style="left:44%;top:6px;width:120px;height:150px;--r:6deg;transform:rotate(6deg)">${NOTEBOOK()}</div>
     <div style="left:0;top:40px;width:78%;"><div class="env" style="margin:0;width:100%">${'<div class="env-body">' + ENV_BODY + '</div><div class="env-front">' + ENV_FRONT + '</div><div class="env-flap" style="cursor:default">' + ENV_FLAP + '</div>'}<span class="env-label">biodata<br>inside</span></div></div>
