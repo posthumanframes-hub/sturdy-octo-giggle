@@ -1,8 +1,8 @@
 # Plot Twist
 
-*People are more than their biodata.*
+*Check profiles against what matters to you.*
 
-A mobile-first, illustrated narrative game prototype about turning a matrimonial biodata into curiosity, and real encounters into a scrapbook. Open `index.html` in any modern browser. There's no build step and nothing to install.
+A personal, mobile-first utility for sorting matrimonial profiles against your own preferences, then keeping notes on the people you meet in a scrapbook. Open `index.html` in any modern browser. There's no build step and nothing to install.
 
 ## Onboarding: what matters to you
 
