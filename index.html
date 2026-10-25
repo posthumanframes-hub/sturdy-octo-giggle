@@ -150,6 +150,8 @@ h1.t{font:400 clamp(28px,8.4vw,35px)/1.08 var(--serif);letter-spacing:-.015em;ma
 
 /* inspect */
 .inspect{display:grid;grid-template-columns:1fr;gap:10px}
+.big:focus-visible{outline-offset:8px}
+.wrow .note-w{transition:transform .35s var(--spring),opacity .2s}
 .big{width:150px;height:150px;margin:2px auto 0;transform:rotate(var(--r,0deg));transition:transform .5s var(--spring);touch-action:none;cursor:grab;filter:drop-shadow(0 10px 8px var(--shadow))}
 .big.dragging{transition:none}
 .rot{display:flex;justify-content:center;gap:8px;margin-top:-6px}
@@ -1188,58 +1190,81 @@ SCENES.inspect = (o) => {
   if (firstReveal) d.spaces = true;
   let pi = 0;
   const pos = d.placed[ob.id] || {r: 0};
+  const many = ob.prompts.length > 1;
   return {
     tone: 'butter', eyebrow: '01 Filter In · Inspect',
     html: `<h1 class="t">${esc(ob.title)}</h1>
     <div class="inspect">
-      <div class="big" id="big" style="--r:${pos.r}deg" aria-hidden="true">${artFor(ob, d.profile.photo)}</div>
-      <div class="rot"><button class="icon-btn" id="ccw" aria-label="Turn left">${IC.ccw}</button><button class="icon-btn" id="cw" aria-label="Turn right">${IC.cw}</button></div>
+      <div class="big" id="big" style="--r:${pos.r}deg" tabindex="0" role="img" aria-label="${esc(ob.title)}. Drag or twist to turn; arrow keys turn it too.">${artFor(ob, d.profile.photo)}</div>
       <p class="label">From the form</p><div class="clips">${ob.known.map((k, n) => clipHtml(k, n)).join('')}</div>
       <p class="label w">A question</p>
-      <div class="wrow"><div class="note-w" id="wn" tabindex="0" aria-label="Question note. Drag to the pocket or use Save to pocket."><div class="note" id="wt"></div></div>
-      <button class="pocket" id="pk" aria-label="Pocket">${POCKET(d.pocket.length)}</button></div>
+      <div class="wrow"><div class="note-w" id="wn" tabindex="0" aria-label="Question note. ${many ? 'Swipe sideways or press the arrow keys for another. ' : ''}Drop it in the pocket, tap the pocket, or press Enter to save."><div class="note" id="wt"></div></div>
+      <button class="pocket" id="pk" aria-label="Pocket. Tap to save the question.">${POCKET(d.pocket.length)}</button></div>
+      <p class="hint" id="gh">${many ? 'Swipe for another · drop in the pocket to save' : 'Drop in the pocket to save'}</p>
     </div>
-        <div class="actions">
-      <button class="btn primary" id="save">Save</button>
-      <div class="row2"><button class="btn" id="own">${IC.pen} Write my own</button><button class="btn" id="another">Another</button></div>
+    <div class="actions">
+      <button class="btn" id="own">${IC.pen} Write my own</button>
       <button class="btn link" id="leave">Back</button>
     </div>`,
     mount: r => {
       const big = $('#big', r), wt = $('#wt', r), wn = $('#wn', r), pk = $('#pk', r);
       const show = () => {
         const q = ob.prompts[pi];
-        wt.innerHTML = q ? esc(q) : 'Nothing to ask here.';
         const inPocket = q && d.pocket.some(n => n.text === q);
-        $('#save', r).textContent = inPocket ? 'Saved' : 'Save';
-        $('#save', r).disabled = !q || inPocket; $('#save', r).style.opacity = (!q || inPocket) ? .55 : 1;
-        $('#another', r).hidden = ob.prompts.length < 2;
+        wt.innerHTML = q ? esc(q) + (inPocket ? '<small>saved</small>' : '') : 'Nothing to ask here.';
+        if (!q) $('#gh', r).hidden = true;
       };
       show();
       if (firstReveal) setTimeout(() => toast('New on the table'), 500);
-      const turn = deg => { pos.r = ((pos.r || 0) + deg); big.style.setProperty('--r', pos.r + 'deg'); sfx('lift'); save(); };
-      on(r, '#ccw', () => turn(-30)); on(r, '#cw', () => turn(30));
-      let px = null, r0 = 0;
-      big.addEventListener('pointerdown', e => { px = e.clientX; r0 = pos.r || 0; big.classList.add('dragging'); try { big.setPointerCapture(e.pointerId); } catch (_) {} });
-      big.addEventListener('pointermove', e => { if (px === null) return; pos.r = Math.round(r0 + (e.clientX - px) * .8); big.style.setProperty('--r', pos.r + 'deg'); });
-      const up = () => { if (px === null) return; px = null; big.classList.remove('dragging'); save(); };
+      // turn the object: one finger drags it round, two fingers twist it
+      const setR = v => { pos.r = Math.round(v); big.style.setProperty('--r', pos.r + 'deg'); };
+      const pts = new Map(); let r0 = 0, x0 = 0, a0 = 0;
+      const angle = () => { const [p1, p2] = [...pts.values()]; return Math.atan2(p2.y - p1.y, p2.x - p1.x) * 180 / Math.PI; };
+      big.style.touchAction = 'none';
+      big.addEventListener('pointerdown', e => {
+        pts.set(e.pointerId, {x: e.clientX, y: e.clientY}); try { big.setPointerCapture(e.pointerId); } catch (_) {}
+        big.classList.add('dragging'); r0 = pos.r || 0; x0 = e.clientX; if (pts.size === 2) a0 = angle();
+      });
+      big.addEventListener('pointermove', e => {
+        if (!pts.has(e.pointerId)) return;
+        pts.set(e.pointerId, {x: e.clientX, y: e.clientY});
+        if (pts.size >= 2) setR(r0 + angle() - a0); else setR(r0 + (e.clientX - x0) * .8);
+      });
+      const up = e => { if (!pts.delete(e.pointerId)) return; r0 = pos.r; if (pts.size === 1) x0 = [...pts.values()][0].x; if (!pts.size) { big.classList.remove('dragging'); save(); } };
       big.addEventListener('pointerup', up); big.addEventListener('pointercancel', up);
+      big.addEventListener('keydown', e => { const k = {ArrowLeft: -15, ArrowRight: 15}[e.key]; if (k) { e.preventDefault(); setR((pos.r || 0) + k); save(); } });
+      big.addEventListener('dblclick', () => { big.classList.remove('dragging'); setR((pos.r || 0) + 180); sfx('lift'); save(); });
       const keep = () => {
         const q = ob.prompts[pi]; if (!q) return;
-        if (tuck(q, ob.id)) { toast('Saved'); $('.cnt', pk).textContent = d.pocket.length + ' in pocket'; pk.classList.add('hot'); setTimeout(() => pk.classList.remove('hot'), 350); }
+        if (tuck(q, ob.id)) { toast('Saved'); $('.cnt', pk).textContent = d.pocket.length + ' in pocket'; } else toast('Already saved');
+        pk.classList.add('hot'); setTimeout(() => pk.classList.remove('hot'), 350);
         show();
       };
-      on(r, '#save', keep);
-      on(r, '#another', () => { pi = (pi + 1) % ob.prompts.length; wn.style.transform = 'rotate(4deg) translateY(-6px)'; setTimeout(() => wn.style.transform = '', 220); sfx('page'); show(); });
+      const another = dir => {
+        if (!many) return;
+        pi = (pi + (dir < 0 ? ob.prompts.length - 1 : 1)) % ob.prompts.length;
+        wn.style.transition = 'transform .18s ease, opacity .18s'; wn.style.transform = `translateX(${dir * 120}%) rotate(${dir * 12}deg)`; wn.style.opacity = 0;
+        setTimeout(() => { show(); wn.style.transition = 'none'; wn.style.transform = `translateX(${-dir * 60}%)`;
+          requestAnimationFrame(() => { wn.style.transition = ''; wn.style.transform = ''; wn.style.opacity = 1; }); }, 180);
+        sfx('page'); buzz(6);
+      };
+      on(r, '#pk', keep);
       on(r, '#own', () => askText({title: 'Your question', placeholder: 'I wonder…', ok: 'Save'}, t => { if (t && tuck(t, ob.id)) { toast('Saved'); $('.cnt', pk).textContent = d.pocket.length + ' in pocket'; } }));
       on(r, '#leave', back);
-      // drag the note into the pocket
+      // the note: swipe sideways for another question, drag into the pocket to save
       let sx = 0, sy = 0, pid = null;
       wn.style.touchAction = 'none';
       wn.addEventListener('pointerdown', e => { pid = e.pointerId; sx = e.clientX; sy = e.clientY; try { wn.setPointerCapture(pid); } catch (_) {} wn.classList.add('lifted'); });
-      wn.addEventListener('pointermove', e => { if (e.pointerId !== pid) return; wn.style.transform = `translate(${e.clientX - sx}px,${e.clientY - sy}px) rotate(-5deg)`; pk.classList.toggle('hot', over(e, pk)); });
-      const wup = e => { if (e.pointerId !== pid) return; pid = null; wn.classList.remove('lifted'); wn.style.transform = ''; pk.classList.remove('hot'); if (over(e, pk)) keep(); };
+      wn.addEventListener('pointermove', e => { if (e.pointerId !== pid) return; wn.style.transform = `translate(${e.clientX - sx}px,${e.clientY - sy}px) rotate(${(e.clientX - sx) / 20 - 3}deg)`; pk.classList.toggle('hot', over(e, pk)); });
+      const wup = e => {
+        if (e.pointerId !== pid) return; pid = null; wn.classList.remove('lifted'); pk.classList.remove('hot');
+        const dx = e.clientX - sx, dy = e.clientY - sy;
+        if (over(e, pk)) { wn.style.transform = ''; keep(); }
+        else if (many && Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.2) another(Math.sign(dx));
+        else wn.style.transform = '';
+      };
       wn.addEventListener('pointerup', wup); wn.addEventListener('pointercancel', wup);
-      wn.addEventListener('keydown', e => { if (e.key === 'Enter') keep(); });
+      wn.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); keep(); } else if (e.key === 'ArrowRight') another(1); else if (e.key === 'ArrowLeft') another(-1); });
     }
   };
 };

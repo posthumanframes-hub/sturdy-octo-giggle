@@ -18,6 +18,7 @@ A mobile-first, illustrated narrative game prototype about turning a matrimonial
 - **Images.** When adding a biodata you can attach an image: a photo of the person or a scan of the biodata itself. The image is shrunk and clipped to the form, shown on the filter check, and becomes a photo object on the table. It's never used as evidence. *Read text from image* runs text recognition (Tesseract.js) in the browser and fills in the details for you to check. It needs to download the engine from jsdelivr, which works when the page is opened directly or served locally. Where that download is blocked, the page asks you to type the details instead.
 - A parcel arrives. Drag the flap (or tap) to open it, then unfold the biodata panel by panel.
 - Each detail on the form becomes an illustrated object on a tabletop. You can drag objects, turn them, and tap to inspect.
+- Inspecting works by touch. Drag or twist the object with two fingers to turn it, and double-tap to flip it. Swipe the question note sideways for another question, and drop it in the pocket (or tap the pocket) to save it. On a keyboard, the arrow keys and Enter do the same.
 - Inspecting an object shows what the form says (**Known**) beside an optional open question (**Wondering**). You can save the question to your pocket, write your own, or leave it.
 - After a few objects, an empty space appears. It holds questions a form can't answer.
 - The curiosity board is a freeform space for your questions.
