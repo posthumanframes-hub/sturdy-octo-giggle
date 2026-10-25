@@ -417,6 +417,25 @@ button.flagmark{cursor:pointer}
 .clipline .ic{width:44px;height:44px}
 .none{margin:0;font-size:12.5px;color:var(--ink-soft)}
 .sheet .bd-row b{color:var(--ink-soft)}
+/* auto layout: the main visual takes the free space between the heading and the buttons */
+.scene > .hero,.scene > .env,.scene > .fold,.scene > .boxstage,.scene > .nb-stage,.scene > .np,.scene > .sil-wrap{margin-block:auto}
+.scene > .onb-art{margin-top:auto}
+.scene > .chapter:first-of-type{margin-top:auto}
+.scene > .chapter.flip{margin-bottom:auto}
+.scene > .tn{flex:1 1 auto;max-height:380px;align-items:stretch}
+.tn > div{display:flex;flex-direction:column}
+.tn .exp{flex:1 1 auto}
+.scene > .book{flex:1 1 auto;display:flex;flex-direction:column}
+.book .page{flex:1 1 auto}
+.scene > textarea.ans{flex:1 1 auto;min-height:190px}
+.scene > .page.drop{flex:1 1 auto;aspect-ratio:auto!important;min-height:300px}
+.scene > #mp.page.drop{min-height:230px}
+.scene > .board{flex:1 1 auto;aspect-ratio:auto;min-height:340px}
+.scene > .exp{flex:1 1 auto;min-height:150px}
+.scene > .inspect{flex:1 1 auto;display:flex;flex-direction:column}
+.inspect .big{flex:1 1 auto;width:100%;height:auto;min-height:150px;max-height:320px;margin:0;display:flex;align-items:center;justify-content:center}
+.inspect .big > .ill{width:auto;height:100%;max-height:250px;max-width:100%;aspect-ratio:1/1}
+.inspect .big > .pic-obj{width:auto;height:100%;max-height:250px;aspect-ratio:.82/1}
 html.rm *,html.rm *::before,html.rm *::after{animation:none!important;transition-duration:.01ms!important}
 @media (prefers-reduced-motion: reduce){.float{animation:none}}
 </style>
