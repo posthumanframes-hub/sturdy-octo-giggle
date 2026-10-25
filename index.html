@@ -440,16 +440,16 @@ button.flagmark{cursor:pointer}
 .points span{display:flex;gap:6px} .points i{font-style:normal;font-weight:800;width:12px;flex:none}
 .points i.ok{color:#4F6B45} .points i.no{color:#B4462F}
 /* idle motion for inspected objects */
-.big[data-anim=spin] > *{animation:spin 7s linear infinite}
-.big[data-anim=turn] > *{animation:spin 40s linear infinite}
-.big[data-anim=sway] > *{transform-origin:50% 15%;animation:sway 4.2s ease-in-out infinite}
-.big[data-anim=swing] > *{transform-origin:50% 95%;animation:sway 3.4s ease-in-out infinite}
-.big[data-anim=hang] > *{transform-origin:12% 50%;animation:sway 3.8s ease-in-out infinite}
-.big[data-anim=bob] > *{animation:bob 3.6s ease-in-out infinite}
-.big[data-anim=press] > *{transform-origin:50% 100%;animation:press 3.4s ease-in-out infinite}
-.big[data-anim=breathe] > *{animation:breathe 4.5s ease-in-out infinite}
-.big[data-anim=roll] > *{animation:roll 5.5s ease-in-out infinite}
-.big[data-anim=float] > *{animation:floaty 5s ease-in-out infinite}
+:is(.big,.mini-obj)[data-anim=spin] > :first-child{animation:spin 7s linear infinite}
+:is(.big,.mini-obj)[data-anim=turn] > :first-child{animation:spin 40s linear infinite}
+:is(.big,.mini-obj)[data-anim=sway] > :first-child{transform-origin:50% 15%;animation:sway 4.2s ease-in-out infinite}
+:is(.big,.mini-obj)[data-anim=swing] > :first-child{transform-origin:50% 95%;animation:sway 3.4s ease-in-out infinite}
+:is(.big,.mini-obj)[data-anim=hang] > :first-child{transform-origin:12% 50%;animation:sway 3.8s ease-in-out infinite}
+:is(.big,.mini-obj)[data-anim=bob] > :first-child{animation:bob 3.6s ease-in-out infinite}
+:is(.big,.mini-obj)[data-anim=press] > :first-child{transform-origin:50% 100%;animation:press 3.4s ease-in-out infinite}
+:is(.big,.mini-obj)[data-anim=breathe] > :first-child{animation:breathe 4.5s ease-in-out infinite}
+:is(.big,.mini-obj)[data-anim=roll] > :first-child{animation:roll 5.5s ease-in-out infinite}
+:is(.big,.mini-obj)[data-anim=float] > :first-child{animation:floaty 5s ease-in-out infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes sway{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
 @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
@@ -476,6 +476,51 @@ button.flagmark{cursor:pointer}
 .inspect .big{flex:1 1 auto;width:100%;height:auto;min-height:150px;max-height:320px;margin:0;display:flex;align-items:center;justify-content:center}
 .inspect .big > .ill{width:auto;height:100%;max-height:250px;max-width:100%;aspect-ratio:1/1}
 .inspect .big > .pic-obj{width:auto;height:100%;max-height:250px;aspect-ratio:.82/1}
+/* simple game: home, check, person, meeting */
+.home-t{font-size:clamp(46px,14vw,60px);margin-top:10px}
+.setup{display:grid;gap:3px;text-align:left;cursor:pointer;transform:rotate(-1deg)}
+.setup .q{font:400 18px/1.2 var(--serif)} .setup .pick{font-size:12.5px}
+.home-empty{margin-block:auto;display:grid;place-items:center;padding:10px 0}
+.home-empty .env{margin:0}
+.shelf .bk .cover{overflow:visible}
+.bk-pic{position:absolute;right:-4px;top:-8px;width:40px;background:#FFFCF5;border:1.2px solid #3D3431;padding:3px 3px 8px;transform:rotate(8deg)}
+.bk-pic img{display:block;width:100%;aspect-ratio:1;object-fit:cover}
+.bk-stamp{position:absolute;left:18%;bottom:12%;font:800 9.5px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--sc,#4F6B45);border:2px double var(--sc,#4F6B45);background:rgba(255,252,245,.85);padding:4px 7px;transform:rotate(-8deg)}
+button.bk-stamp.lg{position:static;font-size:11px;padding:7px 10px;transform:rotate(-4deg);cursor:pointer;background:transparent;color:var(--sc);border-color:var(--sc)}
+.s-talking{--sc:var(--stamp-ok)} .s-new{--sc:#8A6D1E} .s-paused{--sc:#7A6D66} .s-closed{--sc:#7A6D66} .s-passed{--sc:var(--stamp-flag)}
+.cover .bk-stamp.s-talking{--sc:#4F6B45} .cover .bk-stamp.s-passed{--sc:#B4462F}
+.shelf.passed{opacity:.6}
+.readpaper{max-width:330px;margin-inline:auto;cursor:pointer}
+.readpaper.rise{animation:rise .7s var(--spring) both}
+.readpaper.rise .stamp-mark{animation-delay:.75s}
+@keyframes rise{from{transform:translateY(60px) rotate(4deg);opacity:0}to{transform:rotate(-1.2deg);opacity:1}}
+.objgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px 6px}
+.mini-obj{background:none;border:0;padding:0;cursor:pointer;color:var(--paper-ink);display:grid;justify-items:center;gap:2px;font:400 11px/1.15 var(--serif);text-align:center}
+.mini-obj > :first-child{width:52px;height:52px;filter:url(#wobble) drop-shadow(0 3px 2px var(--shadow))}
+.mini-obj > .pic-obj{width:44px;height:52px}
+.mini-obj:active > :first-child{transform:scale(1.15)}
+.meet{display:block;width:100%;background:none;border:0;padding:0;text-align:left;cursor:pointer}
+.meet .clip{display:grid;gap:5px}
+.mtoks{display:flex;gap:4px} .mtok{width:26px;height:26px;display:block}
+.mnote{font:400 15px/1.3 var(--serif)} .mup{font:700 10.5px var(--sans);color:#4F6B45}
+.deck-wrap{display:grid;gap:10px}
+.deck{position:relative;min-height:130px;display:grid;place-items:center}
+.card{position:relative;z-index:2;width:min(92%,320px);cursor:grab;transition:transform .3s var(--spring);user-select:none}
+.card .note{font-size:20px;padding:18px 28px 18px 16px;min-height:100px}
+.card.lean-yes .note{box-shadow:inset 0 0 0 3px #4F6B45} .card.lean-no .note{box-shadow:inset 0 0 0 3px #7A6D66}
+.card-under{position:absolute;width:min(86%,300px);height:96px;background:var(--n-cream);border:1.3px solid var(--paper-ink);transform:rotate(4deg) translateY(10px);z-index:1}
+.deck-done{font:400 18px var(--serif);color:var(--ink-soft)}
+.piles{display:flex;justify-content:center}
+.pile{background:none;border:0;color:var(--ink-soft);font:600 12px var(--sans);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.pile:disabled{text-decoration:none;cursor:default}
+.tokrow{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:8px 4px}
+.tokbtn{background:none;border:0;padding:4px 2px;cursor:pointer;color:var(--paper-ink);border-radius:8px;font:600 10.5px var(--serif);transition:transform .3s var(--spring)}
+.tokbtn svg{width:40px;height:40px;display:block;margin:0 auto 2px;transition:transform .35s var(--spring)}
+.tokbtn[aria-pressed=false] svg{opacity:.55;filter:grayscale(.6)}
+.tokbtn[aria-pressed=true]{background:var(--n-butter);outline:1.2px solid var(--paper-ink)}
+.tokbtn.pop svg{animation:pop .45s var(--spring)}
+@keyframes pop{40%{transform:scale(1.35) rotate(-8deg)}}
+.note-area{font:400 16px/1.4 var(--serif);min-height:80px;border:1.2px solid var(--line);border-radius:8px;padding:12px;background:var(--paper);color:var(--paper-ink);width:100%;resize:vertical}
 html.rm *,html.rm *::before,html.rm *::after{animation:none!important;transition-duration:.01ms!important}
 @media (prefers-reduced-motion: reduce){.float{animation:none}}
 </style>
@@ -915,12 +960,8 @@ function parseBiodata(text) {
   return {name, rows, objects: objects.slice(0, 18)};
 }
 
-/* ---------- empty spaces: what a form can't hold ---------- */
-const SPACES = ['What makes them laugh?', 'What do they care about most?', 'What does independence mean to them?', 'What do they want from a relationship?', 'What could we enjoy doing together?'];
-const NOTE_COLORS = ['', 'pink', 'blue', 'sage'];
-
 /* ---------- navigation ---------- */
-let cur = {name: 'title', opts: {}};
+let cur = {name: 'home', opts: {}};
 const stack = [];
 function go(name, opts = {}, how = 'push') {
   if (how === 'push') stack.push(cur);
@@ -928,7 +969,7 @@ function go(name, opts = {}, how = 'push') {
   cur = {name, opts};
   sfx('page'); render();
 }
-function back() { const p = stack.pop(); cur = p || {name: 'title', opts: {}}; sfx('page'); render(); }
+function back() { const p = stack.pop(); cur = p || {name: 'home', opts: {}}; sfx('page'); render(); }
 const app = $('#app');
 let lastScene = '';
 function render() {
@@ -986,268 +1027,8 @@ function toast(msg) {
   clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('in'), 2600);
 }
 
-/* ---------- drag (pointer + keyboard alternative) ---------- */
-function drag(el, o) {
-  let pid = null, sx = 0, sy = 0, bx = 0, by = 0, moved = false, rect = null;
-  const lo = o.min ?? .05, hi = o.max ?? .95;
-  el.addEventListener('pointerdown', e => {
-    if (e.button > 0 || pid !== null) return;
-    pid = e.pointerId; try { el.setPointerCapture(pid); } catch (_) {}
-    rect = o.stage.getBoundingClientRect(); sx = e.clientX; sy = e.clientY;
-    const p = o.get(); bx = p.x; by = p.y; moved = false;
-  });
-  el.addEventListener('pointermove', e => {
-    if (e.pointerId !== pid) return;
-    const dx = e.clientX - sx, dy = e.clientY - sy;
-    if (!moved && Math.hypot(dx, dy) > 6) { moved = true; el.classList.add('lifted'); sfx('lift'); buzz(6); }
-    if (moved) { const x = clamp(bx + dx / rect.width, lo, hi), y = clamp(by + dy / rect.height, lo, hi); o.set(x, y); o.move && o.move(e); }
-  });
-  const end = e => {
-    if (e.pointerId !== pid) return; pid = null;
-    if (moved) { el.classList.remove('lifted'); sfx('drop'); buzz(4); const p = o.get(); o.end && o.end(p.x, p.y, e); }
-    else if (e.type === 'pointerup') o.tap && o.tap(e);
-  };
-  el.addEventListener('pointerup', end); el.addEventListener('pointercancel', end);
-  el.addEventListener('click', e => { if (e.detail === 0) { e.preventDefault(); } });
-  el.addEventListener('keydown', e => {
-    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); o.tap && o.tap(e); return; }
-    const d = {ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1]}[e.key];
-    if (!d) return; e.preventDefault();
-    const p = o.get(); const x = clamp(p.x + d[0] * .03, lo, hi), y = clamp(p.y + d[1] * .03, lo, hi);
-    o.set(x, y); o.end && o.end(x, y, null);
-  });
-}
-const place = (el, x, y) => { el.style.left = (x * 100) + '%'; el.style.top = (y * 100) + '%'; };
-const over = (e, target) => { if (!e || !target) return false; const r = target.getBoundingClientRect(); return e.clientX >= r.left - 10 && e.clientX <= r.right + 10 && e.clientY >= r.top - 10 && e.clientY <= r.bottom + 10; };
-
-/* ---------- draft helpers (Part One) ---------- */
-const draft = () => S.draft || (S.draft = {id: uid(), profile: null, opened: false, placed: {}, seen: [], pocket: [], spaces: false, kept: []});
-const objById = id => (S.draft?.profile?.objects || []).find(o => o.id === id);
-function tuck(text, src) {
-  const d = draft();
-  if (d.pocket.some(n => n.text === text)) return false;
-  const k = d.pocket.length;
-  d.pocket.push({id: uid(), text, src, c: NOTE_COLORS[k % 4], x: (k % 2 ? .64 : .36) + (rnd() - .5) * .08, y: .12 + (Math.floor(k / 2) % 5) * .19 + (k % 2) * .06, r: Math.round(rnd() * 8 - 4)});
-  save(); sfx('tuck'); buzz(10); return true;
-}
-function layoutTable(objs) {
-  const n = objs.length, cols = 4, rows = Math.max(3, Math.ceil((n + 2) / cols));
-  const cells = [];
-  for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
-    if (r === rows - 1 && (c === cols - 1 || c === 0)) continue; // pocket + empty space live here
-    cells.push([(c + .5) / cols, (r + .5) / rows]);
-  }
-  return {rows, cells};
-}
-
 /* ---------- scenes ---------- */
 const SCENES = {};
-
-SCENES.title = () => ({
-  tone: 'butter', back: false, eyebrow: '',
-  html: `<h1 class="display">Plot<br>Twist</h1>${S.settings.reduced ? IC.squiggle : IC.squiggle.replace('"/></svg>', '"><animate attributeName="d" dur="2.6s" begin="0.9s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines=".45 0 .55 1;.45 0 .55 1" values="M3 8c14-5 24 4 38-1s24-4 38 0 26 3 40-2 10-1 14 0;M3 8c14 5 24-4 38 1s24 4 38 0 26-3 40 2 10 1 14 0;M3 8c14-5 24 4 38-1s24-4 38 0 26 3 40-2 10-1 14 0"/></path></svg>')}<p class="lede">Check profiles against what matters to you.</p>
-  <div class="hero" aria-hidden="true">
-    <div class="float" style="left:44%;top:6px;width:120px;height:150px;--r:6deg;transform:rotate(6deg)">${NOTEBOOK()}</div>
-    <div style="left:0;top:40px;width:78%;"><div class="env" style="margin:0;width:100%">${'<div class="env-body">' + ENV_BODY + '</div><div class="env-front">' + ENV_FRONT + '</div><div class="env-flap" style="cursor:default">' + ENV_FLAP + '</div>'}<span class="env-label">biodata<br>inside</span></div></div>
-    <div class="note-w float" style="right:2%;top:150px;width:118px;--r:8deg;transform:rotate(8deg);animation-delay:-2s"><div class="note" style="font-size:15px;padding:10px 18px 12px 10px">What makes you laugh?</div></div>
-  </div>
-  <div class="actions"><button class="btn primary" data-go>${IC.arrow} Begin</button>
-  <button class="btn" data-settings>Settings</button></div>`,
-  mount: r => { on(r, '[data-go]', () => go(onb().done ? 'chapters' : 'onb')); on(r, '[data-settings]', openSettings); }
-});
-
-SCENES.chapters = () => {
-  const d = S.draft;
-  const ch1 = d?.opened ? 'Back to the table' : 'Check a profile';
-  return {
-    tone: 'cream', eyebrow: '',
-    html: `<h1 class="t">Pick one.</h1>
-    <button class="chapter" data-c="1"><div><h2>01 Filter In</h2><p>${ch1}</p></div><div class="pic">${'<div class="env" style="margin:0;width:100%;transform:rotate(8deg)"><div class="env-body">' + ENV_BODY + '</div><div class="env-front">' + ENV_FRONT + '</div><div class="env-flap">' + ENV_FLAP + '</div></div>'}</div></button>
-    <hr class="dash">
-    <button class="chapter flip" data-c="2"><div class="pic" style="width:96px">${NOTEBOOK()}</div><div><h2>02 Continue?</h2><p>After you meet</p></div></button>
-    <div class="actions"><button class="btn" id="mp">My preferences</button></div>
-    `,
-    mount: r => {
-      on(r, '[data-c="1"]', () => { const d = S.draft; go(d?.opened ? 'table' : 'arrival'); });
-      on(r, '[data-c="2"]', () => go('shelf'));
-      on(r, '#mp', () => go(onb().done && mine().length ? 'mine' : 'onb'));
-    }
-  };
-};
-
-SCENES.arrival = () => ({
-  tone: 'butter', eyebrow: '01 Filter In · Arrival',
-  html: `<h1 class="t">Someone’s here. Well, their paperwork is.</h1>
-  <div class="env" id="env" role="button" tabindex="0" aria-label="Parcel. Drag the flap up or press Enter to open">
-    <div class="env-body">${ENV_BODY}</div>
-    <div class="env-paper"><span style="font-size:11px">Biodata</span><i></i><i style="width:70%"></i><i style="width:85%"></i></div>
-    <div class="env-front">${ENV_FRONT}</div>
-    <span class="env-label">biodata<br>inside</span>
-    <div class="env-flap" id="flap">${ENV_FLAP}</div>
-    <span class="pull" id="pull">pull</span>
-    <svg class="env-arc" viewBox="0 0 60 70" fill="none" stroke="currentColor" stroke-width="1.6" stroke-dasharray="3 4" stroke-linecap="round"><path d="M8 62C2 34 18 10 46 8"/><path d="M40 2l7 6-8 5"/></svg>
-  </div>
-    <div class="actions"><button class="btn primary" id="open">Open parcel</button><p class="hint">Drag the flap or tap</p></div>`,
-  mount: r => {
-    const env = $('#env', r), flap = $('#flap', r);
-    let done = false;
-    const open = () => {
-      if (done) return; done = true;
-      env.classList.add('open'); $('#pull', r).style.opacity = 0; $('.env-arc', r).style.opacity = 0;
-      flap.style.transform = ''; sfx('open'); buzz(14);
-      draft().opened = true; save();
-      setTimeout(() => go('unfold', {}, 'replace'), S.settings.reduced ? 150 : 1100);
-    };
-    on(r, '#open', open);
-    env.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } });
-    let pid = null, sy = 0, moved = false;
-    env.addEventListener('pointerdown', e => { pid = e.pointerId; sy = e.clientY; moved = false; flap.classList.add('dragging'); try { env.setPointerCapture(pid); } catch (_) {} });
-    env.addEventListener('pointermove', e => {
-      if (e.pointerId !== pid) return;
-      const dy = sy - e.clientY; if (Math.abs(dy) > 5) moved = true;
-      const a = clamp(dy / 110 * 180, 0, 178);
-      flap.style.transform = `rotateX(${a}deg)`; if (a > 95) { flap.style.zIndex = 0; }
-    });
-    const up = e => {
-      if (e.pointerId !== pid) return; pid = null; flap.classList.remove('dragging');
-      const a = parseFloat((flap.style.transform.match(/[\d.]+/) || [0])[0]);
-      if (!moved || a > 70) open(); else { flap.style.transform = ''; flap.style.zIndex = ''; }
-    };
-    env.addEventListener('pointerup', up); env.addEventListener('pointercancel', up);
-  }
-});
-
-SCENES.unfold = () => {
-  const d = draft(), p = d.profile;
-  const rows = p ? p.rows : [];
-  const third = Math.ceil(rows.length / 3);
-  const rowHtml = rs => rs.map(x => `<div class="bd-row${x.hide ? ' hide' : ''}"><b>${esc(x.k)}</b><span>${esc(x.v)}</span></div>`).join('');
-  const paper = p
-    ? `<div class="fold" id="fold" role="button" tabindex="0" aria-label="Folded biodata. Tap or drag down to unfold"><span class="tape"></span>
-        <div class="panel">${p.photo ? `<img class="bd-photo" src="${p.photo}" alt="Attached photo">` : ''}<p class="bd-om">॥ SHREE GANESHAYA NAMAH ॥</p><p class="bd-title">BIODATA</p>${rowHtml(rows.slice(0, third))}</div>
-        <div class="panel shut">${rowHtml(rows.slice(third, third * 2))}</div>
-        <div class="panel shut">${rowHtml(rows.slice(third * 2))}</div></div>`
-    : `<div class="fold"><span class="tape"></span><div class="panel"><div class="bd-empty">Nothing yet</div></div></div>`;
-  return {
-    tone: 'cream', eyebrow: '01 Filter In · Unfold',
-    html: `<h1 class="t">The biodata.</h1>${paper}
-    ${p ? `<p class="hint" id="fh">Tap to unfold</p><div class="actions"><button class="btn primary" id="unf">Unfold</button><div class="row3"><button class="btn link" id="img">${p.photo ? 'Change image' : 'Add image'}</button><button class="btn link" id="fr">Filter check</button><button class="btn link" id="other">Try another</button></div></div>`
-        : `<div class="actions"><button class="btn primary" id="paste">${IC.plus} Add biodata</button><button class="btn" id="sample">Use a sample</button><button class="btn" id="none">Skip</button><button class="btn link" id="filters">My preferences</button></div>`}`,
-    mount: r => {
-      on(r, '#sample', () => { d.profile = parseBiodata(SAMPLE); d.sample = true; d.placed = {}; d.seen = []; save(); go('read'); });
-      on(r, '#img', () => pickImage(async f => { try { attachPhoto(d.profile, await shrinkImage(f)); save(); render(); } catch (e) { toast('Couldn’t open that image'); } }));
-      on(r, '#filters', () => go(onb().done && mine().length ? 'mine' : 'onb'));
-      on(r, '#fr', () => go('read'));
-      on(r, '#paste', () => pasteSheet());
-      on(r, '#other', () => { d.profile = null; d.placed = {}; d.seen = []; save(); render(); });
-      on(r, '#none', () => { d.profile = null; save(); go('table', {}, 'replace'); });
-      const fold = $('#fold', r); if (!fold) return;
-      const btn = $('#unf', r);
-      const step = () => {
-        const shut = $('.panel.shut', fold);
-        if (shut) { shut.classList.remove('shut'); sfx('page'); buzz(8); }
-        if (!$('.panel.shut', fold)) { btn.textContent = 'Unpack it'; $('#fh', r).textContent = ''; }
-      };
-      fold.addEventListener('click', step);
-      fold.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); step(); } });
-      let y0 = null; fold.addEventListener('pointerdown', e => { y0 = e.clientY; });
-      fold.addEventListener('pointerup', e => { if (y0 !== null && e.clientY - y0 > 30) step(); y0 = null; });
-      btn.onclick = () => { if ($('.panel.shut', fold)) { step(); return; } go('table', {arriving: true}, 'replace'); };
-    }
-  };
-};
-
-function pasteSheet() {
-  let photo = null, file = null;
-  sheet(`<h3>Add a biodata</h3>
-  <div class="imgpick"><button class="btn" id="pick">${IC.plus} Add image</button><img id="prev" alt="" hidden><button class="btn link" id="ocr" hidden>Read text from image</button></div>
-  <p id="ocrs" hidden></p>
-  <p>Details, one per line, e.g. <i>Hobbies: reading</i></p>
-  <textarea id="bt" placeholder="Name: …&#10;Occupation: …&#10;Hobbies: …" style="min-height:160px"></textarea>
-  <label class="tog" style="border:0;padding:0"><span>I have permission to use this</span><input type="checkbox" class="sw" id="perm"></label>
-  <div class="row2"><button class="btn" data-x>Cancel</button><button class="btn primary" data-ok>Add</button></div>`, (sh, close) => {
-    $('[data-x]', sh).onclick = close;
-    $('#pick', sh).onclick = () => pickImage(async f => {
-      try { file = f; photo = await shrinkImage(f); $('#prev', sh).src = photo; $('#prev', sh).hidden = false; $('#ocr', sh).hidden = false; $('#pick', sh).lastChild.textContent = ' Change'; }
-      catch (e) { toast('Couldn’t open that image'); }
-    });
-    $('#ocr', sh).onclick = async () => {
-      const st = $('#ocrs', sh), b = $('#ocr', sh); st.hidden = false; st.textContent = 'Reading… (on this device)'; b.disabled = true;
-      try {
-        const text = await readImageText(file, n => { st.textContent = `Reading… ${n}%`; });
-        const lines = text.split(/\n/).map(x => x.trim()).filter(Boolean).join('\n');
-        $('#bt', sh).value = lines; st.textContent = lines ? 'Check the text, then add.' : 'No text found. Type the details instead.';
-      } catch (e) { st.textContent = 'Couldn’t read text here. Type the details instead.'; }
-      b.disabled = false;
-    };
-    $('[data-ok]', sh).onclick = () => {
-      const t = $('#bt', sh).value;
-      if (!$('#perm', sh).checked) { toast('Tick the permission box'); return; }
-      const p = parseBiodata(t);
-      if (!p.rows.length) { toast('Couldn’t read it. Try one detail per line.'); return; }
-      attachPhoto(p, photo);
-      const d = draft(); d.profile = p; d.sample = false; d.placed = {}; d.seen = []; save(); close(); go('read');
-    };
-  });
-}
-
-SCENES.table = (o) => {
-  const d = draft(), objs = d.profile?.objects || [];
-  const {rows, cells} = layoutTable(objs);
-  objs.forEach((ob, i) => { if (!d.placed[ob.id]) { const c = cells[i % cells.length]; d.placed[ob.id] = {x: c[0] + (rnd() - .5) * .08, y: c[1] + (rnd() - .5) * .06, r: Math.round(rnd() * 26 - 13)}; } });
-  if (!objs.length) d.spaces = true;
-  const pk = d.pocket.length;
-  const known = objs.length ? `${objs.length} things from the form` : 'Nothing added';
-  return {
-    tone: 'butter', eyebrow: '01 Filter In · The table',
-    html: `<h1 class="t">Take a look.</h1>
-    ${objs.length ? flagStamp(compare(d.profile, d).flags, 'rd') : ''}
-    <p class="label">${known}</p>
-    <div class="tabletop" id="tbl" style="aspect-ratio:4/${rows * 1.02}">
-      ${objs.length ? '' : `<button class="source" id="src">Add a biodata</button>`}
-      ${objs.map(ob => `<button class="obj${d.seen.includes(ob.id) ? ' seen' : ''}${o.arriving ? ' packed' : ''}" data-id="${ob.id}" aria-label="${esc(ob.title)}. Tap to inspect, arrow keys to move." style="left:${d.placed[ob.id].x * 100}%;top:${d.placed[ob.id].y * 100}%;--r:${d.placed[ob.id].r}deg">${artFor(ob, d.profile.photo)}</button>`).join('')}
-      ${d.spaces ? `<button class="space" id="space" style="left:${objs.length ? 12.5 : 70}%;top:${objs.length ? (rows - .5) / rows * 100 : 30}%" aria-label="An empty space. Some things don’t fit on a form.">?</button>` : ''}
-      <button class="pocket" id="pocket" style="right:3%;bottom:2%" aria-label="Your pocket, ${pk} questions. Open the curiosity board.">${POCKET(pk)}</button>
-    </div>
-        <div class="actions">
-      <button class="btn primary" id="board">My questions</button>
-      <div class="${d.spaces ? 'row2' : ''}">${d.spaces ? '<button class="btn" id="spaces">Not on the form</button>' : ''}<button class="btn" id="done" style="width:100%">Done</button></div>
-    </div>`,
-    mount: r => {
-      const tbl = $('#tbl', r), pocket = $('#pocket', r);
-      if (o.arriving) {
-        const els = $$('.obj', r);
-        els.forEach((el, i) => { el.style.left = '50%'; el.style.top = '40%'; });
-        requestAnimationFrame(() => els.forEach((el, i) => setTimeout(() => { const p = d.placed[el.dataset.id]; place(el, p.x, p.y); el.classList.remove('packed'); if (i % 3 === 0) sfx('lift'); }, 120 + i * 90)));
-        cur.opts = {};
-      }
-      $$('.obj', r).forEach(el => {
-        const id = el.dataset.id;
-        drag(el, {stage: tbl, get: () => d.placed[id], set: (x, y) => { d.placed[id].x = x; d.placed[id].y = y; place(el, x, y); },
-          move: e => pocket.classList.toggle('hot', over(e, pocket)),
-          end: (x, y, e) => {
-            pocket.classList.remove('hot');
-            if (over(e, pocket)) {
-              const ob = objById(id);
-              if (ob.prompts.length && tuck(ob.prompts[0], id)) { toast('Saved'); }
-              else toast(ob.prompts.length ? 'Already saved' : 'Nothing to ask here');
-              d.placed[id].y = Math.max(.08, y - .14); place(el, x, d.placed[id].y);
-              $('.cnt', pocket).textContent = d.pocket.length + ' in pocket';
-            }
-            save();
-          },
-          tap: () => go('inspect', {id})});
-      });
-      on(r, '#pocket', () => go('board'));
-      on(r, '#board', () => go('board'));
-      on(r, '#spaces', () => go('spaces'));
-      on(r, '#space', () => go('spaces'));
-      on(r, '#src', () => go('unfold'));
-      on(r, '#done', () => go('pack'));
-      on(r, '#rd', () => go('read'));
-    }
-  };
-};
 
 // Which preference theme each object question could shed light on.
 const PROMPT_THEME = {"What do they like about their work?": "curious", "What’s a good workday for them?": "autonomy", "What did they enjoy studying?": "curious", "Anything they’d learn now just for fun?": "curious", "What do they like spending on?": "new", "What would they do with a month off?": "new", "Which traditions matter to them?": "decide", "Favourite festival?": "decide", "Do they care about horoscopes?": "decide", "Who in the family cares about this?": "decide", "Who are they closest to?": "feel", "Which family tradition would they keep?": "decide", "Which place feels like home?": "living", "Where would they live if they could pick?": "living", "Favourite meal?": "care", "Do they cook?": "roles", "What do these words mean to them?": "roles", "Did they write this, or family?": "decide", "What would they add to this?": "feel", "What would a friend say about them?": "kind", "What are they reading now?": "curious", "A book they’d recommend?": "curious", "Play or watch?": "new", "Favourite team?": "humour", "What do they listen to?": "arts", "A song on repeat right now?": "arts", "Best match they’ve seen?": "humour", "Best trip so far?": "new", "Where next?": "new", "A film they rewatch?": "arts", "Favourite kind of film?": "feel", "What do they like to shoot?": "arts", "A favourite photo?": "arts", "Their best dish?": "care", "Who taught them?": "roles", "What do they like to make?": "arts", "Where do they get ideas?": "curious", "What are they growing?": "care", "Oldest plant?": "care", "What makes them laugh?": "humour", "What do they care about most?": "kind", "What does independence mean to them?": "autonomy", "What do they want from a relationship?": "feel", "What could we enjoy doing together?": "new"};
@@ -1261,190 +1042,6 @@ function pointsTo(q) {
 }
 // A slow idle movement for each object while it's being inspected.
 const IDLE = {record: 'spin', football: 'roll', briefcase: 'sway', kundli: 'turn', map: 'breathe', coins: 'bob', stamp: 'press', tape: 'breathe', photo: 'sway', tiffin: 'bob', scroll: 'sway', bat: 'swing', suitcase: 'bob', ticket: 'sway', camera: 'breathe', pot: 'bob', brush: 'sway', plant: 'swing', tag: 'hang', picture: 'sway'};
-SCENES.inspect = (o) => {
-  const d = draft(), ob = objById(o.id);
-  if (!ob) return SCENES.table({});
-  if (!d.seen.includes(ob.id)) d.seen.push(ob.id);
-  const firstReveal = !d.spaces && d.seen.length >= 3;
-  if (firstReveal) d.spaces = true;
-  let pi = 0;
-  const pos = d.placed[ob.id] || {r: 0};
-  const many = ob.prompts.length > 1;
-  return {
-    tone: 'butter', eyebrow: '01 Filter In · Inspect',
-    html: `<h1 class="t">${esc(ob.title)}</h1>
-    <div class="inspect">
-      <div class="big" id="big" data-anim="${IDLE[ob.kind] || 'float'}" style="--r:${pos.r}deg" tabindex="0" role="img" aria-label="${esc(ob.title)}. Drag or twist to turn; arrow keys turn it too.">${artFor(ob, d.profile.photo)}</div>
-      <p class="label">From the form</p><div class="clips">${ob.known.map((k, n) => clipHtml(k, n)).join('')}</div>
-      <p class="label w">A question</p>
-      <div class="wrow"><div class="note-w" id="wn" tabindex="0" aria-label="Question note. ${many ? 'Swipe sideways or press the arrow keys for another. ' : ''}Drop it in the pocket, tap the pocket, or press Enter to save."><div class="note" id="wt"></div></div>
-      <button class="pocket" id="pk" aria-label="Pocket. Tap to save the question.">${POCKET(d.pocket.length)}</button></div>
-      <div id="pts" aria-live="polite"></div>
-      <p class="hint" id="gh">${many ? 'Swipe for another · drop in the pocket to save' : 'Drop in the pocket to save'}</p>
-    </div>
-    <div class="actions">
-      <button class="btn" id="own">${IC.pen} Write my own</button>
-      <button class="btn link" id="leave">Back</button>
-    </div>`,
-    mount: r => {
-      const big = $('#big', r), wt = $('#wt', r), wn = $('#wn', r), pk = $('#pk', r);
-      let ptsOpen = false;
-      const show = () => {
-        const q = ob.prompts[pi];
-        const inPocket = q && d.pocket.some(n => n.text === q);
-        wt.innerHTML = q ? esc(q) + (inPocket ? '<small>saved</small>' : '') : 'Nothing to ask here.';
-        if (!q) $('#gh', r).hidden = true;
-        $('#pts', r).innerHTML = q ? pointsTo(q) : '';
-        const pd = $('.pts-d', r); if (pd) { pd.open = ptsOpen; pd.addEventListener('toggle', () => { ptsOpen = pd.open; sfx('page'); }); }
-      };
-      show();
-      if (firstReveal) setTimeout(() => toast('New on the table'), 500);
-      // turn the object: one finger drags it round, two fingers twist it
-      const setR = v => { pos.r = Math.round(v); big.style.setProperty('--r', pos.r + 'deg'); };
-      const pts = new Map(); let r0 = 0, x0 = 0, a0 = 0;
-      const angle = () => { const [p1, p2] = [...pts.values()]; return Math.atan2(p2.y - p1.y, p2.x - p1.x) * 180 / Math.PI; };
-      big.style.touchAction = 'none';
-      big.addEventListener('pointerdown', e => {
-        pts.set(e.pointerId, {x: e.clientX, y: e.clientY}); try { big.setPointerCapture(e.pointerId); } catch (_) {}
-        big.classList.add('dragging'); r0 = pos.r || 0; x0 = e.clientX; if (pts.size === 2) a0 = angle();
-      });
-      big.addEventListener('pointermove', e => {
-        if (!pts.has(e.pointerId)) return;
-        pts.set(e.pointerId, {x: e.clientX, y: e.clientY});
-        if (pts.size >= 2) setR(r0 + angle() - a0); else setR(r0 + (e.clientX - x0) * .8);
-      });
-      const up = e => { if (!pts.delete(e.pointerId)) return; r0 = pos.r; if (pts.size === 1) x0 = [...pts.values()][0].x; if (!pts.size) { big.classList.remove('dragging'); save(); } };
-      big.addEventListener('pointerup', up); big.addEventListener('pointercancel', up);
-      big.addEventListener('keydown', e => { const k = {ArrowLeft: -15, ArrowRight: 15}[e.key]; if (k) { e.preventDefault(); setR((pos.r || 0) + k); save(); } });
-      big.addEventListener('dblclick', () => { big.classList.remove('dragging'); setR((pos.r || 0) + 180); sfx('lift'); save(); });
-      const keep = () => {
-        const q = ob.prompts[pi]; if (!q) return;
-        if (tuck(q, ob.id)) { toast('Saved'); $('.cnt', pk).textContent = d.pocket.length + ' in pocket'; } else toast('Already saved');
-        pk.classList.add('hot'); setTimeout(() => pk.classList.remove('hot'), 350);
-        show();
-      };
-      const another = dir => {
-        if (!many) return;
-        pi = (pi + (dir < 0 ? ob.prompts.length - 1 : 1)) % ob.prompts.length;
-        wn.style.transition = 'transform .18s ease, opacity .18s'; wn.style.transform = `translateX(${dir * 120}%) rotate(${dir * 12}deg)`; wn.style.opacity = 0;
-        setTimeout(() => { show(); wn.style.transition = 'none'; wn.style.transform = `translateX(${-dir * 60}%)`;
-          requestAnimationFrame(() => { wn.style.transition = ''; wn.style.transform = ''; wn.style.opacity = 1; }); }, 180);
-        sfx('page'); buzz(6);
-      };
-      on(r, '#pk', keep);
-      on(r, '#own', () => askText({title: 'Your question', placeholder: 'I wonder…', ok: 'Save'}, t => { if (t && tuck(t, ob.id)) { toast('Saved'); $('.cnt', pk).textContent = d.pocket.length + ' in pocket'; } }));
-      on(r, '#leave', back);
-      // the note: swipe sideways for another question, drag into the pocket to save
-      let sx = 0, sy = 0, pid = null;
-      wn.style.touchAction = 'none';
-      wn.addEventListener('pointerdown', e => { pid = e.pointerId; sx = e.clientX; sy = e.clientY; try { wn.setPointerCapture(pid); } catch (_) {} wn.classList.add('lifted'); });
-      wn.addEventListener('pointermove', e => { if (e.pointerId !== pid) return; wn.style.transform = `translate(${e.clientX - sx}px,${e.clientY - sy}px) rotate(${(e.clientX - sx) / 20 - 3}deg)`; pk.classList.toggle('hot', over(e, pk)); });
-      const wup = e => {
-        if (e.pointerId !== pid) return; pid = null; wn.classList.remove('lifted'); pk.classList.remove('hot');
-        const dx = e.clientX - sx, dy = e.clientY - sy;
-        if (over(e, pk)) { wn.style.transform = ''; keep(); }
-        else if (many && Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.2) another(Math.sign(dx));
-        else wn.style.transform = '';
-      };
-      wn.addEventListener('pointerup', wup); wn.addEventListener('pointercancel', wup);
-      wn.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); keep(); } else if (e.key === 'ArrowRight') another(1); else if (e.key === 'ArrowLeft') another(-1); });
-    }
-  };
-};
-
-SCENES.board = () => {
-  const d = draft();
-  return {
-    tone: 'sage', eyebrow: '01 Filter In · Questions',
-    html: `<h1 class="t">Your questions.</h1>
-    <div class="board" id="bd">${d.pocket.length ? d.pocket.map(n => `<div class="pin" data-id="${n.id}" tabindex="0" role="button" aria-label="${esc(n.text)}. Tap to edit, arrow keys to move." style="left:${n.x * 100}%;top:${n.y * 100}%;--r:${n.r}deg"><div class="note-w"><div class="note ${n.c}">${esc(n.text)}${n.src && objById(n.src) ? `<small>from ${esc(objById(n.src).title.replace(/^An? /, '').toLowerCase())}</small>` : n.src === 'space' ? '' : ''}</div></div></div>`).join('')
-      : `<div class="empty">Nothing here yet.</div>`}</div>
-        <div class="actions"><button class="btn primary" id="carry">Done</button>
-    <div class="row2"><button class="btn" id="own">${IC.pen} Write my own</button><button class="btn" id="tbl">Table</button></div></div>`,
-    mount: r => {
-      const bd = $('#bd', r);
-      $$('.pin', r).forEach(el => {
-        const n = d.pocket.find(x => x.id === el.dataset.id);
-        drag(el, {stage: bd, min: .1, max: .9, get: () => n, set: (x, y) => { n.x = x; n.y = y; place(el, x, y); }, end: save,
-          tap: () => sheet(`<h3>Edit</h3><textarea id="et">${esc(n.text)}</textarea><div class="swatches">${NOTE_COLORS.map((c, i) => `<button aria-label="Colour ${i + 1}" data-c="${c}" aria-pressed="${n.c === c}" style="background:var(--n-${c || 'butter'})"></button>`).join('')}</div><div class="row2"><button class="btn" data-rm>Remove</button><button class="btn primary" data-ok>Keep it</button></div>`, (sh, close) => {
-            on(sh, '[data-c]', (e, b) => { n.c = b.dataset.c; $$('[data-c]', sh).forEach(x => x.setAttribute('aria-pressed', x === b)); });
-            $('[data-ok]', sh).onclick = () => { const t = $('#et', sh).value.trim(); if (t) n.text = t; close(); render(); };
-            $('[data-rm]', sh).onclick = () => { d.pocket = d.pocket.filter(x => x !== n); d.kept = (d.kept || []).filter(t => t !== n.text); close(); render(); };
-          })});
-      });
-      on(r, '#own', () => askText({title: 'Your question', placeholder: 'I wonder…', ok: 'Save'}, t => { if (t) { tuck(t, 'own'); render(); } }));
-      on(r, '#tbl', () => go('table'));
-      on(r, '#carry', () => go('pack'));
-    }
-  };
-};
-
-SCENES.spaces = () => {
-  const d = draft(); d.kept = d.kept || [];
-  return {
-    tone: 'sage', eyebrow: '01 Filter In · Not on the form',
-    html: `<h1 class="t">Not on the form.</h1>
-    <div class="sil-wrap">${SPACES.map((q, i) => `<button class="sil${d.kept.includes(q) ? ' kept' : ''}" data-i="${i}" aria-pressed="${d.kept.includes(q)}">${esc(q)}<small>${d.kept.includes(q) ? 'saved' : ''}</small></button>`).join('')}</div>
-    <p class="hint">Tap to save</p>
-    <div class="actions row2"><button class="btn" id="keep">My questions</button><button class="btn" id="skip">Back</button></div>`,
-    mount: r => {
-      on(r, '.sil', (e, b) => {
-        const q = SPACES[+b.dataset.i];
-        if (d.kept.includes(q)) { d.kept = d.kept.filter(x => x !== q); d.pocket = d.pocket.filter(n => n.text !== q); b.classList.remove('kept'); b.setAttribute('aria-pressed', false); $('small', b).textContent = ''; sfx('page'); }
-        else { d.kept.push(q); tuck(q, 'space'); b.classList.add('kept'); b.setAttribute('aria-pressed', true); $('small', b).textContent = 'saved'; }
-        save();
-      });
-      on(r, '#keep', () => go('board'));
-      on(r, '#skip', () => go('table'));
-    }
-  };
-};
-
-SCENES.pack = (o) => {
-  const d = draft();
-  const packing = o.packing;
-  const top = d.pocket[0];
-  d.packSel = d.packSel || d.pocket.map(n => n.id);
-  return {
-    tone: 'butter', eyebrow: '01 Filter In · Packing up',
-    html: `<h1 class="t">${packing ? 'Pack your questions.' : 'What next?'}</h1>
-    <div class="boxstage" id="bs">${top ? `<div class="note-w"><div class="note ${top.c}" style="font-size:17px">${esc(top.text)}</div></div>` : ''}<div class="box">${BOX(d.pocket.length ? 'questions' : 'empty')}</div></div>
-    ${packing ? `<div class="chips">${d.pocket.map(n => `<button class="chip" data-id="${n.id}" aria-pressed="${d.packSel.includes(n.id)}">${esc(n.text)}</button>`).join('') || '<p class="hint">No questions saved</p>'}</div>
-      <div class="field"><label for="bkname">Name</label><input id="bkname" value="${esc(d.profile?.name || '')}" placeholder="Name"></div>
-      <div class="actions"><button class="btn primary" id="close">Close the box</button></div>`
-    : `      <div class="actions"><button class="btn" id="leave">Leave for now</button><button class="btn" id="arch">Archive</button><button class="btn" id="know">Get to know them</button></div>`}`,
-    mount: r => {
-      on(r, '#leave', () => { toast('Saved for later'); go('chapters', {}, 'reset'); });
-      on(r, '#arch', () => archiveDraft());
-      on(r, '#know', () => { d.packSel = d.pocket.map(n => n.id); go('pack', {packing: true}, 'replace'); });
-      on(r, '.chip', (e, b) => {
-        const id = b.dataset.id, i = d.packSel.indexOf(id);
-        if (i >= 0) d.packSel.splice(i, 1); else d.packSel.push(id);
-        b.setAttribute('aria-pressed', i < 0); b.style.transform = i < 0 ? 'translateY(-4px) rotate(-2deg)' : ''; setTimeout(() => b.style.transform = '', 250);
-        sfx('tuck'); save();
-      });
-      on(r, '#close', () => {
-        const name = ($('#bkname', r).value.trim() || 'Someone').slice(0, 24);
-        const qs = d.pocket.filter(n => d.packSel.includes(n.id)).map(n => {
-          const ob = objById(n.src);
-          return {id: n.id, text: n.text, history: [], obj: ob ? {kind: ob.kind, word: ob.word, title: ob.title, about: ob.about, known: ob.known} : null};
-        });
-        const book = {id: uid(), name, created: Date.now(), status: 'unfinished', questions: qs, pages: []};
-        S.books.unshift(book);
-        S.draft = null; // the paperwork itself isn't kept: only what you chose to carry
-        $('#bs', r).classList.add('closed'); sfx('open'); buzz(14);
-        setTimeout(() => { toast('Packed'); go('after', {book: book.id}, 'reset'); }, S.settings.reduced ? 100 : 900);
-      });
-    }
-  };
-};
-
-function archiveDraft(how) {
-  const d = draft(), passed = how === 'Passed';
-  S.archived.unshift({id: d.id, name: (d.profile?.name || 'Unnamed paperwork') + (passed ? ' · passed' : ''), at: Date.now(), draft: d});
-  S.draft = null; save(); toast(passed ? 'Passed' : 'Archived'); go('chapters', {}, 'reset');
-}
-
 const flagText = n => n ? `${n} pass flag${n > 1 ? 's' : ''}` : 'No pass flags';
 const flagStamp = (n, id = '') => `<${id ? `button id="${id}"` : 'span'} class="flagmark${n ? ' flag' : ''}">${flagText(n)}</${id ? 'button' : 'span'}>`;
 const STATE_WORD = {aligned: 'Aligned', conflict: 'Conflict', unknown: 'Unknown', related: 'Related'};
@@ -1461,43 +1058,6 @@ const dirText = x => `Talk about: ${x.topic.replace(/^./, ch => ch.toLowerCase()
 const evPill = st => `<span class="ev ${st}">${{aligned: 'Aligned', conflict: 'Conflict', unknown: 'Unknown', related: 'Related'}[st]}</span>`;
 const quoteHtml = q => q ? `<q>${esc(q.k)}: “${esc(q.s)}”</q>` : '';
 
-SCENES.read = () => {
-  const d = draft(), p = d.profile;
-  if (!p) return SCENES.unfold();
-  d.dismissed = d.dismissed || {}; d.asked = d.asked || [];
-  const c = compare(p, d);
-  const inc = c.items.filter(i => i.state === 'conflict'), cur = c.items.filter(i => i.state === 'aligned' || i.rel), fq = directions(c), shown = d.showAllQ ? fq : fq.slice(0, 5);
-  const none = t => `<p class="none">${t}</p>`;
-  return {
-    tone: 'butter', eyebrow: '01 Filter In · Filter check',
-    html: `<div class="who">${p.photo ? `<span class="polaroid"><img src="${p.photo}" alt=""></span>` : ''}<h1 class="t">${esc(p.name || 'This profile')}</h1></div>
-    <div class="row-pills">${flagStamp(c.flags)}<button class="btn link" id="bio">View biodata</button></div>
-    ${!c.items.length ? `<div class="checkin"><p class="q">No sorted preferences yet.</p><button class="btn" id="setup">Set up my preferences</button></div>` : `
-    <div class="scrap">
-    <section class="rs"><h2>Potential incompatibilities</h2>${inc.map((i, n) => entry({text: i.pref.text, color: 'pink', state: 'conflict', small: CATL[i.pref.cat], quote: i.quote, n, dim: i.dismissed,
-      foot: i.flag ? `<button class="tagbtn" data-dis="${i.pref.id}">${i.dismissed ? 'Undo' : 'Not a dealbreaker'}</button>` : '<span class="hand">Worth a thought</span>'})).join('') || none('None stated.')}</section>
-    <section class="rs"><h2>Reasons for curiosity</h2>${cur.map((i, n) => entry({text: i.pref.text, color: i.rel ? 'blue' : 'sage', state: i.rel ? 'related' : 'aligned', small: i.rel ? 'Related, not proof' : CATL[i.pref.cat], quote: i.quote || i.rel, n})).join('') || none('Nothing stated yet.')}</section>
-    <section class="rs"><div class="rs-h"><h2>Talk about</h2>${fq.length ? '<button class="tagbtn" id="saveall">Save all</button>' : ''}</div>${shown.map((x, n) => { const saved = d.pocket.some(m => m.text === dirText(x)); return entry({text: x.topic, color: '', listen: x, small: `${x.why} · ${x.pref.text}`, n,
-      foot: `<button class="tagbtn" data-ask="${n}"${saved ? ' disabled' : ''}>${saved ? 'Saved' : 'Save'}</button>`}); }).join('') || none('Nothing to talk about yet.')}${fq.length > shown.length ? `<button class="btn link" id="moreq">${fq.length - shown.length} more</button>` : ''}</section>
-    </div>`}
-    ${c.unsorted ? `<button class="btn link" id="uns">${c.unsorted} not sorted</button>` : ''}
-    <div class="actions"><div class="row2"><button class="btn" id="pass">Pass</button><button class="btn primary" id="go">Explore</button></div>
-      <button class="btn link" id="other">Try another</button></div>`,
-    mount: r => {
-      on(r, '#go', () => go('unfold', {}, 'replace'));
-      on(r, '#pass', () => archiveDraft('Passed'));
-      on(r, '#setup', () => go(onb().done && mine().length ? 'mine' : 'onb'));
-      on(r, '#uns', () => go('mine'));
-      on(r, '#bio', () => sheet(`<h3>${esc(p.name || 'Biodata')}</h3>${p.photo ? `<img class="bio-img" src="${p.photo}" alt="Attached image">` : ''}<div>${p.rows.map(x => `<div class="bd-row${x.hide ? ' hide' : ''}" style="color:var(--ink)"><b>${esc(x.k)}</b><span>${esc(x.v)}</span></div>`).join('')}</div><button class="btn primary" data-x>Close</button>`, (sh, close) => { $('[data-x]', sh).onclick = close; }));
-      on(r, '[data-dis]', (e, b) => { const id = b.dataset.dis; d.dismissed[id] = !d.dismissed[id]; save(); render(); });
-      on(r, '[data-ask]', (e, b) => { tuck(dirText(shown[+b.dataset.ask]), 'pref'); save(); b.textContent = 'Saved'; b.disabled = true; toast('Saved'); });
-      on(r, '#saveall', () => { fq.forEach(x => tuck(dirText(x), 'pref')); save(); toast('Saved'); render(); });
-      on(r, '#moreq', () => { d.showAllQ = true; render(); });
-      on(r, '#other', () => { d.profile = null; d.placed = {}; d.seen = []; d.dismissed = {}; save(); go('unfold', {}, 'replace'); });
-    }
-  };
-};
-
 /* ---------- onboarding ---------- */
 const dots = i => `<div class="dots" aria-label="Step ${i + 1} of 6">${[0, 1, 2, 3, 4, 5].map(k => `<span class="d${k < i ? ' done' : k === i ? ' on' : ''}"></span>`).join('')}</div>`;
 SCENES.onb = () => ({
@@ -1508,7 +1068,7 @@ SCENES.onb = () => ({
   mount: r => {
     on(r, '#go', () => go('onbq', {i: 0}));
     on(r, '#ex', () => { Object.assign(onb().a, EXAMPLE_ANSWERS); save(); go('onbq', {i: 0}); });
-    on(r, '#skip', () => { onb().done = true; save(); go('chapters', {}, 'reset'); });
+    on(r, '#skip', () => { onb().done = true; save(); go('home', {}, 'reset'); });
   }
 });
 SCENES.onbq = (o) => {
@@ -1599,7 +1159,7 @@ SCENES.mine = (o) => {
       on(r, '#add', () => prefSheet(null));
       on(r, '#refl', () => go('onbq', {i: 0}));
       on(r, '#start', () => go('onb'));
-      on(r, '#cont', () => go('chapters', {}, 'reset'));
+      on(r, '#cont', () => go('home', {}, 'reset'));
       on(r, '#ck-y', () => { pick.checked = Date.now(); save(); toast('Kept'); render(); });
       on(r, '#ck-c', () => prefSheet(pick));
       on(r, '#ck-n', () => { S.ui.checkHidden = true; render(); });
@@ -1608,319 +1168,224 @@ SCENES.mine = (o) => {
   };
 };
 
-/* ---------- Part Two ---------- *//* ---------- Part Two ---------- */
-const bookById = id => S.books.find(b => b.id === id);
+/* ---------- people: one scrapbook each ---------- */
 const COVERS = ['#E9B9B3', '#B5C7A9', '#F0DC9A', '#BCD0E0'];
-const statusText = s => ({unfinished: 'Open', continuing: 'Continuing', paused: 'Paused', closed: 'Closed'}[s] || 'Open');
+const STATUS = {new: 'Undecided', talking: 'Talking', paused: 'Paused', closed: 'Closed', passed: 'Passed'};
+const bookById = id => S.books.find(b => b.id === id);
+function newBook(profile, status) { return {id: uid(), name: (profile && profile.name) || 'Someone', created: Date.now(), profile, dismissed: {}, status, meetings: []}; }
+// Older saves had drafts, archives and multi-step pages; fold them into one book per person.
+(function migrate() {
+  S.books = (S.books || []).map(b => b.meetings ? b : {
+    id: b.id, name: b.name, created: b.created || Date.now(), example: b.example, profile: null, dismissed: {},
+    status: {continuing: 'talking', paused: 'paused', closed: 'closed'}[b.status] || 'talking',
+    meetings: (b.pages || []).map(pg => ({id: pg.id, date: pg.date, kind: pg.kind || '', topics: {}, tokens: (pg.tokens || []).map(t => t.type),
+      note: [...(pg.fragments || []).filter(f => f.text).map(f => f.text), ...(pg.notes || []).map(n => n.text), ...Object.values(pg.prefNotes || {}), pg.next ? pg.next.text : ''].filter(Boolean).join('\n')}))
+  });
+  (S.archived || []).forEach(a => { if (a.draft && a.draft.profile) S.books.push(newBook(a.draft.profile, 'passed')); });
+  if (S.draft && S.draft.profile) S.books.unshift(newBook(S.draft.profile, 'new'));
+  S.archived = []; S.draft = null;
+})();
+const meetEmpty = m => !m.kind && !m.note && !m.tokens.length && !Object.keys(m.topics).length;
+const squiggle = () => S.settings.reduced ? IC.squiggle : IC.squiggle.replace('"/></svg>', '"><animate attributeName="d" dur="2.6s" begin="0.9s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines=".45 0 .55 1;.45 0 .55 1" values="M3 8c14-5 24 4 38-1s24-4 38 0 26 3 40-2 10-1 14 0;M3 8c14 5 24-4 38 1s24 4 38 0 26-3 40 2 10 1 14 0;M3 8c14-5 24 4 38-1s24-4 38 0 26 3 40-2 10-1 14 0"/></path></svg>');
+const toPrefs = () => go(onb().done && mine().length ? 'mine' : 'onb');
 
-SCENES.shelf = () => ({
-  tone: 'pink', eyebrow: '02 Continue? · Scrapbooks',
-  html: `<h1 class="t">Your scrapbooks.</h1>
-  ${S.books.length ? `<div class="shelf">${S.books.map((b, i) => `<button class="bk" data-id="${b.id}"><div class="cover">${NOTEBOOK(COVERS[i % 4], DOODLES[i % 4])}<span class="name">${esc(b.name)}</span></div>${b.pages.length} encounter${b.pages.length === 1 ? '' : 's'}<span class="st">${b.example ? 'Example · ' : ''}${statusText(b.status)}</span></button>`).join('')}</div>`
-    : `<div class="nb-stage" style="height:220px"><div class="nb" style="left:24%;width:52%">${'<div class="cover">' + NOTEBOOK() + '</div>'}</div></div><p class="hint">No scrapbooks yet.</p>`}
-  <div class="actions"><button class="btn primary" id="add">${IC.plus} Add a scrapbook</button>
-  ${S.books.some(b => b.example) ? '' : '<button class="btn" id="ex">See an example</button>'}
-  <button class="btn link" id="priv">Privacy</button></div>`,
-  mount: r => {
-    on(r, '.bk', (e, b) => { S.ui.tab = 0; go('book', {book: b.dataset.id}); });
-    on(r, '#add', () => askText({title: 'New scrapbook', placeholder: 'Name', ok: 'Create'}, t => {
-      const b = {id: uid(), name: (t || 'Someone').slice(0, 24), created: Date.now(), status: 'unfinished', questions: [], pages: []};
-      S.books.unshift(b); save(); go('after', {book: b.id});
-    }));
-    on(r, '#ex', () => { S.books.push(exampleBook()); save(); render(); });
-    on(r, '#priv', openSettings);
-  }
-});
-
-SCENES.after = (o) => {
-  const b = bookById(o.book); if (!b) return SCENES.shelf();
-  const q = b.questions[0];
+SCENES.home = () => {
+  const live = S.books.filter(b => b.status !== 'passed'), passed = S.books.filter(b => b.status === 'passed');
+  const cover = (b, i) => `<button class="bk" data-id="${b.id}"><div class="cover">${NOTEBOOK(COVERS[i % 4], DOODLES[i % 4])}<span class="name">${esc(b.name)}</span>${b.profile && b.profile.photo ? `<span class="bk-pic"><img src="${b.profile.photo}" alt=""></span>` : ''}<span class="bk-stamp s-${b.status}">${STATUS[b.status]}</span></div>${b.meetings.length ? `${b.meetings.length} meeting${b.meetings.length > 1 ? 's' : ''}` : '&nbsp;'}</button>`;
+  const hasEx = S.books.some(b => b.example);
   return {
-    tone: 'pink', eyebrow: '02 Continue? · After',
+    tone: 'butter', back: false, eyebrow: '',
+    html: `<h1 class="display home-t">Plot<br>Twist</h1>${squiggle()}
+    ${onb().done && mine().length ? '' : `<button class="checkin setup" id="setup"><span class="q">What matters to you?</span><span class="pick">4 quick questions, then every check is about you.</span></button>`}
+    ${live.length ? `<div class="shelf">${live.map(cover).join('')}</div>` : `<div class="home-empty"><div class="env" style="width:min(80%,260px)"><div class="env-body">${ENV_BODY}</div><div class="env-front">${ENV_FRONT}</div><div class="env-flap">${ENV_FLAP}</div><span class="env-label">biodata<br>inside</span></div></div>`}
+    ${passed.length ? `<p class="label">Passed</p><div class="shelf passed">${passed.map((b, i) => cover(b, i + live.length)).join('')}</div>` : ''}
+    <div class="actions"><button class="btn primary" id="add">${IC.plus} Add biodata</button>
+    ${hasEx ? '<button class="btn" id="mp">My preferences</button>' : '<div class="row2"><button class="btn" id="mp">My preferences</button><button class="btn" id="ex">See an example</button></div>'}</div>`,
+    mount: r => {
+      on(r, '.bk', (e, b) => go('person', {book: b.dataset.id}));
+      on(r, '#add', () => go('add'));
+      on(r, '#setup', () => go('onb'));
+      on(r, '#mp', toPrefs);
+      on(r, '#ex', () => { S.books.push(exampleBook()); save(); render(); });
+    }
+  };
+};
+
+SCENES.add = () => {
+  let photo = null, file = null;
+  return {
+    tone: 'cream', eyebrow: 'New biodata',
+    html: `<h1 class="t">Add a biodata.</h1>
+    <div class="imgpick"><button class="btn" id="pick">${IC.plus} Add image</button><img id="prev" alt="" hidden><button class="btn link" id="ocr" hidden>Read text from image</button></div>
+    <p class="hint" id="ocrs" hidden style="text-align:left"></p>
+    <textarea class="ans" id="bt" aria-label="Biodata details" placeholder="Paste the details, one per line&#10;Name: …&#10;Occupation: …&#10;Hobbies: …"></textarea>
+    <p class="hint">Only add documents you have permission to use. Contact details are skipped.</p>
+    <div class="actions"><button class="btn primary" id="go">Check it</button><button class="btn" id="sample">Use a sample</button></div>`,
+    mount: r => {
+      const start = p => { attachPhoto(p, photo); const b = newBook(p, 'new'); S.books.unshift(b); save(); go('check', {book: b.id, intro: true}, 'replace'); };
+      on(r, '#pick', () => pickImage(async f => {
+        try { file = f; photo = await shrinkImage(f); $('#prev', r).src = photo; $('#prev', r).hidden = false; $('#ocr', r).hidden = false; }
+        catch (e) { toast('Couldn’t open that image'); }
+      }));
+      on(r, '#ocr', async () => {
+        const st = $('#ocrs', r); st.hidden = false; st.textContent = 'Reading… (on this device)';
+        try { const text = await readImageText(file, n => { st.textContent = `Reading… ${n}%`; }); $('#bt', r).value = text.split(/\n/).map(x => x.trim()).filter(Boolean).join('\n'); st.textContent = 'Check the text, then tap Check it.'; }
+        catch (e) { st.textContent = 'Couldn’t read text here. Type the details instead.'; }
+      });
+      on(r, '#go', () => { const p = parseBiodata($('#bt', r).value); if (!p.rows.length) { toast('Try one detail per line, like Hobbies: reading'); return; } start(p); });
+      on(r, '#sample', () => start(parseBiodata(SAMPLE)));
+    }
+  };
+};
+
+// The filter check: a stamp lands on the form, then the reasons, then Pass or Explore.
+SCENES.check = (o) => {
+  const b = bookById(o.book), p = b && b.profile; if (!p) return SCENES.home();
+  b.dismissed = b.dismissed || {};
+  const c = compare(p, b);
+  const inc = c.items.filter(i => i.state === 'conflict'), cur = c.items.filter(i => i.state === 'aligned' || i.rel), fq = directions(c), shown = o.allDirs ? fq : fq.slice(0, 3);
+  const none = t => `<p class="none">${t}</p>`;
+  return {
+    tone: 'butter', eyebrow: 'Filter check',
+    html: `<div class="who">${p.photo ? `<span class="polaroid"><img src="${p.photo}" alt=""></span>` : ''}<h1 class="t">${esc(p.name || 'This profile')}</h1></div>
+    <div class="fold readpaper${o.intro ? ' rise' : ''}" id="bio" role="button" tabindex="0" aria-label="View the biodata"><span class="tape"></span><div class="panel"><p class="bd-om">॥ SHREE GANESHAYA NAMAH ॥</p><p class="bd-title">BIODATA</p>${p.rows.slice(0, 6).map(x => `<div class="bd-row${x.hide ? ' hide' : ''}"><b>${esc(x.k)}</b><span>${esc(x.v)}</span></div>`).join('')}</div><span class="stamp-mark" style="--sc:${c.flags ? '#B4462F' : '#4F6B45'}">${c.items.length ? flagText(c.flags).toUpperCase() : 'UNSORTED'}</span></div>
+    ${!c.items.length ? `<button class="checkin" id="setup"><span class="q">No preferences yet</span><span class="pick">Answer 4 quick questions to get a real check.</span></button>` : `
+    <div class="scrap">
+    <section class="rs"><h2>Potential incompatibilities</h2>${inc.map((i, n) => entry({text: i.pref.text, color: 'pink', state: 'conflict', small: CATL[i.pref.cat], quote: i.quote, n, dim: i.dismissed,
+      foot: i.flag ? `<button class="tagbtn" data-dis="${i.pref.id}">${i.dismissed ? 'Undo' : 'Not a dealbreaker'}</button>` : '<span class="hand">Worth a thought</span>'})).join('') || none('None stated.')}</section>
+    <section class="rs"><h2>Reasons for curiosity</h2>${cur.map((i, n) => entry({text: i.pref.text, color: i.rel ? 'blue' : 'sage', state: i.rel ? 'related' : 'aligned', small: i.rel ? 'Related, not proof' : CATL[i.pref.cat], quote: i.quote || i.rel, n})).join('') || none('Nothing stated yet.')}</section>
+    <section class="rs"><h2>Talk about</h2>${shown.map((x, n) => entry({text: x.topic, color: '', listen: x, small: `${x.why} · ${x.pref.text}`, n})).join('') || none('Nothing yet.')}${fq.length > shown.length ? `<button class="btn link" id="moreq">${fq.length - shown.length} more</button>` : ''}</section>
+    </div>`}
+    <div class="actions"><div class="row2"><button class="btn" id="pass">Pass</button><button class="btn primary" id="go">Explore</button></div></div>`,
+    mount: r => {
+      if (o.intro && !S.settings.reduced) setTimeout(() => { sfx('drop'); buzz(20); }, 700);
+      cur.opts = {...o, intro: false};
+      on(r, '#go', () => { if (b.status === 'new' || b.status === 'passed') b.status = 'talking'; save(); go('person', {book: b.id}, 'replace'); });
+      on(r, '#pass', () => { b.status = 'passed'; save(); toast('Passed'); go('home', {}, 'reset'); });
+      on(r, '#setup', () => go('onb'));
+      const showBio = () => sheet(`<h3>${esc(p.name || 'Biodata')}</h3>${p.photo ? `<img class="bio-img" src="${p.photo}" alt="Attached image">` : ''}<div>${p.rows.map(x => `<div class="bd-row${x.hide ? ' hide' : ''}" style="color:var(--ink)"><b>${esc(x.k)}</b><span>${esc(x.v)}</span></div>`).join('')}</div><button class="btn primary" data-x>Close</button>`, (sh, close) => { $('[data-x]', sh).onclick = close; });
+      on(r, '#bio', showBio);
+      $('#bio', r).addEventListener('keydown', e => { if (e.key === 'Enter') showBio(); });
+      on(r, '[data-dis]', (e, x) => { const id = x.dataset.dis; b.dismissed[id] = !b.dismissed[id]; save(); render(); });
+      on(r, '#moreq', () => { cur.opts.allDirs = true; render(); });
+    }
+  };
+};
+
+// Tap an object from the form: it comes up close, moving gently, with what the form says.
+function inspectSheet(ob, p) {
+  const q = ob.prompts[0];
+  sheet(`<h3>${esc(ob.title)}</h3><div class="big" data-anim="${IDLE[ob.kind] || 'float'}" style="--r:0deg;margin:6px auto">${artFor(ob, p.photo)}</div>
+  <div class="clips">${ob.known.map((k, n) => clipHtml(k, n)).join('')}</div>${q ? pointsTo(q) : ''}<button class="btn primary" data-x>Close</button>`, (sh, close) => {
+    $('[data-x]', sh).onclick = close;
+    const big = $('.big', sh); let x0 = null, r0 = 0, rr = 0; big.style.touchAction = 'none';
+    big.addEventListener('pointerdown', e => { x0 = e.clientX; r0 = rr; try { big.setPointerCapture(e.pointerId); } catch (_) {} });
+    big.addEventListener('pointermove', e => { if (x0 === null) return; rr = r0 + (e.clientX - x0) * .8; big.style.setProperty('--r', rr + 'deg'); });
+    const up = () => { x0 = null; }; big.addEventListener('pointerup', up); big.addEventListener('pointercancel', up);
+    big.addEventListener('dblclick', () => { rr += 180; big.style.setProperty('--r', rr + 'deg'); sfx('lift'); });
+  });
+}
+function statusSheet(b) {
+  sheet(`<h3>${esc(b.name)}</h3><div class="seg">${['talking', 'paused', 'closed', 'passed'].map(s => `<button data-s="${s}" aria-pressed="${b.status === s}">${STATUS[s]}</button>`).join('')}</div>`, (sh, close) => {
+    on(sh, '[data-s]', (e, x) => { b.status = x.dataset.s; save(); sfx('drop'); close(); render(); });
+  });
+}
+const fmtDate = t => new Date(t).toLocaleDateString(undefined, {day: 'numeric', month: 'short'});
+
+SCENES.person = (o) => {
+  const b = bookById(o.book); if (!b) return SCENES.home();
+  b.meetings = b.meetings.filter(m => !meetEmpty(m));
+  const p = b.profile, c = p ? compare(p, b) : null, dirs = c ? directions(c) : [];
+  const came = {}; b.meetings.forEach(m => Object.entries(m.topics).forEach(([t, v]) => { if (v.up) came[t] = (came[t] || 0) + 1; }));
+  const shown = o.allDirs ? dirs : dirs.slice(0, 4);
+  const card = (m, i) => { const upN = Object.values(m.topics).filter(v => v.up).length; return `<button class="meet" data-m="${m.id}"><div class="clip-w" style="--r:${i % 2 ? 1 : -1}deg">${i === 0 ? '<span class="tape"></span>' : ''}<div class="clip"><b>${fmtDate(m.date)}${m.kind ? ' · ' + esc(m.kind) : ''}</b>${m.tokens.length ? `<span class="mtoks">${m.tokens.map((t, k) => `<span class="mtok" title="${TOKENS[t] ? TOKENS[t].label : ''}">${tokenSvg(t, k)}</span>`).join('')}</span>` : ''}${m.note ? `<span class="mnote">${esc(short(m.note))}</span>` : ''}${upN ? `<span class="mup">${upN} topic${upN > 1 ? 's' : ''} came up</span>` : ''}</div></div></button>`; };
+  return {
+    tone: 'pink', eyebrow: 'Scrapbook',
+    html: `<div class="who">${p && p.photo ? `<span class="polaroid"><img src="${p.photo}" alt=""></span>` : ''}<h1 class="t">${esc(b.name)}</h1></div>
+    <div class="row-pills"><button class="bk-stamp lg s-${b.status}" id="st">${STATUS[b.status]}</button>${c ? flagStamp(c.flags, 'chk') : ''}</div>
+    <div class="scrap">
+      ${p ? `<section class="rs"><h2>From the form</h2><div class="objgrid">${p.objects.map(ob => `<button class="mini-obj" data-o="${ob.id}" data-anim="${IDLE[ob.kind] || 'float'}" aria-label="${esc(ob.title)}">${artFor(ob, p.photo)}<span>${esc(ob.title)}</span></button>`).join('')}</div></section>` : ''}
+      ${p ? `<section class="rs"><h2>Talk about</h2>${dirs.length ? shown.map((x, n) => entry({text: x.topic, color: came[x.topic] ? 'sage' : '', listen: x, small: came[x.topic] ? `Came up${came[x.topic] > 1 ? ' ' + came[x.topic] + '×' : ''}` : x.why, n})).join('') + (dirs.length > shown.length ? `<button class="btn link" id="moreq">${dirs.length - shown.length} more</button>` : '') : '<button class="tagbtn" id="setup">Add your preferences to get topics</button>'}</section>` : ''}
+      <section class="rs"><h2>Meetings</h2>${b.meetings.map(card).join('') || '<p class="none">None yet.</p>'}</section>
+    </div>
+    <div class="actions"><button class="btn primary" id="meet">${IC.plus} Add a meeting</button><button class="btn link" id="del">Delete</button></div>`,
+    mount: r => {
+      on(r, '#st', () => statusSheet(b));
+      on(r, '#chk', () => go('check', {book: b.id}));
+      on(r, '.mini-obj', (e, x) => inspectSheet(p.objects.find(ob => ob.id === x.dataset.o), p));
+      on(r, '#moreq', () => { cur.opts.allDirs = true; render(); });
+      on(r, '#setup', toPrefs);
+      on(r, '#meet', () => go('meeting', {book: b.id}));
+      on(r, '.meet', (e, x) => go('meeting', {book: b.id, meet: x.dataset.m}));
+      on(r, '#del', () => confirmSheet(`Delete ${esc(b.name)}?`, 'This can’t be undone.', 'Delete', () => { S.books = S.books.filter(y => y !== b); save(); toast('Deleted'); go('home', {}, 'reset'); }));
+    }
+  };
+};
+
+// After a meeting: flick each topic card into "came up" or "didn't", tap a few moments, done.
+SCENES.meeting = (o) => {
+  const b = bookById(o.book); if (!b) return SCENES.home();
+  let m = b.meetings.find(x => x.id === o.meet);
+  if (!m) { m = {id: uid(), date: Date.now(), kind: '', topics: {}, tokens: [], note: ''}; b.meetings.push(m); cur.opts = {...o, meet: m.id}; }
+  const dirs = b.profile ? directions(compare(b.profile, b)) : [];
+  const deck = dirs.filter(x => !(x.topic in m.topics)), top = deck[0];
+  const upN = dirs.filter(x => m.topics[x.topic] && m.topics[x.topic].up).length, downN = dirs.filter(x => m.topics[x.topic] && !m.topics[x.topic].up).length;
+  return {
+    tone: 'pink', eyebrow: `${esc(b.name)} · ${fmtDate(m.date)}`,
     html: `<h1 class="t">So, what happened?</h1>
-    <div class="nb-stage"><div class="nb" id="nb"><div class="inner"><span class="label" style="color:var(--paper-soft)">Encounter ${pad(b.pages.length + 1)}</span></div><div class="cover" id="cv" role="button" tabindex="0" aria-label="Open the scrapbook">${NOTEBOOK('#E9B9B3')}<span class="nb-label">${esc(b.name)}</span></div></div>
-    ${q ? `<div class="note-w" style="position:absolute;left:0;bottom:22%;width:150px;transform:rotate(-12deg);z-index:3"><div class="note" style="font-size:14px;padding:10px 18px 12px 10px">${esc(q.text)}</div></div>` : ''}
-    <div class="kbox">${BOX(b.questions.length ? b.questions.length + ' question' + (b.questions.length > 1 ? 's' : '') : 'keepsakes')}</div></div>
-        <div class="seg" id="kind">${['A call', 'Messages', 'A conversation', 'A date', 'Something else'].map(k => `<button aria-pressed="false">${k}</button>`).join('')}</div>
-        <div class="actions"><button class="btn primary" id="start">Start a page</button><button class="btn" id="blank">Not now</button></div>`,
+    <div class="seg" id="kind">${['Call', 'Messages', 'Coffee', 'Date', 'Other'].map(k => `<button data-k="${k}" aria-pressed="${m.kind === k}">${k}</button>`).join('')}</div>
+    ${dirs.length ? `<div class="deck-wrap"><p class="label">Did this come up?</p>
+      <div class="deck" id="deck">${top ? `${deck.length > 1 ? '<div class="card-under"></div>' : ''}<div class="card" id="card" tabindex="0" aria-label="${esc(top.topic)}. Swipe right if it came up, left if not."><div class="note-w"><div class="note">${esc(top.topic)}<small>${esc(top.pref.text)}</small></div></div></div>` : '<div class="deck-done">All sorted.</div>'}</div>
+      ${top ? `<div class="row2"><button class="btn" id="no">← Didn’t</button><button class="btn" id="yes">Came up →</button></div>` : ''}
+      <div class="piles"><button class="pile" id="pile" ${upN + downN ? '' : 'disabled'}><b>${upN}</b> came up · <b>${downN}</b> didn’t${upN + downN ? ' · undo' : ''}</button></div></div>` : ''}
+    <p class="label">Moments</p>
+    <div class="tokrow">${Object.keys(TOKENS).filter(k => k !== 'custom').map((k, i) => `<button class="tokbtn" data-t="${k}" aria-pressed="${m.tokens.includes(k)}">${tokenSvg(k, i)}<span>${TOKENS[k].label}</span></button>`).join('')}</div>
+    <textarea class="note-area" id="nt" aria-label="Note" placeholder="Anything else? (optional)">${esc(m.note)}</textarea>
+    <p class="label">Keep talking?</p>
+    <div class="seg" id="stat">${[['talking', 'Yes'], ['paused', 'Pause'], ['closed', 'Close']].map(([s, l]) => `<button data-s="${s}" aria-pressed="${b.status === s}">${l}</button>`).join('')}</div>
+    <div class="actions"><button class="btn primary" id="done">Done</button></div>`,
     mount: r => {
-      let kind = '';
-      on(r, '#kind button', (e, btn) => { const was = btn.getAttribute('aria-pressed') === 'true'; $$('#kind button', r).forEach(x => x.setAttribute('aria-pressed', 'false')); btn.setAttribute('aria-pressed', String(!was)); kind = was ? '' : btn.textContent; });
-      const nb = $('#nb', r), cv = $('#cv', r);
-      const start = () => {
-        nb.classList.add('open'); sfx('open'); buzz(10);
-        const pg = {id: uid(), kind, date: Date.now(), fragments: defaultFragments(), tokens: [], revisits: {}, next: null, notes: []};
-        b.pages.push(pg); S.ui.page = b.pages.length - 1; S.ui.q = 0; save();
-        setTimeout(() => go('fragments', {book: b.id}), S.settings.reduced ? 80 : 800);
+      const decide = up => {
+        if (!top) return;
+        const card = $('#card', r); m.topics[top.topic] = {up}; save(); sfx('tuck'); buzz(8);
+        card.style.transition = 'transform .25s ease, opacity .25s'; card.style.transform = `translateX(${up ? 130 : -130}%) rotate(${up ? 16 : -16}deg)`; card.style.opacity = 0;
+        setTimeout(render, S.settings.reduced ? 0 : 230);
       };
-      on(r, '#start', start);
-      cv.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); start(); } });
-      let x0 = null; cv.addEventListener('pointerdown', e => { x0 = e.clientX; });
-      cv.addEventListener('pointerup', e => { if (x0 === null) return; const dx = e.clientX - x0; x0 = null; if (dx < -20 || Math.abs(dx) < 6) start(); });
-      on(r, '#blank', () => { S.ui.tab = Math.max(0, b.pages.length - 1); go('book', {book: b.id}, 'replace'); });
-    }
-  };
-};
-const defaultFragments = () => [
-  {id: uid(), prompt: 'What stuck with you?', text: '', who: 'them', x: .4, y: .2, r: -2, b: ''},
-  {id: uid(), prompt: 'Something you didn’t ask?', text: '', who: 'me', x: .6, y: .52, r: 2, b: 'var(--n-butter)'},
-  {id: uid(), prompt: 'Anything surprising?', text: '', who: 'them', x: .4, y: .82, r: -1, b: 'var(--n-blue)'}
-];
-const curPage = b => b.pages[clamp(S.ui.page ?? b.pages.length - 1, 0, b.pages.length - 1)];
-
-SCENES.fragments = (o) => {
-  const b = bookById(o.book), pg = b && curPage(b); if (!pg) return SCENES.shelf();
-  const bub = f => `<div class="bub ${f.who === 'me' ? 'me' : ''}${f.who === 'pause' ? ' pause' : ''}" data-id="${f.id}" tabindex="0" role="button" aria-label="${esc(f.text || f.prompt)}. Tap to write, arrow keys to move." style="left:${f.x * 100}%;top:${f.y * 100}%;--r:${f.r}deg;${f.b ? `--b:${f.b}` : ''}">${f.who === 'pause' && !f.text ? '<span class="pr">…a pause</span>' : f.text ? esc(f.text) : `<span class="pr">${esc(f.prompt)}</span>`}${f.text && f.prompt ? `<small>${esc(f.prompt)}</small>` : ''}</div>`;
-  return {
-    tone: 'pink', eyebrow: '02 Continue? · Words',
-    html: `<h1 class="t">What was said?</h1>
-    <div class="page drop" id="pg">${pg.fragments.map(bub).join('')}</div>
-    <p class="hint">Tap a bubble to write</p>
-    <div class="actions"><button class="btn primary" id="next">Next</button><div class="row2"><button class="btn" id="add">${IC.plus} Add</button><button class="btn" id="skip">Skip</button></div></div>`,
-    mount: r => {
-      const st = $('#pg', r);
-      $$('.bub', r).forEach(el => {
-        const f = pg.fragments.find(x => x.id === el.dataset.id);
-        drag(el, {stage: st, min: .2, max: .86, get: () => f, set: (x, y) => { f.x = x; f.y = y; place(el, x, y); }, end: save,
-          tap: () => editFragment(f)});
-      });
-      on(r, '#add', () => { pg.fragments.push({id: uid(), prompt: '', text: '', who: 'me', x: .5, y: .5, r: Math.round(rnd() * 6 - 3), b: ''}); editFragment(pg.fragments[pg.fragments.length - 1], true); });
-      on(r, '#next', () => go('moments', {book: b.id}));
-      on(r, '#skip', () => go('moments', {book: b.id}));
-    }
-  };
-  function editFragment(f, isNew) {
-    sheet(`<h3>${esc(f.prompt || 'A fragment')}</h3><textarea id="ft" placeholder="They said… / I said… / We both…">${esc(f.text)}</textarea>
-    <div class="seg" id="who">${[['them', 'Them'], ['me', 'Me'], ['pause', 'Pause']].map(([k, l]) => `<button data-w="${k}" aria-pressed="${f.who === k}">${l}</button>`).join('')}</div>
-    <div class="row2"><button class="btn" data-rm>Remove</button><button class="btn primary" data-ok>Save</button></div>`, (sh, close) => {
-      on(sh, '[data-w]', (e, x) => { f.who = x.dataset.w; $$('[data-w]', sh).forEach(y => y.setAttribute('aria-pressed', y === x)); });
-      $('[data-ok]', sh).onclick = () => { f.text = $('#ft', sh).value.trim(); close(); save(); render(); };
-      $('[data-rm]', sh).onclick = () => { pg.fragments = pg.fragments.filter(x => x !== f); close(); save(); render(); };
-    });
-  }
-};
-
-SCENES.moments = (o) => {
-  const b = bookById(o.book), pg = b && curPage(b); if (!pg) return SCENES.shelf();
-  let sel = null;
-  const tokHtml = (t, i) => `<button class="tok" data-id="${t.id}" aria-label="${esc(t.label)}${t.note ? ': ' + esc(t.note) : ''}. Tap to add a note, arrow keys to move." style="left:${t.x * 100}%;top:${t.y * 100}%;--r:${t.r}deg">${tokenSvg(t.type, i)}<span>${esc(t.label)}</span>${t.note ? '<i class="nt"></i>' : ''}</button>`;
-  return {
-    tone: 'pink', eyebrow: '02 Continue? · Moments',
-    html: `<h1 class="t">How did it feel?</h1>
-    <div class="page drop" id="mp" style="aspect-ratio:1/.82">${pg.tokens.map(tokHtml).join('')}</div>
-    <div class="tray" id="tray">${Object.keys(TOKENS).map((k, i) => `<button data-t="${k}" aria-pressed="false">${tokenSvg(k, i)}${TOKENS[k].label}</button>`).join('')}</div>
-    <p class="hint" id="mh">Drag a token onto the page</p>
-    <div class="actions row2"><button class="btn primary" id="next">Next</button><button class="btn" id="skip">Skip</button></div>`,
-    mount: r => {
-      const mp = $('#mp', r), mh = $('#mh', r);
-      let sel_label = '';
-      const bindTok = el => {
-        const t = pg.tokens.find(x => x.id === el.dataset.id);
-        drag(el, {stage: mp, min: .08, max: .92, get: () => t, set: (x, y) => { t.x = x; t.y = y; place(el, x, y); }, end: save,
-          tap: () => askText({title: t.label, value: t.note || '', placeholder: 'Add a note', ok: 'Save', remove: () => { pg.tokens = pg.tokens.filter(x => x !== t); save(); render(); }}, txt => { t.note = txt; save(); render(); })});
-      };
-      $$('.tok', r).forEach(bindTok);
-      const addTok = (type, x, y, label) => {
-        const t = {id: uid(), type, label: label || TOKENS[type].label, note: '', x, y, r: Math.round(rnd() * 16 - 8)};
-        pg.tokens.push(t); save();
-        $('.empty', mp)?.remove();
-        mp.insertAdjacentHTML('beforeend', tokHtml(t, pg.tokens.length - 1));
-        const el = mp.lastElementChild; bindTok(el); sfx('drop'); buzz(6);
-        return el;
-      };
-      const choose = (type, then) => {
-        if (type !== 'custom') return then(TOKENS[type].label);
-        askText({title: 'Your own', placeholder: 'e.g. the walk back', ok: 'Add'}, t => { if (t) then(t.slice(0, 22)); });
-      };
-      $$('#tray button', r).forEach(btn => {
-        const type = btn.dataset.t; let pid = null, sx = 0, sy = 0, ghost = null;
-        btn.addEventListener('pointerdown', e => { pid = e.pointerId; sx = e.clientX; sy = e.clientY; try { btn.setPointerCapture(pid); } catch (_) {} });
-        btn.addEventListener('pointermove', e => {
-          if (e.pointerId !== pid) return;
-          if (!ghost && Math.hypot(e.clientX - sx, e.clientY - sy) > 8 && type !== 'custom') {
-            ghost = document.createElement('div'); ghost.className = 'tok lifted'; ghost.style.position = 'fixed'; ghost.style.zIndex = 40; ghost.style.pointerEvents = 'none';
-            ghost.innerHTML = tokenSvg(type) + `<span>${TOKENS[type].label}</span>`; document.body.append(ghost); sfx('lift');
-          }
-          if (ghost) { ghost.style.left = e.clientX + 'px'; ghost.style.top = e.clientY + 'px'; }
-        });
-        const up = e => {
-          if (e.pointerId !== pid) return; pid = null;
-          if (ghost) {
-            ghost.remove(); ghost = null;
-            if (over(e, mp)) { const rc = mp.getBoundingClientRect(); addTok(type, clamp((e.clientX - rc.left) / rc.width, .08, .92), clamp((e.clientY - rc.top) / rc.height, .08, .92)); }
-            return;
-          }
-          if (e.type !== 'pointerup') return;
-          const was = sel === type;
-          $$('#tray button', r).forEach(x => x.setAttribute('aria-pressed', 'false'));
-          if (was) { sel = null; mh.textContent = 'Drag a token onto the page'; return; }
-          choose(type, label => { sel = type; sel_label = label; btn.setAttribute('aria-pressed', 'true'); mh.textContent = 'Tap the page'; });
-        };
-        btn.addEventListener('pointerup', up); btn.addEventListener('pointercancel', up);
-        btn.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); choose(type, label => { addTok(type, .2 + rnd() * .6, .2 + rnd() * .6, label); say(label + ' placed'); }); } });
-      });
-      mp.addEventListener('click', e => {
-        if (!sel || e.target.closest('.tok')) return;
-        const rc = mp.getBoundingClientRect();
-        addTok(sel, clamp((e.clientX - rc.left) / rc.width, .08, .92), clamp((e.clientY - rc.top) / rc.height, .08, .92), sel_label);
-        sel = null; $$('#tray button', r).forEach(x => x.setAttribute('aria-pressed', 'false')); mh.textContent = 'Tap it to add a note';
-      });
-      on(r, '#next', () => { S.ui.q = 0; go('thennow', {book: b.id}); });
-      on(r, '#skip', () => { S.ui.q = 0; go('thennow', {book: b.id}); });
-    }
-  };
-};
-
-SCENES.thennow = (o) => {
-  const b = bookById(o.book), pg = b && curPage(b); if (!pg) return SCENES.shelf();
-  const qs = b.questions, pIdx = b.pages.indexOf(pg);
-  if (!qs.length) return {
-    tone: 'pink', eyebrow: '02 Continue? · Then vs now',
-    html: `<h1 class="t">Then vs now.</h1><p class="sub">No questions carried over.</p>
-    <div class="actions"><button class="btn" id="addq">${IC.pen} Add a question</button><button class="btn primary" id="next">Next</button></div>`,
-    mount: r => { on(r, '#addq', () => askText({title: 'Your question', placeholder: 'I wonder…', ok: 'Save'}, t => { if (t) { b.questions.push({id: uid(), text: t, history: [], obj: null}); save(); render(); } })); on(r, '#next', () => { S.ui.m = 0; go('matters', {book: b.id}); }); }
-  };
-  const qi = clamp(S.ui.q || 0, 0, qs.length - 1), q = qs[qi];
-  const rv = pg.revisits[q.id] || {};
-    const earlier = b.pages.map((p, i) => ({i, v: p.revisits[q.id]})).filter(x => x.i !== pIdx && x.v && x.v.note);
-  return {
-    tone: 'pink', eyebrow: '02 Continue? · Then vs now',
-    html: `<h1 class="t">Then vs now.</h1><p class="sub">Did anything change?</p>
-    ${q.obj ? `<div class="clipline"><div class="ic">${artFor(q.obj)}</div>${clipHtml(q.obj.known[0] || '', 0)}</div>` : ''}
-    <div class="tn"><div><p class="label w" style="margin-bottom:8px">Then</p><div class="note-w"><div class="note" style="font-size:16px">${esc(q.text)}${q.history.length ? `<small>revised ${q.history.length}×</small>` : ''}</div></div></div>
-    <div><p class="label" style="margin-bottom:8px">Now</p><div class="exp">${rv.note ? esc(rv.note) : rv.open ? '<span class="ph">Skipped</span>' : '<span class="ph">…</span>'}</div></div></div>
-    ${earlier.length ? `<div class="trail"><span class="label">Before</span>${earlier.map(x => `<span><b>Encounter ${pad(x.i + 1)}:</b> ${esc(x.v.note)}</span>`).join('')}</div>` : ''}
-    ${qs.length > 1 ? `<p class="hint">${qi + 1} of ${qs.length}</p>` : ''}
-    <div class="actions"><div class="row2"><button class="btn" id="obs">Add a note</button><button class="btn" id="rev">Edit question</button></div>
-    <div class="row2"><button class="btn" id="open">Skip</button><button class="btn primary" id="next">Next</button></div></div>`,
-    mount: r => {
-      on(r, '#obs', () => askText({title: q.text, value: rv.note || '', placeholder: 'What happened?', ok: 'Save'}, t => { pg.revisits[q.id] = {note: t, open: !t}; save(); render(); }));
-      on(r, '#rev', () => askText({title: 'Edit question', value: q.text, ok: 'Save'}, t => { if (t && t !== q.text) { q.history.push({text: q.text, page: pIdx}); q.text = t; save(); render(); } }));
-      on(r, '#open', () => { pg.revisits[q.id] = {note: '', open: true}; save(); advance(); });
-      on(r, '#next', advance);
-      function advance() { if (qi < qs.length - 1) { S.ui.q = qi + 1; render(); } else { S.ui.m = 0; go('matters', {book: b.id}); } }
-    }
-  };
-};
-
-SCENES.matters = (o) => {
-  const b = bookById(o.book), pg = b && curPage(b); if (!pg) return SCENES.shelf();
-  const order = CATS.map(c => c[0]);
-  const list = mine().filter(x => x.cat && reflectFor(x)).sort((a, b) => order.indexOf(a.cat) - order.indexOf(b.cat)).filter((x, n, all) => all.findIndex(y => reflectFor(y) === reflectFor(x)) === n);
-  if (!list.length) return SCENES.nextpage(o);
-  pg.prefNotes = pg.prefNotes || {};
-  const i = clamp(S.ui.m || 0, 0, list.length - 1), pref = list[i], note = pg.prefNotes[pref.id];
-  return {
-    tone: 'pink', eyebrow: '02 Continue? · What matters',
-    html: `<h1 class="t">${esc(reflectFor(pref))}</h1><span class="status">${CATL[pref.cat]} · ${esc(pref.text)}</span>
-    <div class="exp">${note ? esc(note) : '<span class="ph">…</span>'}</div>
-    ${list.length > 1 ? `<p class="hint">${i + 1} of ${list.length}</p>` : ''}
-    <div class="actions"><div class="row2"><button class="btn" id="ans">${note ? 'Edit' : 'Answer'}</button><button class="btn" id="own">${IC.plus} My own note</button></div>
-    <div class="row2"><button class="btn" id="skip">Skip</button><button class="btn primary" id="next">Next</button></div>
-    <button class="btn link" id="all">Skip all</button></div>`,
-    mount: r => {
-      const next = () => { if (i < list.length - 1) { S.ui.m = i + 1; render(); } else go('nextpage', {book: b.id}); };
-      on(r, '#ans', () => askText({title: reflectFor(pref), value: note || '', placeholder: 'What happened?', ok: 'Save'}, t => { if (t) pg.prefNotes[pref.id] = t; else delete pg.prefNotes[pref.id]; save(); render(); }));
-      on(r, '#own', () => askText({title: 'Your note', placeholder: 'Something you noticed', ok: 'Save'}, t => { if (t) { pg.notes.push({id: uid(), text: t}); save(); toast('Saved'); } }));
-      on(r, '#skip', next); on(r, '#next', next);
-      on(r, '#all', () => go('nextpage', {book: b.id}));
-    }
-  };
-};
-
-SCENES.nextpage = (o) => {
-  const b = bookById(o.book), pg = b && curPage(b); if (!pg) return SCENES.shelf();
-  const n = pg.next;
-  return {
-    tone: 'sage', eyebrow: '02 Continue? · Next',
-    html: `<h1 class="t">What next?</h1>
-    <div class="np">${n && n.text ? `<div class="written"><small>${n.type === 'question' ? 'Next time' : 'Memory'}</small>${esc(n.text)}</div>` : ''}
-      <button id="wq">${IC.pen} ${n?.type === 'question' ? 'Edit question' : 'Write a question'}</button>
-      <button id="am">${IC.plus} Add a memory</button>
-      <button id="lb">${IC.arrow} Leave blank</button></div>
-    <div class="actions"><button class="btn" data-s="continuing">Continue</button><button class="btn" data-s="paused">Pause</button><button class="btn" data-s="closed">Close the chapter</button><button class="btn link" data-s="later">Later</button></div>`,
-    mount: r => {
-      on(r, '#wq', () => askText({title: 'Next time', value: n?.type === 'question' ? n.text : '', placeholder: 'I’d like to ask…', ok: 'Save'}, t => { pg.next = t ? {type: 'question', text: t} : null; save(); render(); }));
-      on(r, '#am', () => askText({title: 'Memory', value: n?.type === 'memory' ? n.text : '', placeholder: 'Something to remember', ok: 'Save'}, t => { pg.next = t ? {type: 'memory', text: t} : null; save(); render(); }));
-      on(r, '#lb', () => { pg.next = null; save(); render(); });
-      on(r, '[data-s]', (e, btn) => {
-        const s = btn.dataset.s;
-        if (s !== 'later') b.status = s;
-        save(); sfx('page'); if (s !== 'later') toast(statusText(s));
-        S.ui.tab = b.pages.indexOf(pg);
-        go('book', {book: b.id, closing: true}, 'reset'); stack.push({name: 'shelf', opts: {}});
-      });
-    }
-  };
-};
-
-SCENES.book = (o) => {
-  const b = bookById(o.book); if (!b) return SCENES.shelf();
-  const n = b.pages.length;
-  let tab = S.ui.tab ?? 0; if (tab !== 'time') tab = clamp(+tab || 0, 0, Math.max(0, n - 1));
-  const pg = tab === 'time' ? null : b.pages[tab];
-  const qLine = q => { const v = pg.revisits[q.id]; return `<button class="it q" data-q="${q.id}">${esc(q.text)}${v?.note ? `<span class="obs">${esc(v.note)}</span>` : v?.open ? '<span class="obs">Skipped</span>' : ''}</button>`; };
-  const pageHtml = pg ? `<h2 class="pg-h">Encounter ${pad(tab + 1)}</h2><p class="pg-m">${esc(pg.kind || 'Encounter')} · ${new Date(pg.date).toLocaleDateString(undefined, {day: 'numeric', month: 'short'})}</p>
-    ${b.questions.length ? `<p class="sec">Questions</p><div class="items">${b.questions.map(qLine).join('')}</div>` : ''}
-    ${Object.keys(pg.prefNotes || {}).length ? `<p class="sec">What matters</p><div class="items">${Object.entries(pg.prefNotes).map(([id, t]) => { const x = mine().find(y => y.id === id); return `<span class="it">${esc(t)}<span class="obs">${esc(x ? x.text : '')}</span></span>`; }).join('')}</div>` : ''}
-    <p class="sec">Moments</p><div class="items">${pg.tokens.map(t => `<button class="it tk" data-k="tokens" data-id="${t.id}">${esc(t.label)}${t.note ? `<span class="obs">${esc(t.note)}</span>` : ''}</button>`).join('') || '<span class="pg-m">—</span>'}</div>
-    <p class="sec">Fragments</p><div class="items">${pg.fragments.filter(f => f.text).map(f => `<button class="it" data-k="fragments" data-id="${f.id}">“${esc(f.text)}”<span class="obs">${f.who === 'me' ? 'me' : f.who === 'pause' ? 'pause' : 'them'}</span></button>`).join('') || '<span class="pg-m">—</span>'}</div>
-    ${pg.next?.text ? `<p class="sec">${pg.next.type === 'question' ? 'Next time' : 'Memory'}</p><div class="items"><button class="it q" data-next>${esc(pg.next.text)}</button></div>` : ''}
-    <p class="sec">Notes</p><div class="items">${pg.notes.map(t => `<button class="it" data-k="notes" data-id="${t.id}">${esc(t.text)}</button>`).join('')}<button class="it" id="ann" style="border-style:dashed">+ note</button></div>`
-    : tab === 'time' ? `<h2 class="pg-h">Over time</h2>
-      <div class="evo">${b.questions.map(q => `<div>${q.history.map(h => `<s>${esc(h.text)}</s>`).join('')}<div class="q">${esc(q.text)}</div><ul>${b.pages.map((p, i) => p.revisits[q.id] ? `<li><b>Encounter ${pad(i + 1)}:</b> ${p.revisits[q.id].note ? esc(p.revisits[q.id].note) : 'skipped'}</li>` : '').join('') || '<li>—</li>'}</ul></div>`).join('') || '<p class="pg-m">No questions yet.</p>'}</div>`
-    : `<h2 class="pg-h">No pages yet</h2>`;
-  return {
-    tone: 'pink', eyebrow: '02 Continue? · Scrapbook',
-    html: `<h1 class="t">${esc(b.name)}</h1>
-    <span class="status">${statusText(b.status)}${b.example ? ' · example' : ''}</span>
-    <div class="book" id="book"><div class="tabs">${b.pages.map((p, i) => `<button data-tab="${i}" aria-current="${tab === i}" aria-label="Encounter ${i + 1}">${pad(i + 1)}</button>`).join('')}${n ? `<button data-tab="time" aria-current="${tab === 'time'}" aria-label="Over time">≈</button>` : ''}</div><div class="page">${pageHtml}</div></div>
-        <div class="actions"><div class="row2"><button class="btn" id="add">${IC.plus} Add a page</button><button class="btn" id="turn">Turn the page</button></div>
-    ${pg ? '<button class="btn" id="reopen">Edit this page</button>' : ''}
-    <div class="row2"><button class="btn" id="where">Status</button><button class="btn primary" id="close">Close</button></div>
-    <button class="btn link" id="del">Delete</button></div>`,
-    mount: r => {
-      on(r, '[data-tab]', (e, t) => { S.ui.tab = t.dataset.tab === 'time' ? 'time' : +t.dataset.tab; sfx('page'); render(); });
-      on(r, '#turn', () => { const order = [...b.pages.map((_, i) => i), 'time']; const i = order.indexOf(tab); S.ui.tab = order[(i + 1) % order.length]; sfx('page'); render(); });
-      on(r, '#add', () => go('after', {book: b.id}));
-      on(r, '#reopen', () => { S.ui.page = tab; S.ui.q = 0; go('fragments', {book: b.id}); });
-      on(r, '#close', () => { const bk = $('#book', r); bk.classList.add('closing'); sfx('open'); setTimeout(() => { go('shelf', {}, 'reset'); stack.push({name: 'chapters', opts: {}}); }, S.settings.reduced ? 50 : 650); });
-      on(r, '#where', () => sheet(`<h3>Status</h3>
-        <div class="seg">${['continuing', 'paused', 'closed', 'unfinished'].map(s => `<button data-s="${s}" aria-pressed="${b.status === s}">${{continuing: 'Continue', paused: 'Pause', closed: 'Close the chapter', unfinished: 'Keep open'}[s]}</button>`).join('')}</div>`, (sh, close) => {
-          on(sh, '[data-s]', (e, x) => { b.status = x.dataset.s; save(); close(); render(); });
-        }));
-      on(r, '#del', () => confirmSheet(`Delete ${esc(b.name)}?`, 'This can’t be undone.', 'Delete', () => { S.books = S.books.filter(x => x !== b); save(); toast('Deleted'); go('shelf', {}, 'reset'); }));
-      on(r, '#ann', () => askText({title: 'Note', placeholder: 'Add a note', ok: 'Save'}, t => { if (t) { pg.notes.push({id: uid(), text: t}); save(); render(); } }));
-      on(r, '[data-q]', (e, el) => { const q = b.questions.find(x => x.id === el.dataset.q); const v = pg.revisits[q.id] || {}; askText({title: q.text, value: v.note || '', placeholder: 'What happened?', ok: 'Save'}, t => { pg.revisits[q.id] = {note: t, open: !t}; save(); render(); }); });
-      on(r, '[data-next]', () => go('nextpage', {book: b.id}));
-      on(r, '[data-k]', (e, el) => {
-        const kind = el.dataset.k, item = pg[kind].find(x => x.id === el.dataset.id);
-        const label = kind === 'tokens' ? item.label : (item.text || '');
-        const others = b.pages.map((p, i) => ({p, i})).filter(x => x.p !== pg);
-        sheet(`<h3>${esc(label)}</h3>${kind !== 'notes' ? `<textarea id="nt" placeholder="${kind === 'tokens' ? 'Add a note' : 'Words'}">${esc(kind === 'tokens' ? item.note || '' : item.text)}</textarea>` : `<textarea id="nt">${esc(item.text)}</textarea>`}
-          ${others.length ? `<p>Move to</p><div class="seg">${others.map(x => `<button data-mv="${x.i}">Encounter ${pad(x.i + 1)}</button>`).join('')}</div>` : ''}
-          <div class="row2"><button class="btn" data-rm>Remove</button><button class="btn primary" data-ok>Save</button></div>`, (sh, close) => {
-          $('[data-ok]', sh).onclick = () => { const v = $('#nt', sh).value.trim(); if (kind === 'tokens') item.note = v; else item.text = v; save(); close(); render(); };
-          $('[data-rm]', sh).onclick = () => { pg[kind] = pg[kind].filter(x => x !== item); save(); close(); render(); };
-          on(sh, '[data-mv]', (e2, m) => { const to = b.pages[+m.dataset.mv]; pg[kind] = pg[kind].filter(x => x !== item); to[kind].push(item); save(); close(); toast('Moved'); render(); });
-        });
-      });
+      on(r, '#yes', () => decide(true)); on(r, '#no', () => decide(false));
+      const card = $('#card', r);
+      if (card) {
+        let sx = null, pid = null; card.style.touchAction = 'pan-y';
+        card.addEventListener('pointerdown', e => { sx = e.clientX; pid = e.pointerId; try { card.setPointerCapture(pid); } catch (_) {} });
+        card.addEventListener('pointermove', e => { if (e.pointerId !== pid || sx === null) return; const dx = e.clientX - sx; card.style.transform = `translateX(${dx}px) rotate(${dx / 18}deg)`; card.classList.toggle('lean-yes', dx > 50); card.classList.toggle('lean-no', dx < -50); });
+        const up = e => { if (e.pointerId !== pid || sx === null) return; const dx = e.clientX - sx; sx = null; if (Math.abs(dx) > 80) decide(dx > 0); else { card.style.transform = ''; card.classList.remove('lean-yes', 'lean-no'); } };
+        card.addEventListener('pointerup', up); card.addEventListener('pointercancel', up);
+        card.addEventListener('keydown', e => { if (e.key === 'ArrowRight') decide(true); if (e.key === 'ArrowLeft') decide(false); });
+      }
+      on(r, '#pile', () => sheet(`<h3>Sorted</h3>${dirs.filter(x => x.topic in m.topics).map((x, n) => `<div class="arch"><span>${m.topics[x.topic].up ? '✓' : '–'} ${esc(x.topic)}</span><span class="seg"><button data-u="${n}">Undo</button></span></div>`).join('')}<button class="btn primary" data-x>Close</button>`, (sh, close) => {
+        const sorted = dirs.filter(x => x.topic in m.topics);
+        on(sh, '[data-u]', (e, x) => { delete m.topics[sorted[+x.dataset.u].topic]; save(); close(); render(); });
+        $('[data-x]', sh).onclick = close;
+      }));
+      on(r, '#kind button', (e, x) => { m.kind = m.kind === x.dataset.k ? '' : x.dataset.k; $$('#kind button', r).forEach(y => y.setAttribute('aria-pressed', y.dataset.k === m.kind)); sfx('tuck'); save(); });
+      on(r, '.tokbtn', (e, x) => { const t = x.dataset.t, i = m.tokens.indexOf(t); if (i >= 0) m.tokens.splice(i, 1); else m.tokens.push(t); x.setAttribute('aria-pressed', i < 0); x.classList.remove('pop'); void x.offsetWidth; if (i < 0) x.classList.add('pop'); sfx(i < 0 ? 'drop' : 'tuck'); buzz(6); save(); });
+      $('#nt', r).addEventListener('input', e => { m.note = e.target.value; save(); });
+      on(r, '#stat button', (e, x) => { b.status = x.dataset.s; $$('#stat button', r).forEach(y => y.setAttribute('aria-pressed', y.dataset.s === b.status)); sfx('drop'); save(); });
+      on(r, '#done', () => { if (meetEmpty(m)) b.meetings = b.meetings.filter(y => y !== m); else toast('Saved'); save(); back(); });
     }
   };
 };
 
 /* ---------- example book for a first look ---------- */
 function exampleBook() {
-  const p = parseBiodata(SAMPLE), book = p.objects.find(x => x.kind === 'book'), fam = p.objects.find(x => x.kind === 'photo');
-  const q1 = {id: uid(), text: 'What has he read recently that he couldn’t put down?', history: [{text: 'What would you want to ask about something they’ve read recently?', page: 0}], obj: {kind: 'book', title: book.title, about: book.about, known: book.known}};
-  const q2 = {id: uid(), text: 'What makes them laugh?', history: [], obj: null};
-  const q3 = {id: uid(), text: 'Which family tradition would they keep?', history: [], obj: {kind: 'photo', title: fam.title, about: fam.about, known: fam.known}};
-  const day = 864e5, now = Date.now();
-  const pg = (kind, ago, frags, toks, rev, next) => ({id: uid(), kind, date: now - ago * day, fragments: frags.map((f, i) => ({id: uid(), prompt: '', text: f[0], who: f[1], x: .45 + (i % 2) * .1, y: .2 + i * .3, r: i % 2 ? 2 : -2, b: ''})), tokens: toks.map((t, i) => ({id: uid(), type: t[0], label: TOKENS[t[0]].label, note: t[1] || '', x: .2 + i * .25, y: .35 + (i % 2) * .3, r: 0})), revisits: rev, next, notes: []});
-  return {id: uid(), name: 'Rohan', example: true, created: now - 20 * day, status: 'unfinished', questions: [q1, q2, q3], pages: [
-    pg('A call', 14, [['I’ve been rereading the same three books since college.', 'them'], ['A long pause after I asked about Bengaluru.', 'pause']], [['curiosity', 'When he talked about the books'], ['silence'], ['uncertainty', 'Whether the pause meant anything']], {[q1.id]: {note: 'He mentioned rereading old favourites more than finding new ones.'}, [q2.id]: {note: '', open: true}}, {type: 'question', text: 'What keeps him going back to the same books?'}),
-    pg('A conversation', 5, [['My sister would like you.', 'them'], ['I laughed harder than I expected to.', 'me']], [['laughter', 'The story about the football trophy'], ['surprise'], ['affection']], {[q2.id]: {note: 'A badly told story about a football trophy. Mostly the telling.'}, [q3.id]: {note: 'Sunday lunches at his parents’. He said it without being asked.'}}, {type: 'memory', text: 'Walking out and both of us forgetting which way the car was.'})
-  ]};
+  const p = parseBiodata(SAMPLE), b = newBook(p, 'talking'); b.example = true;
+  const dirs = directions(compare(p, b)), topics = {};
+  dirs.slice(0, 3).forEach((x, i) => { topics[x.topic] = {up: i !== 1}; });
+  const day = 864e5;
+  b.meetings = [
+    {id: uid(), date: Date.now() - 12 * day, kind: 'Call', topics, tokens: ['curiosity', 'laughter'], note: 'Talked about books for ages. He rereads the same three.'},
+    {id: uid(), date: Date.now() - 3 * day, kind: 'Coffee', topics: {}, tokens: ['laughter', 'surprise'], note: 'Funny story about a football trophy. Mentioned Sunday lunches at his parents’.'}
+  ];
+  return b;
 }
 
 /* ---------- settings + privacy ---------- */
@@ -1931,22 +1396,18 @@ function openSettings() {
   <label class="tog"><span>Paper sounds</span><input type="checkbox" class="sw" id="s-snd" ${st.sound ? 'checked' : ''}></label>
   <label class="tog"><span>Haptics</span><input type="checkbox" class="sw" id="s-hap" ${st.haptics ? 'checked' : ''}></label>
   <p>Saved only in this browser. Contact details are never kept.</p>
-  ${S.archived.length ? `<p class="label">Archived</p>${S.archived.map(a => `<div class="arch"><span>${esc(a.name)} · ${new Date(a.at).toLocaleDateString()}</span><span class="seg"><button data-ro="${a.id}">Reopen</button><button data-da="${a.id}">Delete</button></span></div>`).join('')}` : ''}
-  ${S.books.length ? `<p class="label">Scrapbooks</p>${S.books.map(b => `<div class="arch"><span>${esc(b.name)} · ${b.pages.length} page${b.pages.length === 1 ? '' : 's'}</span><span class="seg"><button data-db="${b.id}">Delete</button></span></div>`).join('')}` : ''}
   <button class="btn" id="s-f">My preferences</button>
   <div class="row2"><button class="btn" id="s-all">Delete everything</button><button class="btn primary" data-x>Done</button></div>`, (sh, close) => {
     $('#s-rm', sh).onchange = e => { st.reduced = e.target.checked; applyMotion(); save(); };
     $('#s-snd', sh).onchange = e => { st.sound = e.target.checked; save(); if (st.sound) sfx('page'); };
     $('#s-hap', sh).onchange = e => { st.haptics = e.target.checked; save(); buzz(10); };
     $('[data-x]', sh).onclick = close;
-    $('#s-f', sh).onclick = () => { close(); go(onb().done && mine().length ? 'mine' : 'onb'); };
-    on(sh, '[data-ro]', (e, x) => { const a = S.archived.find(y => y.id === x.dataset.ro); if (S.draft && S.draft.profile) { toast('Finish the current profile first'); return; } S.draft = a.draft; S.archived = S.archived.filter(y => y !== a); save(); close(); go('table'); });
-    on(sh, '[data-da]', (e, x) => { S.archived = S.archived.filter(y => y.id !== x.dataset.da); save(); x.closest('.arch').remove(); toast('Deleted'); });
-    on(sh, '[data-db]', (e, x) => { const b = bookById(x.dataset.db); close(); confirmSheet(`Delete ${esc(b.name)}?`, 'This can’t be undone.', 'Delete', () => { S.books = S.books.filter(y => y !== b); save(); toast('Deleted'); go('shelf', {}, 'reset'); }); });
-    $('#s-all', sh).onclick = () => { close(); confirmSheet('Delete everything?', 'This can’t be undone.', 'Delete', () => { const keep = S.settings; S = fresh(); S.settings = keep; try { localStorage.removeItem(KEY); } catch (e) {} save(); toast('Deleted'); go('title', {}, 'reset'); }); };
+    $('#s-f', sh).onclick = () => { close(); toPrefs(); };
+    $('#s-all', sh).onclick = () => { close(); confirmSheet('Delete everything?', 'This can’t be undone.', 'Delete', () => { const keep = S.settings; S = fresh(); S.settings = keep; try { localStorage.removeItem(KEY); } catch (e) {} save(); toast('Deleted'); go('home', {}, 'reset'); }); };
   });
 }
 
+cur = {name: onb().done || S.books.length ? 'home' : 'onb', opts: {}};
 render();
 })();
 </script>
