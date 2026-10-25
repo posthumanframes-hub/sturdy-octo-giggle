@@ -368,6 +368,14 @@ textarea.ans{font:400 18px/1.4 var(--serif);min-height:190px;border:1.2px solid 
 .ev.aligned{background:var(--n-sage)} .ev.conflict{background:var(--n-pink)} .ev.unknown{background:var(--n-butter)} .ev.related{background:var(--n-blue)}
 .rs-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
 .ri-f .btns{display:flex;gap:6px}
+.pic-obj{display:block;width:100%;height:100%;background:#FFFCF5;border:1.5px solid #3D3431;padding:5% 5% 16%;box-sizing:border-box}
+.pic-obj img{display:block;width:100%;height:100%;object-fit:cover}
+.imgpick{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.imgpick img{width:54px;height:54px;object-fit:cover;border-radius:6px;border:1px solid var(--line)}
+.bd-photo{float:right;width:70px;height:88px;object-fit:cover;border:3px solid #fff;outline:1px solid rgba(61,52,49,.3);transform:rotate(3deg);margin:2px 0 6px 10px;box-shadow:0 3px 6px rgba(0,0,0,.15)}
+.who{display:flex;align-items:flex-end;gap:12px}
+.who img{width:58px;height:58px;object-fit:cover;border-radius:50%;border:1.5px solid var(--ink);flex:none}
+.bio-img{max-width:100%;max-height:50vh;object-fit:contain;border-radius:6px;justify-self:center}
 .none{margin:0;font-size:12.5px;color:var(--ink-soft)}
 .sheet .bd-row b{color:var(--ink-soft)}
 html.rm *,html.rm *::before,html.rm *::after{animation:none!important;transition-duration:.01ms!important}
@@ -461,7 +469,45 @@ const ART = {
   envelope: '', notebook: '', box: '', pocket: ''
 };
 const tagArt = word => svg(`<g transform="rotate(-8 50 50)"><path d="M28 26h50v48H28L14 50z" fill="#F3E2A6" ${K}/><circle cx="24" cy="50" r="3" fill="#FFFCF5" ${K}/><path d="M21 50C10 40 8 30 14 22" ${T(1.4)}/><text x="52" y="54" text-anchor="middle" font-size="${word.length > 8 ? 8 : 10}" font-family="Fraunces,Georgia,serif" fill="${INK}">${esc(word.slice(0, 12))}</text></g>`);
-const artFor = o => o.kind === 'tag' ? tagArt(o.word || '?') : ART[o.kind];
+const pictureArt = img => `<span class="pic-obj"><img src="${img}" alt=""></span>`;
+const artFor = (o, img) => o.kind === 'tag' ? tagArt(o.word || '?') : o.kind === 'picture' ? (img ? pictureArt(img) : ART.photo) : ART[o.kind];
+
+/* ---------- images: attach a photo or scan; optionally read its text on this device ---------- */
+function shrinkImage(file, max = 900) {
+  return new Promise((res, rej) => {
+    const fr = new FileReader();
+    fr.onerror = rej;
+    fr.onload = () => { const im = new Image(); im.onerror = rej; im.onload = () => {
+      const sc = Math.min(1, max / Math.max(im.width, im.height)), c = document.createElement('canvas');
+      c.width = Math.round(im.width * sc); c.height = Math.round(im.height * sc);
+      c.getContext('2d').drawImage(im, 0, 0, c.width, c.height); res(c.toDataURL('image/jpeg', .82));
+    }; im.src = fr.result; };
+    fr.readAsDataURL(file);
+  });
+}
+let tessP = null;
+const loadTess = () => tessP || (tessP = new Promise((res, rej) => {
+  if (window.Tesseract) return res(window.Tesseract);
+  const sc = document.createElement('script'); sc.src = 'https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js';
+  sc.onload = () => res(window.Tesseract); sc.onerror = () => { tessP = null; rej(new Error('load')); };
+  document.head.append(sc);
+}));
+async function readImageText(file, onProg) {
+  const T = await loadTess();
+  const w = await T.createWorker('eng', 1, {logger: m => { if (m.status === 'recognizing text') onProg(Math.round(m.progress * 100)); }});
+  try { const {data} = await Promise.race([w.recognize(file), new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 90000))]); return data.text; }
+  finally { w.terminate(); }
+}
+function attachPhoto(prof, url) {
+  prof.photo = url;
+  if (url && !prof.objects.some(o => o.kind === 'picture')) prof.objects.push({id: 'o' + prof.objects.length + 'p', kind: 'picture', title: 'Photo', about: '', known: ['A photo is attached to the form.'], prompts: []});
+  if (!url) prof.objects = prof.objects.filter(o => o.kind !== 'picture');
+}
+function pickImage(cb) {
+  const inp = document.createElement('input'); inp.type = 'file'; inp.accept = 'image/*';
+  inp.onchange = () => { const f = inp.files && inp.files[0]; if (f) cb(f); };
+  inp.click();
+}
 
 const ENV_BODY = svg(`<rect x="2" y="2" width="296" height="196" rx="3" fill="#D8B387" ${K}/>`, '0 0 300 200');
 const ENV_FRONT = svg(`<path d="M2 198L150 104L298 198" fill="#CFA676" ${K}/><path d="M2 4L118 112M298 4L182 112" stroke="${INK}" stroke-width="1.4" opacity=".5" fill="none"/><rect x="30" y="12" width="70" height="16" fill="#F3E2A6" opacity=".85" transform="rotate(-6 65 20)"/>`, '0 0 300 200');
@@ -977,17 +1023,18 @@ SCENES.unfold = () => {
   const rowHtml = rs => rs.map(x => `<div class="bd-row${x.hide ? ' hide' : ''}"><b>${esc(x.k)}</b><span>${esc(x.v)}</span></div>`).join('');
   const paper = p
     ? `<div class="fold" id="fold" role="button" tabindex="0" aria-label="Folded biodata. Tap or drag down to unfold"><span class="tape"></span>
-        <div class="panel"><p class="bd-om">॥ SHREE GANESHAYA NAMAH ॥</p><p class="bd-title">BIODATA</p>${rowHtml(rows.slice(0, third))}</div>
+        <div class="panel">${p.photo ? `<img class="bd-photo" src="${p.photo}" alt="Attached photo">` : ''}<p class="bd-om">॥ SHREE GANESHAYA NAMAH ॥</p><p class="bd-title">BIODATA</p>${rowHtml(rows.slice(0, third))}</div>
         <div class="panel shut">${rowHtml(rows.slice(third, third * 2))}</div>
         <div class="panel shut">${rowHtml(rows.slice(third * 2))}</div></div>`
     : `<div class="fold"><span class="tape"></span><div class="panel"><div class="bd-empty">Nothing yet</div></div></div>`;
   return {
     tone: 'cream', eyebrow: '01 Filter In · Unfold',
     html: `<h1 class="t">The biodata.</h1>${paper}
-    ${p ? `<p class="hint" id="fh">Tap to unfold</p><div class="actions"><button class="btn primary" id="unf">Unfold</button><div class="row2"><button class="btn link" id="fr">Filter check</button><button class="btn link" id="other">Try another</button></div></div>`
+    ${p ? `<p class="hint" id="fh">Tap to unfold</p><div class="actions"><button class="btn primary" id="unf">Unfold</button><div class="row3"><button class="btn link" id="img">${p.photo ? 'Change image' : 'Add image'}</button><button class="btn link" id="fr">Filter check</button><button class="btn link" id="other">Try another</button></div></div>`
         : `<div class="actions"><button class="btn primary" id="paste">${IC.plus} Add biodata</button><button class="btn" id="sample">Use a sample</button><button class="btn" id="none">Skip</button><button class="btn link" id="filters">My preferences</button></div>`}`,
     mount: r => {
       on(r, '#sample', () => { d.profile = parseBiodata(SAMPLE); d.sample = true; d.placed = {}; d.seen = []; save(); go('read'); });
+      on(r, '#img', () => pickImage(async f => { try { attachPhoto(d.profile, await shrinkImage(f)); save(); render(); } catch (e) { toast('Couldn’t open that image'); } }));
       on(r, '#filters', () => go(onb().done && mine().length ? 'mine' : 'onb'));
       on(r, '#fr', () => go('read'));
       on(r, '#paste', () => pasteSheet());
@@ -1010,16 +1057,34 @@ SCENES.unfold = () => {
 };
 
 function pasteSheet() {
-  sheet(`<h3>Add a biodata</h3><p>One detail per line, e.g. <i>Hobbies: reading</i></p>
-  <textarea id="bt" placeholder="Name: …&#10;Occupation: …&#10;Hobbies: …" style="min-height:180px"></textarea>
+  let photo = null, file = null;
+  sheet(`<h3>Add a biodata</h3>
+  <div class="imgpick"><button class="btn" id="pick">${IC.plus} Add image</button><img id="prev" alt="" hidden><button class="btn link" id="ocr" hidden>Read text from image</button></div>
+  <p id="ocrs" hidden></p>
+  <p>Details, one per line, e.g. <i>Hobbies: reading</i></p>
+  <textarea id="bt" placeholder="Name: …&#10;Occupation: …&#10;Hobbies: …" style="min-height:160px"></textarea>
   <label class="tog" style="border:0;padding:0"><span>I have permission to use this</span><input type="checkbox" class="sw" id="perm"></label>
   <div class="row2"><button class="btn" data-x>Cancel</button><button class="btn primary" data-ok>Add</button></div>`, (sh, close) => {
     $('[data-x]', sh).onclick = close;
+    $('#pick', sh).onclick = () => pickImage(async f => {
+      try { file = f; photo = await shrinkImage(f); $('#prev', sh).src = photo; $('#prev', sh).hidden = false; $('#ocr', sh).hidden = false; $('#pick', sh).lastChild.textContent = ' Change'; }
+      catch (e) { toast('Couldn’t open that image'); }
+    });
+    $('#ocr', sh).onclick = async () => {
+      const st = $('#ocrs', sh), b = $('#ocr', sh); st.hidden = false; st.textContent = 'Reading… (on this device)'; b.disabled = true;
+      try {
+        const text = await readImageText(file, n => { st.textContent = `Reading… ${n}%`; });
+        const lines = text.split(/\n/).map(x => x.trim()).filter(Boolean).join('\n');
+        $('#bt', sh).value = lines; st.textContent = lines ? 'Check the text, then add.' : 'No text found. Type the details instead.';
+      } catch (e) { st.textContent = 'Couldn’t read text here. Type the details instead.'; }
+      b.disabled = false;
+    };
     $('[data-ok]', sh).onclick = () => {
       const t = $('#bt', sh).value;
       if (!$('#perm', sh).checked) { toast('Tick the permission box'); return; }
       const p = parseBiodata(t);
       if (!p.rows.length) { toast('Couldn’t read it. Try one detail per line.'); return; }
+      attachPhoto(p, photo);
       const d = draft(); d.profile = p; d.sample = false; d.placed = {}; d.seen = []; save(); close(); go('read');
     };
   });
@@ -1039,7 +1104,7 @@ SCENES.table = (o) => {
     <p class="label">${known}</p>
     <div class="tabletop" id="tbl" style="aspect-ratio:4/${rows * 1.02}">
       ${objs.length ? '' : `<button class="source" id="src">Add a biodata</button>`}
-      ${objs.map(ob => `<button class="obj${d.seen.includes(ob.id) ? ' seen' : ''}${o.arriving ? ' packed' : ''}" data-id="${ob.id}" aria-label="${esc(ob.title)}. Tap to inspect, arrow keys to move." style="left:${d.placed[ob.id].x * 100}%;top:${d.placed[ob.id].y * 100}%;--r:${d.placed[ob.id].r}deg">${artFor(ob)}</button>`).join('')}
+      ${objs.map(ob => `<button class="obj${d.seen.includes(ob.id) ? ' seen' : ''}${o.arriving ? ' packed' : ''}" data-id="${ob.id}" aria-label="${esc(ob.title)}. Tap to inspect, arrow keys to move." style="left:${d.placed[ob.id].x * 100}%;top:${d.placed[ob.id].y * 100}%;--r:${d.placed[ob.id].r}deg">${artFor(ob, d.profile.photo)}</button>`).join('')}
       ${d.spaces ? `<button class="space" id="space" style="left:${objs.length ? 12.5 : 70}%;top:${objs.length ? (rows - .5) / rows * 100 : 30}%" aria-label="An empty space. Some things don’t fit on a form.">?</button>` : ''}
       <button class="pocket" id="pocket" style="right:3%;bottom:2%" aria-label="Your pocket, ${pk} questions. Open the curiosity board.">${POCKET(pk)}</button>
     </div>
@@ -1095,7 +1160,7 @@ SCENES.inspect = (o) => {
     tone: 'butter', eyebrow: '01 Filter In · Inspect',
     html: `<h1 class="t">${esc(ob.title)}</h1>
     <div class="inspect">
-      <div class="big" id="big" style="--r:${pos.r}deg" aria-hidden="true">${artFor(ob)}</div>
+      <div class="big" id="big" style="--r:${pos.r}deg" aria-hidden="true">${artFor(ob, d.profile.photo)}</div>
       <div class="rot"><button class="icon-btn" id="ccw" aria-label="Turn left">${IC.ccw}</button><button class="icon-btn" id="cw" aria-label="Turn right">${IC.cw}</button></div>
       <div class="known"><p class="label">From the form</p><ul>${ob.known.map(k => `<li>${esc(k)}</li>`).join('')}</ul></div>
       <p class="label w">A question</p>
@@ -1253,7 +1318,7 @@ SCENES.read = () => {
   const none = t => `<p class="none">${t}</p>`;
   return {
     tone: 'butter', eyebrow: '01 Filter In · Filter check',
-    html: `<h1 class="t">${esc(p.name || 'This profile')}</h1>
+    html: `<div class="who">${p.photo ? `<img src="${p.photo}" alt="">` : ''}<h1 class="t">${esc(p.name || 'This profile')}</h1></div>
     <div class="row-pills"><span class="status">${flagText(c.flags)}</span><button class="btn link" id="bio">View biodata</button></div>
     ${!c.items.length ? `<div class="checkin"><p class="q">No sorted preferences yet.</p><button class="btn" id="setup">Set up my preferences</button></div>` : `
     <section class="rs"><h2>Potential incompatibilities</h2>${inc.map(i => `<div class="ri${i.dismissed ? ' dim' : ''}"><div class="ri-h"><span>${esc(i.pref.text)}</span>${evPill('conflict')}</div>${quoteHtml(i.quote)}<div class="ri-f"><span>${CATL[i.pref.cat]}</span>${i.flag ? `<button data-dis="${i.pref.id}">${i.dismissed ? 'Undo' : 'Not a dealbreaker'}</button>` : '<span>Consider</span>'}</div></div>`).join('') || none('None stated.')}</section>
@@ -1267,7 +1332,7 @@ SCENES.read = () => {
       on(r, '#pass', () => archiveDraft('Passed'));
       on(r, '#setup', () => go(onb().done && mine().length ? 'mine' : 'onb'));
       on(r, '#uns', () => go('mine'));
-      on(r, '#bio', () => sheet(`<h3>${esc(p.name || 'Biodata')}</h3><div>${p.rows.map(x => `<div class="bd-row${x.hide ? ' hide' : ''}" style="color:var(--ink)"><b>${esc(x.k)}</b><span>${esc(x.v)}</span></div>`).join('')}</div><button class="btn primary" data-x>Close</button>`, (sh, close) => { $('[data-x]', sh).onclick = close; }));
+      on(r, '#bio', () => sheet(`<h3>${esc(p.name || 'Biodata')}</h3>${p.photo ? `<img class="bio-img" src="${p.photo}" alt="Attached image">` : ''}<div>${p.rows.map(x => `<div class="bd-row${x.hide ? ' hide' : ''}" style="color:var(--ink)"><b>${esc(x.k)}</b><span>${esc(x.v)}</span></div>`).join('')}</div><button class="btn primary" data-x>Close</button>`, (sh, close) => { $('[data-x]', sh).onclick = close; }));
       on(r, '[data-dis]', (e, b) => { const id = b.dataset.dis; d.dismissed[id] = !d.dismissed[id]; save(); render(); });
       on(r, '[data-ask]', (e, b) => { tuck(shown[+b.dataset.ask].q, 'pref'); save(); b.textContent = 'Saved'; b.disabled = true; toast('Saved'); });
       on(r, '[data-edq]', (e, b) => { const x = shown[+b.dataset.edq]; askText({title: 'Edit question', value: x.q, ok: 'Save'}, t => { if (t) { tuck(t, 'pref'); save(); toast('Saved'); render(); } }); });
