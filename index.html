@@ -366,6 +366,8 @@ textarea.ans{font:400 18px/1.4 var(--serif);min-height:190px;border:1.2px solid 
 .ri-f button:disabled{opacity:.5;cursor:default}
 .ev{flex:none;font:800 9px var(--sans);letter-spacing:.08em;text-transform:uppercase;padding:3px 7px;border-radius:10px;border:1px solid var(--paper-ink);margin-top:2px}
 .ev.aligned{background:var(--n-sage)} .ev.conflict{background:var(--n-pink)} .ev.unknown{background:var(--n-butter)} .ev.related{background:var(--n-blue)}
+.rs-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.ri-f .btns{display:flex;gap:6px}
 .none{margin:0;font-size:12.5px;color:var(--ink-soft)}
 .sheet .bd-row b{color:var(--ink-soft)}
 html.rm *,html.rm *::before,html.rm *::after{animation:none!important;transition-duration:.01ms!important}
@@ -601,60 +603,60 @@ const CATL = Object.fromEntries(CATS.map(c => [c[0], c[1]]));
 const THEMES = [
   {id: 'autonomy', pos: 'Respect for my independence', neg: 'Being monitored or controlled', t: /independen|autonom|my own space|space to|own thing|freedom|control|checked on|where i was|monitor|track(ed|ing)|possessiv|jealous|smother|clingy/i, negT: /control|monitor|track|checked on|possessiv|jealous|smother/i,
     yes: /independen|own space|respects? (her|his|my partner'?s?|their) (choices|space|career)|career[- ]oriented|working (girl|woman|partner)/i, no: /should(n'?t| not) work|quit (her |the )?job|obedient|submissive/i,
-    ask: 'How do they think about independence in a relationship?', reflect: 'Have you learned anything about how they approach independence in relationships?'},
+    first: 'What do you like doing just for yourself?', reflect: 'Have you learned anything about how they approach independence in relationships?'},
   {id: 'talk', pos: 'Talking through disagreements', neg: 'Silent treatment or shutting down', t: /disagree|argu|fight|talk (it |things )?(through|out)|communicat|silent|shut(s|ting)? down|stonewall|listen/i, negT: /silent treatment|shut(s|ting)? down|stonewall/i,
     yes: /communicat|talks? things (through|out)|open[- ]minded|good listener/i, no: null,
-    ask: 'How do they handle disagreements?', reflect: 'Did a difference of opinion come up? How did it feel?'},
+    first: 'When you and someone close see things differently, how do you usually work it out?', reflect: 'Did a difference of opinion come up? How did it feel?'},
   {id: 'humour', pos: 'Playfulness and humour', neg: 'Teasing at my expense', t: /laugh|humou?r|funny|\bfun\b|playful|joke|silly|banter/i, negT: /teas|mock|at my expense|made fun of me/i,
     yes: /fun[- ]loving|humou?r|witty|laugh|cheerful|jovial/i, no: null, rel: /comedy|stand[- ]?up|improv/i,
-    ask: 'What makes them laugh?', reflect: 'Did you laugh together? What about?'},
+    first: 'What’s made you laugh recently?', reflect: 'Did you laugh together? What about?'},
   {id: 'curious', pos: 'Intellectual curiosity', neg: 'Being dismissed when I share ideas', t: /curio|ideas|intellect|\bbooks?\b|reading|learn|debate|deep conversation/i, negT: /dismiss|belittl|talked down|condescend/i,
     yes: /curious|intellectual|love (to )?learn|lifelong learner|inquisitive/i, no: null, rel: /read|book|quiz|chess|science|podcast|writ|history|philosoph/i,
-    ask: 'What are they curious about lately?', reflect: 'What did you enjoy exploring together?'},
+    first: 'What have you been curious about lately?', reflect: 'What did you enjoy exploring together?'},
   {id: 'care', pos: 'Care shown through actions', neg: 'Feeling taken for granted', t: /\bcare\b|caring|small (acts|things|gestures)|actions|show(ed|s)? up|thoughtful|looked after|effort|considerate/i, negT: /taken for granted|no effort|neglect/i,
     yes: /caring|thoughtful|considerate|kind[- ]hearted/i, no: null,
-    ask: 'How do they like to show they care?', reflect: 'Was there a moment you felt considered or understood?'},
+    first: 'How do you like to look after the people close to you?', reflect: 'Was there a moment you felt considered or understood?'},
   {id: 'boundaries', pos: 'Respect for my boundaries', neg: 'Being pressured or pushed', t: /boundar|pressur|push(ed|y)|respect(ed)? my no|consent|forced/i, negT: /pressur|push(ed|y)|forced/i,
     yes: /respect(s|ful)? (of )?(boundaries|personal space)/i, no: null,
-    ask: 'What do boundaries mean to them?', reflect: 'Did you feel comfortable saying what you wanted, or didn’t want?'},
+    first: 'What helps you feel comfortable with someone new?', reflect: 'Did you feel comfortable saying what you wanted, or didn’t want?'},
   {id: 'roles', pos: 'Shared chores, no rigid gender roles', neg: 'Rigid gender roles', t: /gender|chores|housework|household|around the house|domestic|equal(ly)?|share(d)? (the )?(work|load|responsibilit)|housewife/i, negT: /rigid|expected me to|housewife|traditional roles|gender roles/i,
     yes: /equal partner|share(d)? (the )?(household |home |domestic )?(chores|responsibilit|housework)|egalitarian/i, no: /homely|housewife|domestic duties|manage (the )?(home|household)|traditional (girl|bride|wife)|should cook/i,
-    ask: 'How do they imagine sharing a home day to day?', reflect: 'Did anything come up about how you’d share everyday life?'},
+    first: 'What does a good, ordinary day at home look like for you?', reflect: 'Did anything come up about how you’d share everyday life?'},
   {id: 'mono', pos: 'Openness to non-monogamy', neg: 'Expectation of strict monogamy', t: /monogam|open relationship|polyam|non-?exclusive/i, posT: /non-?monogam|open relationship|polyam/i, negT: /strict|exclusive/i,
     yes: /open to (consensual |ethical )?non-?monogam|polyam|open relationship/i, no: /(?<!non-?)monogam(ous|y)\b|exclusive (relationship|commitment)/i,
-    ask: 'How do they think about relationship structure?', reflect: 'Has anything come up about what kind of relationship they want?'},
+    first: 'What kind of relationship feels right to you?', reflect: 'Has anything come up about what kind of relationship they want?'},
   {id: 'decide', pos: 'Making our own decisions as a couple', neg: 'Family making decisions for us', t: /(family|parents|in-?laws)\b.{0,30}(decid|decision|interfer|involv)|decid\w* for us/i, negT: /decid|interfer/i,
     yes: /(we|couple) (will )?(make|take) (our own )?decisions|independent decisions/i, no: /parents (will )?decide|family'?s? decision|as per (parents'?|family) wish/i,
-    ask: 'How involved would their family be in your decisions?', reflect: 'Did family come up? How did that sit with you?'},
+    first: 'How do you and your family usually make big decisions?', reflect: 'Did family come up? How did that sit with you?'},
   {id: 'living', pos: 'Living on our own', neg: 'Living with in-laws', t: /lived with|living with|live with|in-?laws|joint family|move(d)? in with/i, posT: /on our own|separately|independently/i, negT: /in-?laws|parents|joint family/i,
     yes: /nuclear family|live (on our own|separately|independently)/i, no: /live with (my |his |her |the )?(parents|in-?laws|family)|stay with (my |his |her )?(parents|in-?laws)/i,
-    ask: 'Where do they picture living after marriage?', reflect: 'Did you talk about where you might live?'},
+    first: 'Where do you picture living in a few years?', reflect: 'Did you talk about where you might live?'},
   {id: 'honest', pos: 'Honesty, even when it’s awkward', neg: 'Lying or hiding things', t: /honest|truth|\blie|lied|lying|trust|transparen|cheat|hiding/i, negT: /\blie|lied|lying|cheat|hiding/i,
     yes: /honest|truthful|transparent/i, no: null,
-    ask: 'What does honesty look like to them?', reflect: 'Did you feel you could be straightforward with each other?'},
+    first: 'What do you appreciate people being upfront about?', reflect: 'Did you feel you could be straightforward with each other?'},
   {id: 'smoke', pos: 'Doesn’t smoke', neg: 'Smoking', t: /smok|cigarette/i, posT: /(doesn'?t|don'?t|non|never|not|no)[ -]?smok/i, negT: /smok/i,
     yes: /non[- ]?smoker|don'?t smoke/i, no: /\bsmoker\b/i,
     ev: (rows, pol) => { const r = rows.find(x => /smok/i.test(x.k)); if (!r) return null; const q = {k: r.k, s: r.v}, non = /^\s*(no|never|non)/i.test(r.v), yes = !non && /yes|occasion|regular|social|daily/i.test(r.v); return pol === 'pos' ? {has: non ? q : null, lacks: yes ? q : null} : {has: yes ? q : null, lacks: non ? q : null}; },
-    ask: 'Do they smoke?', reflect: ''},
+    first: 'How do you feel about smoking?', reflect: ''},
   {id: 'drink', pos: 'Doesn’t drink', neg: 'Heavy drinking', t: /drink|alcohol|drunk/i, posT: /(doesn'?t|don'?t|non|never|not|no)[ -]?drink|teetotal/i, negT: /drink|alcohol|drunk/i,
     yes: /teetotal|don'?t drink/i, no: null,
     ev: (rows, pol) => { const r = rows.find(x => /drink|alcohol/i.test(x.k)); if (!r) return null; const q = {k: r.k, s: r.v}, none = /^\s*(no|never|non|tee)/i.test(r.v); if (pol === 'pos') return {has: none ? q : null, lacks: !none && /yes|occasion|social|regular|daily/i.test(r.v) ? q : null}; return {has: /heavy|daily|regular/i.test(r.v) ? q : null, lacks: none || /occasion|social/i.test(r.v) ? q : null}; },
-    ask: 'How do they feel about drinking?', reflect: ''},
+    first: 'How do you feel about drinking?', reflect: ''},
   {id: 'kind', pos: 'Kindness and respect', neg: 'Rudeness or disrespect', t: /\bkind\b|kindness|respect|rude|mean to|disrespect|polite/i, negT: /rude|mean to|disrespect/i,
     yes: /\bkind\b|respectful|polite|good[- ]natured/i, no: null,
-    ask: 'How do they treat people they don’t need anything from?', reflect: 'How did they treat the people around you?'},
+    first: 'Who’s someone you admire, and why?', reflect: 'How did they treat the people around you?'},
   {id: 'new', pos: 'Trying new things together', neg: 'Being stuck in a routine', t: /adventur|new things|travel|explor|spontaneous|outdoors/i, negT: /stuck|routine|boring/i,
     yes: /adventur|love (to )?travel|explor|spontaneous/i, no: null, rel: /travel|trek|hik|camp|sport|football|cricket|danc/i,
-    ask: 'What’s something new they want to try?', reflect: 'Did you try anything new together?'},
+    first: 'What’s something new you’d love to try?', reflect: 'Did you try anything new together?'},
   {id: 'feel', pos: 'Being open about feelings', neg: 'Emotional distance', t: /emotion|feelings|vulnerab|open up|opened up|distant/i, negT: /distant|closed off|cold/i,
     yes: /emotionally (open|expressive|available)/i, no: null,
-    ask: 'How do they talk about feelings?', reflect: 'Did either of you open up about something?'},
+    first: 'Who do you talk to when something’s on your mind?', reflect: 'Did either of you open up about something?'},
   {id: 'pace', pos: 'A shared pace on commitment', neg: 'Being rushed into commitment', t: /commit|\brush|\bpace\b|timeline|settle down|ready to marry/i, negT: /rush/i,
     yes: /no rush|take (our|things) slow|at (our|your) own pace/i, no: /marriage within|marry (soon|immediately|within)/i,
-    ask: 'What pace feels right to them?', reflect: 'Did you get a sense of the pace they want?'},
+    first: 'What pace feels right to you for getting to know someone?', reflect: 'Did you get a sense of the pace they want?'},
   {id: 'arts', pos: 'Sharing music or art', neg: '', t: /music|songs?|concerts?|\bart\b|gigs?|painting/i,
     yes: /love (music|art)/i, no: null, rel: /music|sing|guitar|piano|\bart\b|paint|danc|theat/i,
-    ask: 'What music or art do they love?', reflect: 'Did you share any music, art or recommendations?'}
+    first: 'What music or art have you been into lately?', reflect: 'Did you share any music, art or recommendations?'}
 ];
 const THEME = Object.fromEntries(THEMES.map(t => [t.id, t]));
 const sentences = txt => String(txt || '').split(/(?<=[.!?])\s+|\n+/).map(x => x.trim()).filter(Boolean);
@@ -699,7 +701,26 @@ function evidenceFor(pref, p) {
   if (th.rel) { const h = rows.find(r => catOf(r.k) === 'hobbies' && th.rel.test(r.v)); if (h) rel = {k: h.k, s: h.v}; }
   return {has, lacks, rel};
 }
-const askFor = pref => THEME[pref.theme]?.ask || `How do they feel about “${pref.text.toLowerCase()}”?`;
+const firstQ = pref => THEME[pref.theme]?.first || `How do you think about ${pref.text.toLowerCase().replace(/[.?!]+$/, '')}?`;
+const short = t => { t = String(t).trim().replace(/[.!]+$/, ''); return t.length > 60 ? t.slice(0, 57).replace(/\s+\S*$/, '') + '…' : t; };
+// First questions to ask them, built to filter in: open on something they've said, then explore what
+// matters most, ask openly about anything that looks like a conflict, and never ask yes/no gatekeeping questions first.
+function firstQuestions(c, p) {
+  const out = [], add = (q, pref, why) => { if (!out.some(x => x.q === q)) out.push({q, pref, why}); };
+  const pri = {need: 0, nice: 1, no: 2, avoid: 3};
+  const items = [...c.items].sort((a, b) => pri[a.pref.cat] - pri[b.pref.cat]);
+  const want = i => i.pref.cat === 'need' || i.pref.cat === 'nice';
+  const said = items.find(i => i.state === 'aligned' && want(i) && i.quote && !/^(smoking|drinking)/i.test(i.quote.k));
+  if (said) add(`You wrote “${short(i_s(said))}”. ${firstQ(said.pref)}`, said.pref, 'Opener');
+  const rel = items.find(i => i.rel);
+  if (rel) { const w = rel.rel.s.split(/,|;|\/|&|\band\b/).map(x => x.trim()).find(x => THEME[rel.pref.theme].rel.test(x)) || rel.rel.s; add(`You mentioned ${w.toLowerCase()}. What got you into it?`, rel.pref, 'Opener'); }
+  items.filter(i => i.state === 'unknown' && i.pref.cat === 'need').forEach(i => add(firstQ(i.pref), i.pref, CATL.need));
+  items.filter(i => i.state === 'conflict' && i.quote).forEach(i => add(`You wrote “${short(i.quote.s)}”. What does that look like for you?`, i.pref, 'To understand'));
+  items.filter(i => i.state === 'unknown' && i.pref.cat === 'nice').forEach(i => add(firstQ(i.pref), i.pref, CATL.nice));
+  items.filter(i => i.state === 'unknown' && !want(i)).forEach(i => add(firstQ(i.pref), i.pref, CATL[i.pref.cat]));
+  return out;
+  function i_s(i) { return i.quote.s; }
+}
 const reflectFor = pref => THEME[pref.theme]?.reflect || `Did you learn anything about “${pref.text.toLowerCase()}”?`;
 function compare(p, d) {
   const dis = d.dismissed || {};
@@ -1228,7 +1249,7 @@ SCENES.read = () => {
   if (!p) return SCENES.unfold();
   d.dismissed = d.dismissed || {}; d.asked = d.asked || [];
   const c = compare(p, d);
-  const inc = c.items.filter(i => i.state === 'conflict'), cur = c.items.filter(i => i.state === 'aligned' || i.rel), ask = c.items.filter((i, n, all) => i.state === 'unknown' && all.findIndex(j => j.state === 'unknown' && askFor(j.pref) === askFor(i.pref)) === n);
+  const inc = c.items.filter(i => i.state === 'conflict'), cur = c.items.filter(i => i.state === 'aligned' || i.rel), fq = firstQuestions(c, p), shown = d.showAllQ ? fq : fq.slice(0, 5);
   const none = t => `<p class="none">${t}</p>`;
   return {
     tone: 'butter', eyebrow: '01 Filter In · Filter check',
@@ -1237,7 +1258,7 @@ SCENES.read = () => {
     ${!c.items.length ? `<div class="checkin"><p class="q">No sorted preferences yet.</p><button class="btn" id="setup">Set up my preferences</button></div>` : `
     <section class="rs"><h2>Potential incompatibilities</h2>${inc.map(i => `<div class="ri${i.dismissed ? ' dim' : ''}"><div class="ri-h"><span>${esc(i.pref.text)}</span>${evPill('conflict')}</div>${quoteHtml(i.quote)}<div class="ri-f"><span>${CATL[i.pref.cat]}</span>${i.flag ? `<button data-dis="${i.pref.id}">${i.dismissed ? 'Undo' : 'Not a dealbreaker'}</button>` : '<span>Consider</span>'}</div></div>`).join('') || none('None stated.')}</section>
     <section class="rs"><h2>Reasons for curiosity</h2>${cur.map(i => `<div class="ri"><div class="ri-h"><span>${esc(i.pref.text)}</span>${evPill(i.rel ? 'related' : 'aligned')}</div>${quoteHtml(i.quote || i.rel)}${i.rel ? '<div class="ri-f"><span>Related, not proof</span></div>' : ''}</div>`).join('') || none('Nothing stated yet.')}</section>
-    <section class="rs"><h2>Things worth asking</h2>${ask.map(i => { const q = askFor(i.pref), saved = d.asked.includes(q) || d.pocket.some(n => n.text === q); return `<div class="ri"><div class="ri-h"><span>${esc(q)}</span>${evPill('unknown')}</div><div class="ri-f"><span>${esc(i.pref.text)}</span><button data-ask="${esc(q)}"${saved ? ' disabled' : ''}>${saved ? 'Saved' : 'Save'}</button></div></div>`; }).join('') || none('Nothing open.')}</section>`}
+    <section class="rs"><div class="rs-h"><h2>First questions</h2>${fq.length ? '<button class="btn link" id="saveall">Save all</button>' : ''}</div>${shown.map((x, n) => { const saved = d.pocket.some(m => m.text === x.q); return `<div class="ri"><div class="ri-h"><span>${esc(x.q)}</span></div><div class="ri-f"><span>${esc(x.why)} · ${esc(x.pref.text)}</span><span class="btns"><button data-edq="${n}">Edit</button><button data-ask="${n}"${saved ? ' disabled' : ''}>${saved ? 'Saved' : 'Save'}</button></span></div></div>`; }).join('') || none('Nothing to ask yet.')}${fq.length > shown.length ? `<button class="btn link" id="moreq">${fq.length - shown.length} more</button>` : ''}</section>`}
     ${c.unsorted ? `<button class="btn link" id="uns">${c.unsorted} not sorted</button>` : ''}
     <div class="actions"><div class="row2"><button class="btn" id="pass">Pass</button><button class="btn primary" id="go">Explore</button></div>
       <button class="btn link" id="other">Try another</button></div>`,
@@ -1248,7 +1269,10 @@ SCENES.read = () => {
       on(r, '#uns', () => go('mine'));
       on(r, '#bio', () => sheet(`<h3>${esc(p.name || 'Biodata')}</h3><div>${p.rows.map(x => `<div class="bd-row${x.hide ? ' hide' : ''}" style="color:var(--ink)"><b>${esc(x.k)}</b><span>${esc(x.v)}</span></div>`).join('')}</div><button class="btn primary" data-x>Close</button>`, (sh, close) => { $('[data-x]', sh).onclick = close; }));
       on(r, '[data-dis]', (e, b) => { const id = b.dataset.dis; d.dismissed[id] = !d.dismissed[id]; save(); render(); });
-      on(r, '[data-ask]', (e, b) => { const q = b.dataset.ask; tuck(q, 'pref'); d.asked.push(q); save(); b.textContent = 'Saved'; b.disabled = true; toast('Saved'); });
+      on(r, '[data-ask]', (e, b) => { tuck(shown[+b.dataset.ask].q, 'pref'); save(); b.textContent = 'Saved'; b.disabled = true; toast('Saved'); });
+      on(r, '[data-edq]', (e, b) => { const x = shown[+b.dataset.edq]; askText({title: 'Edit question', value: x.q, ok: 'Save'}, t => { if (t) { tuck(t, 'pref'); save(); toast('Saved'); render(); } }); });
+      on(r, '#saveall', () => { fq.forEach(x => tuck(x.q, 'pref')); save(); toast('Saved'); render(); });
+      on(r, '#moreq', () => { d.showAllQ = true; render(); });
       on(r, '#other', () => { d.profile = null; d.placed = {}; d.seen = []; d.dismissed = {}; save(); go('unfold', {}, 'replace'); });
     }
   };
