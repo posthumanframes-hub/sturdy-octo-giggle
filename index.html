@@ -324,6 +324,50 @@ h1.t{font:400 clamp(28px,8.4vw,35px)/1.08 var(--serif);letter-spacing:-.015em;ma
 .pref input,.pref select{font:400 15px var(--sans);border:1.2px solid var(--line);border-radius:6px;padding:8px 10px;background:var(--paper);color:var(--paper-ink);width:100%;min-width:0}
 .pref.off > :not(.pref-h){opacity:.55}
 button.status{cursor:pointer}
+/* onboarding + preferences */
+.dots{display:flex;gap:6px;margin-top:6px}
+.dots .d{width:22px;height:4px;border-radius:2px;background:var(--line);transition:background .3s}
+.dots .d.done{background:var(--ink-soft)} .dots .d.on{background:var(--coral)}
+.onb-art{position:relative;height:150px;margin-top:20px}
+.onb-art span{position:absolute;top:20px;width:110px;height:110px;border-radius:50%;border:1.5px solid var(--ink);animation:float 6s ease-in-out infinite}
+.onb-art span:first-child{left:calc(50% - 90px);background:var(--n-pink)}
+.onb-art span:last-child{left:calc(50% - 20px);background:var(--n-sage);mix-blend-mode:multiply;animation-delay:-3s}
+textarea.ans{font:400 18px/1.4 var(--serif);min-height:190px;border:1.2px solid var(--line);border-radius:8px;padding:14px;background:var(--paper);color:var(--paper-ink);width:100%;resize:vertical}
+.plist{display:grid;gap:6px}
+.prow{display:grid;grid-template-columns:1fr auto;background:var(--paper);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.ptxt{background:none;border:0;text-align:left;padding:10px 12px;font:400 16px/1.25 var(--serif);color:var(--paper-ink);cursor:pointer}
+.ptxt small{display:block;font:700 9.5px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--paper-soft);margin-top:4px}
+.x{background:none;border:0;border-left:1px solid var(--line);width:42px;font-size:20px;color:var(--paper-soft);cursor:pointer}
+.pcard{background:var(--paper);color:var(--paper-ink);border:1px solid var(--line);border-radius:8px;padding:12px;display:grid;gap:10px}
+.pcard p{margin:0;font:400 17px/1.25 var(--serif)}
+.cats{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.cats button{border:1.2px solid var(--line);background:var(--paper);color:var(--paper-ink);border-radius:6px;padding:9px 6px;font:700 12px var(--sans);cursor:pointer;transition:background .2s,transform .25s var(--spring)}
+.cats button[aria-pressed=true]{border-color:var(--paper-ink);transform:scale(1.03)}
+.cats button[data-c=need][aria-pressed=true]{background:var(--n-pink)}
+.cats button[data-c=nice][aria-pressed=true]{background:var(--n-sage)}
+.cats button[data-c=avoid][aria-pressed=true]{background:var(--n-butter)}
+.cats button[data-c=no][aria-pressed=true]{background:#3D3431;color:#FFFCF5}
+.srcq{font-size:12.5px;line-height:1.4}
+.srcq b{display:block;font:800 9px var(--sans);letter-spacing:.08em;text-transform:uppercase}
+.checkin{background:var(--n-butter);color:var(--paper-ink);border:1.2px solid var(--paper-ink);border-radius:8px;padding:12px;display:grid;gap:8px}
+.checkin .q{font:400 17px/1.25 var(--serif);margin:0}
+.checkin .pick{margin:0;font-size:12.5px}
+.row3{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.row3 .btn{padding:10px 6px;font-size:12px}
+.row-pills{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.rs{display:grid;gap:8px}
+.rs h2{font:400 21px/1.15 var(--serif);margin:6px 0 0}
+.ri{background:var(--paper);color:var(--paper-ink);border:1px solid var(--line);border-radius:8px;padding:10px 12px;display:grid;gap:6px}
+.ri.dim{opacity:.55}
+.ri-h{display:flex;justify-content:space-between;gap:8px;align-items:flex-start;font:400 16px/1.25 var(--serif)}
+.ri q{display:block;font:400 12.5px/1.4 var(--sans);color:var(--paper-soft);border-left:2px solid var(--line);padding-left:8px;quotes:none}
+.ri-f{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:11.5px;color:var(--paper-soft)}
+.ri-f button{background:none;border:1px solid var(--line);border-radius:14px;padding:5px 10px;font:700 11.5px var(--sans);color:var(--paper-ink);cursor:pointer;flex:none}
+.ri-f button:disabled{opacity:.5;cursor:default}
+.ev{flex:none;font:800 9px var(--sans);letter-spacing:.08em;text-transform:uppercase;padding:3px 7px;border-radius:10px;border:1px solid var(--paper-ink);margin-top:2px}
+.ev.aligned{background:var(--n-sage)} .ev.conflict{background:var(--n-pink)} .ev.unknown{background:var(--n-butter)} .ev.related{background:var(--n-blue)}
+.none{margin:0;font-size:12.5px;color:var(--ink-soft)}
+.sheet .bd-row b{color:var(--ink-soft)}
 html.rm *,html.rm *::before,html.rm *::after{animation:none!important;transition-duration:.01ms!important}
 @media (prefers-reduced-motion: reduce){.float{animation:none}}
 </style>
@@ -400,6 +444,7 @@ const ART = {
   map: svg(`<path d="M12 25l25-7 26 7 25-7v58l-25 7-26-7-25 7z" fill="#DCE5CF" ${K}/><path d="M37 18v58M63 25v58" ${T(1.6)}/><path d="M22 62c10-14 22 4 32-8s18-6 26-18" fill="none" stroke="#C65A43" stroke-width="2" stroke-dasharray="3 4"/><circle cx="80" cy="34" r="4.5" fill="#C65A43" ${K}/>`),
   book: svg(`<path d="M24 20h50c2 0 4 2 4 4v54H30c-3 0-6-3-6-6z" fill="#EDC3BC" ${K}/><path d="M78 78v6H30c-3 0-6-3-6-6v-6" fill="#FFFCF5" ${K}/><path d="M30 80h44" ${T(1)}/><rect x="36" y="32" width="30" height="12" rx="1.5" fill="#FFFCF5" ${K}/><path d="M64 20v18l4-3 4 3V20" fill="#C65A43" ${K}/>`),
   football: svg(`<circle cx="50" cy="50" r="31" fill="#FFFCF5" ${K}/><path d="M50 38l11 8-4 13H43l-4-13z" fill="${INK}"/><path d="M50 38V20M61 46l17-5M57 59l11 14M43 59L32 73M39 46l-17-5" ${T(1.8)}/>`),
+  bubble: svg(`<path d="M18 20h64a6 6 0 0 1 6 6v34a6 6 0 0 1-6 6H46l-15 13 2-13H18a6 6 0 0 1-6-6V26a6 6 0 0 1 6-6z" fill="#FFFCF5" ${K}/><path d="M24 34h50M24 44h42M24 54h30" ${T(1.6)}/>`),
   record: svg(`<circle cx="50" cy="50" r="33" fill="#3D3431" ${K}/><circle cx="50" cy="50" r="26" fill="none" stroke="#7d706a" stroke-width="1"/><circle cx="50" cy="50" r="20" fill="none" stroke="#7d706a" stroke-width="1"/><circle cx="50" cy="50" r="11" fill="#E98B6D" stroke="${INK}" stroke-width="1.5"/><circle cx="50" cy="50" r="2" fill="#FFFCF5"/>`),
   tiffin: svg(`<path d="M32 30V18h36v12" fill="none" ${K}/><rect x="24" y="30" width="52" height="16" rx="5" fill="#CFDDE8" ${K}/><rect x="24" y="46" width="52" height="16" rx="5" fill="#C3D3B8" ${K}/><rect x="24" y="62" width="52" height="18" rx="5" fill="#CFDDE8" ${K}/>`),
   list: svg(listArt()),
@@ -477,12 +522,16 @@ Mother: Homemaker
 Siblings: One elder sister, married, settled in Mumbai
 Native Place: Nashik
 Hobbies: Reading, football, music
-Expectations: Well-educated, family-oriented girl from a cultured family
+Smoking: No
+Drinking: Occasionally
+About Me: Easy-going and fun-loving. I value honesty and like keeping family traditions.
+Expectations: Well-educated, family-oriented girl from a cultured family. Should be willing to live with my parents after marriage.
 Contact: Father, +91 00000 00000`;
 
 const RULES = [
   ['contact', /contact|phone|mobile|e-?mail|whats ?app|address|\bcell\b/i],
   ['name', /^(full )?name/i],
+  ['about', /about|myself|describe/i],
   ['community', /religion|caste|community|gotra|gothra|sect|mother tongue|language/i],
   ['horoscope', /birth|dob|rashi|rasi|nakshatra|nakshtra|manglik|mangal|\bgan\b|nadi|horoscope|zodiac|charan/i],
   ['height', /height/i],
@@ -507,6 +556,7 @@ const KIND = {
   places: {art: 'map', title: 'Places', about: 'where they’ve lived', prompts: ['Which place feels like home?', 'Where would they live if they could pick?']},
   diet: {art: 'tiffin', title: 'Diet', about: 'food', prompts: ['Favourite meal?', 'Do they cook?']},
   expect: {art: 'list', title: 'Expectations', about: 'what they’re looking for', prompts: ['What do these words mean to them?', 'Did they write this, or family?']},
+  about: {art: 'bubble', title: 'About me', about: 'how they describe themselves', prompts: ['What would they add to this?', 'What would a friend say about them?']},
   fine: {art: 'slip', title: 'Other details', about: '', prompts: []}
 };
 const HOBBY = [
@@ -529,71 +579,140 @@ function citiesIn(rows) {
   return cities;
 }
 
-/* ---------- first read: the form vs. the player's own filters ---------- */
-const DIETS = ['Vegetarian', 'Eggetarian', 'Non-vegetarian', 'Vegan', 'Jain'];
-const HEIGHTS = []; for (let i = 54; i <= 80; i++) HEIGHTS.push(Math.round(i * 2.54));
-const fmtH = cm => { const i = Math.round(cm / 2.54); return `${Math.floor(i / 12)}'${i % 12}"`; };
-const defaultPrefs = () => ({age: {imp: 'off', min: '', max: ''}, height: {imp: 'off', min: '', max: ''}, diet: {imp: 'off', ok: []}, place: {imp: 'off', list: ''}, edu: {imp: 'off', list: ''}, comm: {imp: 'off', list: ''}, manglik: {imp: 'off', want: 'No'}, interests: {imp: 'off', list: ''}});
-const prefs = () => S.prefs || (S.prefs = defaultPrefs());
-function ageFrom(v) {
-  let t = Date.parse(v.replace(/(\d)(st|nd|rd|th)\b/i, '$1'));
-  const m = v.match(/(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{4})/);
-  if (m) t = new Date(+m[3], +m[2] - 1, +m[1]).getTime();
-  if (isNaN(t)) return null;
-  const b = new Date(t), n = new Date();
-  let a = n.getFullYear() - b.getFullYear();
-  if (n.getMonth() < b.getMonth() || (n.getMonth() === b.getMonth() && n.getDate() < b.getDate())) a--;
-  return a > 15 && a < 90 ? a : null;
-}
-function heightCm(v) {
-  const cm = v.match(/(\d{3})\s*cm/i); if (cm) return +cm[1];
-  const ft = v.match(/(\d)\s*(?:'|’|ft|feet|foot)\s*(\d{1,2})?/i);
-  return ft ? Math.round((+ft[1] * 12 + (+ft[2] || 0)) * 2.54) : null;
-}
-const dietOf = v => /vegan/i.test(v) ? 'Vegan' : /jain/i.test(v) ? 'Jain' : /egg/i.test(v) ? 'Eggetarian' : /non[\s-]?veg/i.test(v) ? 'Non-vegetarian' : /veg/i.test(v) ? 'Vegetarian' : null;
-function factsOf(p) {
-  const f = {text: {}, cats: new Set(), age: null, heightCm: null, diet: null, manglik: null};
-  p.rows.filter(r => !r.hide).forEach(r => {
-    const cat = catOf(r.k); f.cats.add(cat);
-    f.text[cat] = (f.text[cat] || '') + ' ' + r.v;
-    if (/^age\b/i.test(r.k)) { const m = r.v.match(/\d{2}/); if (m) f.age = +m[0]; }
-    if (/date of birth|^dob|birth ?date/i.test(r.k) && f.age == null) f.age = ageFrom(r.v);
-    if (cat === 'height') f.heightCm = heightCm(r.v);
-    if (cat === 'diet') f.diet = dietOf(r.v);
-    if (/manglik|mangal/i.test(r.k)) f.manglik = /\b(yes|anshik|partial)/i.test(r.v) ? 'Yes' : /\b(no|non)/i.test(r.v) ? 'No' : null;
-  });
-  f.cities = citiesIn(p.rows);
-  f.all = p.rows.filter(r => !r.hide).map(r => r.v).join(' ');
-  return f;
-}
-const words = s => String(s || '').split(/,|;|\//).map(x => x.trim()).filter(Boolean);
-const findAny = (list, text) => list.find(w => new RegExp('\\b' + w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i').test(text || ''));
-function evaluate(p, P) {
-  const f = factsOf(p);
-  const basics = [['age', f.age != null], ['height', f.heightCm != null], ['education', f.cats.has('education')], ['work', f.cats.has('occupation')], ['location', f.cities.length > 0 || f.cats.has('places')], ['family', f.cats.has('family')], ['diet', f.cats.has('diet')], ['interests', f.cats.has('hobbies')], ['community', f.cats.has('community')]];
-  const missing = basics.filter(b => !b[1]).map(b => b[0]);
-  const checks = [];
-  const add = (key, label, status, detail) => { if (P[key].imp !== 'off') checks.push({label, imp: P[key].imp, status, detail}); };
-  const range = (v, lo, hi) => (lo === '' || v >= +lo) && (hi === '' || v <= +hi);
-  if (P.age.min !== '' || P.age.max !== '') add('age', 'Age', f.age == null ? 'un' : range(f.age, P.age.min, P.age.max) ? 'ok' : 'no', f.age == null ? 'Not listed' : `${f.age} (you: ${P.age.min || 'any'}–${P.age.max || 'any'})`);
-  if (P.height.min !== '' || P.height.max !== '') add('height', 'Height', f.heightCm == null ? 'un' : range(f.heightCm, P.height.min, P.height.max) ? 'ok' : 'no', f.heightCm == null ? 'Not listed' : `${fmtH(f.heightCm)} (you: ${P.height.min ? fmtH(P.height.min) : 'any'}–${P.height.max ? fmtH(P.height.max) : 'any'})`);
-  if (P.diet.ok.length) add('diet', 'Diet', !f.diet ? 'un' : P.diet.ok.includes(f.diet) ? 'ok' : 'no', f.diet ? f.diet : 'Not listed');
-  const kw = (key, label, list, text, none) => { if (!list.length) return; const hit = text && findAny(list, text); add(key, label, !text ? 'un' : hit ? 'ok' : 'no', !text ? none : hit ? cap(hit) : 'No match'); };
-  kw('place', 'Location', words(P.place.list), (f.cities.length || f.cats.has('places')) ? f.all : null, 'Not listed');
-  kw('edu', 'Education', words(P.edu.list), f.text.education, 'Not listed');
-  kw('comm', 'Community', words(P.comm.list), f.text.community, 'Not listed');
-  add('manglik', 'Manglik', f.manglik == null ? 'un' : f.manglik === P.manglik.want ? 'ok' : 'no', f.manglik == null ? 'Not listed' : f.manglik);
-  kw('interests', 'Interests', words(P.interests.list), f.text.hobbies, 'Not listed');
-  const must = checks.filter(c => c.imp === 'must');
-  const verdict = !checks.length ? 'noprefs' : must.some(c => c.status === 'no') ? 'fail' : must.some(c => c.status === 'un') ? 'unclear' : 'pass';
-  return {present: basics.length - missing.length, total: basics.length, missing, sufficient: missing.length <= 3 && !must.some(c => c.status === 'un'), checks, verdict};
-}
-const VERDICT = {
-  pass: {t: 'Likely pass.', stamp: 'LIKELY PASS', short: 'Likely pass', c: '#4F6B45'},
-  fail: {t: 'Likely fail.', stamp: 'LIKELY FAIL', short: 'Likely fail', c: '#B4462F'},
-  unclear: {t: 'Can’t tell yet.', stamp: 'NOT ENOUGH INFO', short: 'Unclear', c: '#7A6D66'},
-  noprefs: {t: 'No filters yet.', stamp: 'UNSORTED', short: 'No filters set', c: '#7A6D66'}
+/* ---------- preferences, drawn from the player's own reflections ---------- */
+const QS = [
+  {k: 'valued', q: 'What did you value most in your past relationships?', hint: 'Any relationships. No names needed.', label: 'What you valued'},
+  {k: 'wish', q: 'What did you consistently wish was different?', hint: '', label: 'What you wished for'},
+  {k: 'avoid', q: 'What behaviours or situations would you not want to experience again?', hint: '', label: 'What to avoid'},
+  {k: 'surprised', q: 'What qualities surprised you by becoming important?', hint: '', label: 'What surprised you'}
+];
+const QL = Object.fromEntries(QS.map(x => [x.k, x.label]));
+const EXAMPLE_ANSWERS = {
+  valued: 'Laughing about silly things together. Long conversations about books and ideas. He gave me space to do my own thing.',
+  wish: 'I wish we could talk through disagreements instead of going silent. More help around the house without being asked.',
+  avoid: 'Being checked on all the time and asked where I was. His family making decisions for us. We lived with his parents and it was hard. Smoking indoors.',
+  surprised: 'Small acts of care mattered more than grand gestures. Honesty, even when it was awkward.'
 };
+const CATS = [['need', 'Non-negotiable', 'Something I need in order to pursue a connection.'], ['nice', 'Nice to have', 'Something I’d appreciate, but don’t require.'], ['avoid', 'Nice to not have', 'Something I’d prefer to avoid, but could navigate.'], ['no', 'Hard no', 'Something I’m unwilling to accept.']];
+const CATL = Object.fromEntries(CATS.map(c => [c[0], c[1]]));
+// Each theme: words that trigger it in reflections (t), how to phrase it (pos/neg), and the only profile
+// statements that count as evidence (yes = explicitly shows pos, no = explicitly shows the opposite).
+// Evidence is read from statement fields only (about me, expectations, lifestyle), never from job, caste, religion or family background.
+const THEMES = [
+  {id: 'autonomy', pos: 'Respect for my independence', neg: 'Being monitored or controlled', t: /independen|autonom|my own space|space to|own thing|freedom|control|checked on|where i was|monitor|track(ed|ing)|possessiv|jealous|smother|clingy/i, negT: /control|monitor|track|checked on|possessiv|jealous|smother/i,
+    yes: /independen|own space|respects? (her|his|my partner'?s?|their) (choices|space|career)|career[- ]oriented|working (girl|woman|partner)/i, no: /should(n'?t| not) work|quit (her |the )?job|obedient|submissive/i,
+    ask: 'How do they think about independence in a relationship?', reflect: 'Have you learned anything about how they approach independence in relationships?'},
+  {id: 'talk', pos: 'Talking through disagreements', neg: 'Silent treatment or shutting down', t: /disagree|argu|fight|talk (it |things )?(through|out)|communicat|silent|shut(s|ting)? down|stonewall|listen/i, negT: /silent treatment|shut(s|ting)? down|stonewall/i,
+    yes: /communicat|talks? things (through|out)|open[- ]minded|good listener/i, no: null,
+    ask: 'How do they handle disagreements?', reflect: 'Did a difference of opinion come up? How did it feel?'},
+  {id: 'humour', pos: 'Playfulness and humour', neg: 'Teasing at my expense', t: /laugh|humou?r|funny|\bfun\b|playful|joke|silly|banter/i, negT: /teas|mock|at my expense|made fun of me/i,
+    yes: /fun[- ]loving|humou?r|witty|laugh|cheerful|jovial/i, no: null, rel: /comedy|stand[- ]?up|improv/i,
+    ask: 'What makes them laugh?', reflect: 'Did you laugh together? What about?'},
+  {id: 'curious', pos: 'Intellectual curiosity', neg: 'Being dismissed when I share ideas', t: /curio|ideas|intellect|\bbooks?\b|reading|learn|debate|deep conversation/i, negT: /dismiss|belittl|talked down|condescend/i,
+    yes: /curious|intellectual|love (to )?learn|lifelong learner|inquisitive/i, no: null, rel: /read|book|quiz|chess|science|podcast|writ|history|philosoph/i,
+    ask: 'What are they curious about lately?', reflect: 'What did you enjoy exploring together?'},
+  {id: 'care', pos: 'Care shown through actions', neg: 'Feeling taken for granted', t: /\bcare\b|caring|small (acts|things|gestures)|actions|show(ed|s)? up|thoughtful|looked after|effort|considerate/i, negT: /taken for granted|no effort|neglect/i,
+    yes: /caring|thoughtful|considerate|kind[- ]hearted/i, no: null,
+    ask: 'How do they like to show they care?', reflect: 'Was there a moment you felt considered or understood?'},
+  {id: 'boundaries', pos: 'Respect for my boundaries', neg: 'Being pressured or pushed', t: /boundar|pressur|push(ed|y)|respect(ed)? my no|consent|forced/i, negT: /pressur|push(ed|y)|forced/i,
+    yes: /respect(s|ful)? (of )?(boundaries|personal space)/i, no: null,
+    ask: 'What do boundaries mean to them?', reflect: 'Did you feel comfortable saying what you wanted, or didn’t want?'},
+  {id: 'roles', pos: 'Shared chores, no rigid gender roles', neg: 'Rigid gender roles', t: /gender|chores|housework|household|around the house|domestic|equal(ly)?|share(d)? (the )?(work|load|responsibilit)|housewife/i, negT: /rigid|expected me to|housewife|traditional roles|gender roles/i,
+    yes: /equal partner|share(d)? (the )?(household |home |domestic )?(chores|responsibilit|housework)|egalitarian/i, no: /homely|housewife|domestic duties|manage (the )?(home|household)|traditional (girl|bride|wife)|should cook/i,
+    ask: 'How do they imagine sharing a home day to day?', reflect: 'Did anything come up about how you’d share everyday life?'},
+  {id: 'mono', pos: 'Openness to non-monogamy', neg: 'Expectation of strict monogamy', t: /monogam|open relationship|polyam|non-?exclusive/i, posT: /non-?monogam|open relationship|polyam/i, negT: /strict|exclusive/i,
+    yes: /open to (consensual |ethical )?non-?monogam|polyam|open relationship/i, no: /(?<!non-?)monogam(ous|y)\b|exclusive (relationship|commitment)/i,
+    ask: 'How do they think about relationship structure?', reflect: 'Has anything come up about what kind of relationship they want?'},
+  {id: 'decide', pos: 'Making our own decisions as a couple', neg: 'Family making decisions for us', t: /(family|parents|in-?laws)\b.{0,30}(decid|decision|interfer|involv)|decid\w* for us/i, negT: /decid|interfer/i,
+    yes: /(we|couple) (will )?(make|take) (our own )?decisions|independent decisions/i, no: /parents (will )?decide|family'?s? decision|as per (parents'?|family) wish/i,
+    ask: 'How involved would their family be in your decisions?', reflect: 'Did family come up? How did that sit with you?'},
+  {id: 'living', pos: 'Living on our own', neg: 'Living with in-laws', t: /lived with|living with|live with|in-?laws|joint family|move(d)? in with/i, posT: /on our own|separately|independently/i, negT: /in-?laws|parents|joint family/i,
+    yes: /nuclear family|live (on our own|separately|independently)/i, no: /live with (my |his |her |the )?(parents|in-?laws|family)|stay with (my |his |her )?(parents|in-?laws)/i,
+    ask: 'Where do they picture living after marriage?', reflect: 'Did you talk about where you might live?'},
+  {id: 'honest', pos: 'Honesty, even when it’s awkward', neg: 'Lying or hiding things', t: /honest|truth|\blie|lied|lying|trust|transparen|cheat|hiding/i, negT: /\blie|lied|lying|cheat|hiding/i,
+    yes: /honest|truthful|transparent/i, no: null,
+    ask: 'What does honesty look like to them?', reflect: 'Did you feel you could be straightforward with each other?'},
+  {id: 'smoke', pos: 'Doesn’t smoke', neg: 'Smoking', t: /smok|cigarette/i, posT: /(doesn'?t|don'?t|non|never|not|no)[ -]?smok/i, negT: /smok/i,
+    yes: /non[- ]?smoker|don'?t smoke/i, no: /\bsmoker\b/i,
+    ev: (rows, pol) => { const r = rows.find(x => /smok/i.test(x.k)); if (!r) return null; const q = {k: r.k, s: r.v}, non = /^\s*(no|never|non)/i.test(r.v), yes = !non && /yes|occasion|regular|social|daily/i.test(r.v); return pol === 'pos' ? {has: non ? q : null, lacks: yes ? q : null} : {has: yes ? q : null, lacks: non ? q : null}; },
+    ask: 'Do they smoke?', reflect: ''},
+  {id: 'drink', pos: 'Doesn’t drink', neg: 'Heavy drinking', t: /drink|alcohol|drunk/i, posT: /(doesn'?t|don'?t|non|never|not|no)[ -]?drink|teetotal/i, negT: /drink|alcohol|drunk/i,
+    yes: /teetotal|don'?t drink/i, no: null,
+    ev: (rows, pol) => { const r = rows.find(x => /drink|alcohol/i.test(x.k)); if (!r) return null; const q = {k: r.k, s: r.v}, none = /^\s*(no|never|non|tee)/i.test(r.v); if (pol === 'pos') return {has: none ? q : null, lacks: !none && /yes|occasion|social|regular|daily/i.test(r.v) ? q : null}; return {has: /heavy|daily|regular/i.test(r.v) ? q : null, lacks: none || /occasion|social/i.test(r.v) ? q : null}; },
+    ask: 'How do they feel about drinking?', reflect: ''},
+  {id: 'kind', pos: 'Kindness and respect', neg: 'Rudeness or disrespect', t: /\bkind\b|kindness|respect|rude|mean to|disrespect|polite/i, negT: /rude|mean to|disrespect/i,
+    yes: /\bkind\b|respectful|polite|good[- ]natured/i, no: null,
+    ask: 'How do they treat people they don’t need anything from?', reflect: 'How did they treat the people around you?'},
+  {id: 'new', pos: 'Trying new things together', neg: 'Being stuck in a routine', t: /adventur|new things|travel|explor|spontaneous|outdoors/i, negT: /stuck|routine|boring/i,
+    yes: /adventur|love (to )?travel|explor|spontaneous/i, no: null, rel: /travel|trek|hik|camp|sport|football|cricket|danc/i,
+    ask: 'What’s something new they want to try?', reflect: 'Did you try anything new together?'},
+  {id: 'feel', pos: 'Being open about feelings', neg: 'Emotional distance', t: /emotion|feelings|vulnerab|open up|opened up|distant/i, negT: /distant|closed off|cold/i,
+    yes: /emotionally (open|expressive|available)/i, no: null,
+    ask: 'How do they talk about feelings?', reflect: 'Did either of you open up about something?'},
+  {id: 'pace', pos: 'A shared pace on commitment', neg: 'Being rushed into commitment', t: /commit|\brush|\bpace\b|timeline|settle down|ready to marry/i, negT: /rush/i,
+    yes: /no rush|take (our|things) slow|at (our|your) own pace/i, no: /marriage within|marry (soon|immediately|within)/i,
+    ask: 'What pace feels right to them?', reflect: 'Did you get a sense of the pace they want?'},
+  {id: 'arts', pos: 'Sharing music or art', neg: '', t: /music|songs?|concerts?|\bart\b|gigs?|painting/i,
+    yes: /love (music|art)/i, no: null, rel: /music|sing|guitar|piano|\bart\b|paint|danc|theat/i,
+    ask: 'What music or art do they love?', reflect: 'Did you share any music, art or recommendations?'}
+];
+const THEME = Object.fromEntries(THEMES.map(t => [t.id, t]));
+const sentences = txt => String(txt || '').split(/(?<=[.!?])\s+|\n+/).map(x => x.trim()).filter(Boolean);
+const onb = () => S.onb || (S.onb = {done: false, a: {valued: '', wish: '', avoid: '', surprised: ''}});
+const mine = () => S.mine || (S.mine = []);
+const detect = text => THEMES.find(t => t.t.test(text)) || null;
+const polOf = (th, text, fallback) => th?.posT?.test(text) ? 'pos' : th?.negT?.test(text) ? 'neg' : fallback;
+// Mock of AI-assisted extraction: keyword themes, run on this device only.
+function extract() {
+  const made = [];
+  const all = () => [...mine(), ...made];
+  QS.forEach(({k}) => {
+    const ans = onb().a[k] || ''; if (!ans.trim()) return;
+    let found = false;
+    sentences(ans).forEach(sen => THEMES.forEach(th => {
+      if (!th.t.test(sen)) return;
+      const pol = k === 'avoid' ? 'neg' : 'pos', text = pol === 'pos' ? th.pos : th.neg;
+      if (!text) return;
+      found = true;
+      const ex = all().find(x => x.theme === th.id && x.pol === pol);
+      if (ex) { if (!ex.src.some(x => x.quote === sen)) ex.src.push({q: k, quote: sen}); return; }
+      made.push({id: uid(), text, theme: th.id, pol, cat: null, src: [{q: k, quote: sen}], checked: Date.now()});
+    }));
+    if (!found) { const sen = sentences(ans)[0].slice(0, 80); if (!all().some(x => x.text === sen)) made.push({id: uid(), text: sen, theme: null, pol: k === 'avoid' ? 'neg' : 'pos', cat: null, src: [{q: k, quote: sentences(ans)[0]}], checked: Date.now()}); }
+  });
+  mine().push(...made); save(); return made.length;
+}
+const EVID_KEY = /expect|looking for|partner|preference|requirement|about|myself|describe|lifestyle|relationship|values|outlook|views|plans/i;
+function evidenceFor(pref, p) {
+  const th = THEME[pref.theme]; if (!th) return {};
+  const rows = p.rows.filter(r => !r.hide);
+  let has = null, lacks = null;
+  const own = th.ev && th.ev(rows, pref.pol);
+  if (own) ({has, lacks} = own);
+  if (!has && !lacks) {
+    const stmt = rows.filter(r => EVID_KEY.test(r.k));
+    const find = re => { if (!re) return null; for (const r of stmt) { const x = sentences(r.v).find(y => re.test(y)); if (x) return {k: r.k, s: x}; } return null; };
+    const y = find(th.yes), n = y ? null : find(th.no);
+    [has, lacks] = pref.pol === 'pos' ? [y, n] : [n, y];
+  }
+  let rel = null;
+  if (th.rel) { const h = rows.find(r => catOf(r.k) === 'hobbies' && th.rel.test(r.v)); if (h) rel = {k: h.k, s: h.v}; }
+  return {has, lacks, rel};
+}
+const askFor = pref => THEME[pref.theme]?.ask || `How do they feel about “${pref.text.toLowerCase()}”?`;
+const reflectFor = pref => THEME[pref.theme]?.reflect || `Did you learn anything about “${pref.text.toLowerCase()}”?`;
+function compare(p, d) {
+  const dis = d.dismissed || {};
+  const items = mine().filter(x => x.cat).map(pref => {
+    const ev = evidenceFor(pref, p), want = pref.cat === 'need' || pref.cat === 'nice';
+    let state = 'unknown', quote = null;
+    if (ev.has) { state = want ? 'aligned' : 'conflict'; quote = ev.has; }
+    else if (ev.lacks) { state = want ? 'conflict' : 'aligned'; quote = ev.lacks; }
+    const flag = state === 'conflict' && (pref.cat === 'need' || pref.cat === 'no');
+    return {pref, state, quote, flag, dismissed: !!dis[pref.id], rel: state === 'unknown' && want ? ev.rel : null};
+  });
+  return {items, unsorted: mine().filter(x => !x.cat).length, flags: items.filter(i => i.flag && !i.dismissed).length};
+}
 
 function parseBiodata(text) {
   const rows = [], groups = {}; let name = '';
@@ -623,7 +742,7 @@ function parseBiodata(text) {
   std('family'); std('horoscope');
   const cities = citiesIn(rows);
   if (cities.length || groups.places) add({kind: 'map', title: KIND.places.title, about: KIND.places.about, known: [...(cities.length ? [`Places named on the form: ${cities.join(', ')}.`] : []), ...lines('places')], prompts: KIND.places.prompts});
-  std('community'); std('income'); std('diet'); std('height'); std('expect');
+  std('about'); std('community'); std('income'); std('diet'); std('height'); std('expect');
   if (groups.fine) add({kind: 'slip', title: KIND.fine.title, about: '', known: lines('fine'), prompts: []});
   return {name, rows, objects: objects.slice(0, 18)};
 }
@@ -766,7 +885,7 @@ SCENES.title = () => ({
   </div>
   <div class="actions"><button class="btn primary" data-go>${IC.arrow} Begin</button>
   <button class="btn" data-settings>Settings</button></div>`,
-  mount: r => { on(r, '[data-go]', () => go('chapters')); on(r, '[data-settings]', openSettings); }
+  mount: r => { on(r, '[data-go]', () => go(onb().done ? 'chapters' : 'onb')); on(r, '[data-settings]', openSettings); }
 });
 
 SCENES.chapters = () => {
@@ -778,10 +897,12 @@ SCENES.chapters = () => {
     <button class="chapter" data-c="1"><div><h2>01 Filter In</h2><p>${ch1}</p></div><div class="pic">${'<div class="env" style="margin:0;width:100%;transform:rotate(8deg)"><div class="env-body">' + ENV_BODY + '</div><div class="env-front">' + ENV_FRONT + '</div><div class="env-flap">' + ENV_FLAP + '</div></div>'}</div></button>
     <hr class="dash">
     <button class="chapter flip" data-c="2"><div class="pic" style="width:96px">${NOTEBOOK()}</div><div><h2>02 Continue?</h2><p>After you meet</p></div></button>
+    <div class="actions"><button class="btn" id="mp">My preferences</button></div>
     `,
     mount: r => {
       on(r, '[data-c="1"]', () => { const d = S.draft; go(d?.opened ? 'table' : 'arrival'); });
       on(r, '[data-c="2"]', () => go('shelf'));
+      on(r, '#mp', () => go(onb().done && mine().length ? 'mine' : 'onb'));
     }
   };
 };
@@ -843,10 +964,10 @@ SCENES.unfold = () => {
     tone: 'cream', eyebrow: '01 Filter In · Unfold',
     html: `<h1 class="t">The biodata.</h1>${paper}
     ${p ? `<p class="hint" id="fh">Tap to unfold</p><div class="actions"><button class="btn primary" id="unf">Unfold</button><div class="row2"><button class="btn link" id="fr">Filter check</button><button class="btn link" id="other">Try another</button></div></div>`
-        : `<div class="actions"><button class="btn primary" id="paste">${IC.plus} Add biodata</button><button class="btn" id="sample">Use a sample</button><button class="btn" id="none">Skip</button><button class="btn link" id="filters">Set your filters</button></div>`}`,
+        : `<div class="actions"><button class="btn primary" id="paste">${IC.plus} Add biodata</button><button class="btn" id="sample">Use a sample</button><button class="btn" id="none">Skip</button><button class="btn link" id="filters">My preferences</button></div>`}`,
     mount: r => {
       on(r, '#sample', () => { d.profile = parseBiodata(SAMPLE); d.sample = true; d.placed = {}; d.seen = []; save(); go('read'); });
-      on(r, '#filters', () => go('prefs'));
+      on(r, '#filters', () => go(onb().done && mine().length ? 'mine' : 'onb'));
       on(r, '#fr', () => go('read'));
       on(r, '#paste', () => pasteSheet());
       on(r, '#other', () => { d.profile = null; d.placed = {}; d.seen = []; save(); render(); });
@@ -893,7 +1014,7 @@ SCENES.table = (o) => {
   return {
     tone: 'butter', eyebrow: '01 Filter In · The table',
     html: `<h1 class="t">Take a look.</h1>
-    ${objs.length ? `<button class="status" id="rd">${VERDICT[evaluate(d.profile, prefs()).verdict].short}</button>` : ''}
+    ${objs.length ? `<button class="status" id="rd">${flagText(compare(d.profile, d).flags)}</button>` : ''}
     <p class="label">${known}</p>
     <div class="tabletop" id="tbl" style="aspect-ratio:4/${rows * 1.02}">
       ${objs.length ? '' : `<button class="source" id="src">Add a biodata</button>`}
@@ -1068,7 +1189,7 @@ SCENES.pack = (o) => {
     : `      <div class="actions"><button class="btn" id="leave">Leave for now</button><button class="btn" id="arch">Archive</button><button class="btn" id="know">Get to know them</button></div>`}`,
     mount: r => {
       on(r, '#leave', () => { toast('Saved for later'); go('chapters', {}, 'reset'); });
-      on(r, '#arch', archiveDraft);
+      on(r, '#arch', () => archiveDraft());
       on(r, '#know', () => { d.packSel = d.pocket.map(n => n.id); go('pack', {packing: true}, 'replace'); });
       on(r, '.chip', (e, b) => {
         const id = b.dataset.id, i = d.packSel.indexOf(id);
@@ -1092,71 +1213,155 @@ SCENES.pack = (o) => {
   };
 };
 
-function archiveDraft() {
-  const d = draft();
-  S.archived.unshift({id: d.id, name: d.profile?.name || 'Unnamed paperwork', at: Date.now(), draft: d});
-  S.draft = null; save(); toast('Archived'); go('chapters', {}, 'reset');
+function archiveDraft(how) {
+  const d = draft(), passed = how === 'Passed';
+  S.archived.unshift({id: d.id, name: (d.profile?.name || 'Unnamed paperwork') + (passed ? ' · passed' : ''), at: Date.now(), draft: d});
+  S.draft = null; save(); toast(passed ? 'Passed' : 'Archived'); go('chapters', {}, 'reset');
 }
+
+const flagText = n => n ? `${n} pass flag${n > 1 ? 's' : ''}` : 'No pass flags';
+const evPill = st => `<span class="ev ${st}">${{aligned: 'Aligned', conflict: 'Conflict', unknown: 'Unknown', related: 'Related'}[st]}</span>`;
+const quoteHtml = q => q ? `<q>${esc(q.k)}: “${esc(q.s)}”</q>` : '';
 
 SCENES.read = () => {
   const d = draft(), p = d.profile;
   if (!p) return SCENES.unfold();
-  const ev = evaluate(p, prefs()), v = VERDICT[ev.verdict];
-  const mark = {ok: '✓', no: '✕', un: '?'};
+  d.dismissed = d.dismissed || {}; d.asked = d.asked || [];
+  const c = compare(p, d);
+  const inc = c.items.filter(i => i.state === 'conflict'), cur = c.items.filter(i => i.state === 'aligned' || i.rel), ask = c.items.filter((i, n, all) => i.state === 'unknown' && all.findIndex(j => j.state === 'unknown' && askFor(j.pref) === askFor(i.pref)) === n);
+  const none = t => `<p class="none">${t}</p>`;
   return {
     tone: 'butter', eyebrow: '01 Filter In · Filter check',
-    html: `<h1 class="t">${v.t}</h1>
-    <div class="fold readpaper"><span class="tape"></span><div class="panel"><p class="bd-om">॥ SHREE GANESHAYA NAMAH ॥</p><p class="bd-title">BIODATA</p>${p.rows.slice(0, 7).map(x => `<div class="bd-row${x.hide ? ' hide' : ''}"><b>${esc(x.k)}</b><span>${esc(x.v)}</span></div>`).join('')}</div><span class="stamp-mark" style="--sc:${v.c}">${v.stamp}</span></div>
-    <div class="suff${ev.sufficient ? '' : ' thin'}"><b>${ev.sufficient ? 'Enough info' : 'Not much info'}</b><span>${ev.present}/${ev.total}${ev.missing.length ? `<br>missing ${ev.missing.join(', ')}` : ''}</span></div>
-    ${ev.checks.length ? `<p class="label">Your filters</p><div class="checks">${ev.checks.map(c => `<div class="ck ${c.status}"><i>${mark[c.status]}</i><div>${c.label}<span>${esc(c.detail)}</span></div><em>${c.imp === 'must' ? 'Must' : 'Nice'}</em></div>`).join('')}</div>` : ''}
-    <div class="actions">${ev.verdict === 'noprefs'
-      ? `<button class="btn primary" id="pf">Set your filters</button><button class="btn" id="go">Open it</button>`
-      : `<button class="btn primary" id="go">Open it</button><div class="row2"><button class="btn" id="pf">Edit filters</button><button class="btn" id="ar">Archive</button></div>`}
+    html: `<h1 class="t">${esc(p.name || 'This profile')}</h1>
+    <div class="row-pills"><span class="status">${flagText(c.flags)}</span><button class="btn link" id="bio">View biodata</button></div>
+    ${!c.items.length ? `<div class="checkin"><p class="q">No sorted preferences yet.</p><button class="btn" id="setup">Set up my preferences</button></div>` : `
+    <section class="rs"><h2>Potential incompatibilities</h2>${inc.map(i => `<div class="ri${i.dismissed ? ' dim' : ''}"><div class="ri-h"><span>${esc(i.pref.text)}</span>${evPill('conflict')}</div>${quoteHtml(i.quote)}<div class="ri-f"><span>${CATL[i.pref.cat]}</span>${i.flag ? `<button data-dis="${i.pref.id}">${i.dismissed ? 'Undo' : 'Not a dealbreaker'}</button>` : '<span>Consider</span>'}</div></div>`).join('') || none('None stated.')}</section>
+    <section class="rs"><h2>Reasons for curiosity</h2>${cur.map(i => `<div class="ri"><div class="ri-h"><span>${esc(i.pref.text)}</span>${evPill(i.rel ? 'related' : 'aligned')}</div>${quoteHtml(i.quote || i.rel)}${i.rel ? '<div class="ri-f"><span>Related, not proof</span></div>' : ''}</div>`).join('') || none('Nothing stated yet.')}</section>
+    <section class="rs"><h2>Things worth asking</h2>${ask.map(i => { const q = askFor(i.pref), saved = d.asked.includes(q) || d.pocket.some(n => n.text === q); return `<div class="ri"><div class="ri-h"><span>${esc(q)}</span>${evPill('unknown')}</div><div class="ri-f"><span>${esc(i.pref.text)}</span><button data-ask="${esc(q)}"${saved ? ' disabled' : ''}>${saved ? 'Saved' : 'Save'}</button></div></div>`; }).join('') || none('Nothing open.')}</section>`}
+    ${c.unsorted ? `<button class="btn link" id="uns">${c.unsorted} not sorted</button>` : ''}
+    <div class="actions"><div class="row2"><button class="btn" id="pass">Pass</button><button class="btn primary" id="go">Explore</button></div>
       <button class="btn link" id="other">Try another</button></div>`,
     mount: r => {
-      if (!S.settings.reduced) setTimeout(() => { sfx('drop'); buzz(20); }, 450);
-      say(v.t);
       on(r, '#go', () => go('unfold', {}, 'replace'));
-      on(r, '#pf', () => go('prefs'));
-      on(r, '#ar', archiveDraft);
-      on(r, '#other', () => { d.profile = null; d.placed = {}; d.seen = []; save(); go('unfold', {}, 'replace'); });
+      on(r, '#pass', () => archiveDraft('Passed'));
+      on(r, '#setup', () => go(onb().done && mine().length ? 'mine' : 'onb'));
+      on(r, '#uns', () => go('mine'));
+      on(r, '#bio', () => sheet(`<h3>${esc(p.name || 'Biodata')}</h3><div>${p.rows.map(x => `<div class="bd-row${x.hide ? ' hide' : ''}" style="color:var(--ink)"><b>${esc(x.k)}</b><span>${esc(x.v)}</span></div>`).join('')}</div><button class="btn primary" data-x>Close</button>`, (sh, close) => { $('[data-x]', sh).onclick = close; }));
+      on(r, '[data-dis]', (e, b) => { const id = b.dataset.dis; d.dismissed[id] = !d.dismissed[id]; save(); render(); });
+      on(r, '[data-ask]', (e, b) => { const q = b.dataset.ask; tuck(q, 'pref'); d.asked.push(q); save(); b.textContent = 'Saved'; b.disabled = true; toast('Saved'); });
+      on(r, '#other', () => { d.profile = null; d.placed = {}; d.seen = []; d.dismissed = {}; save(); go('unfold', {}, 'replace'); });
     }
   };
 };
 
-SCENES.prefs = () => {
-  const P = prefs();
-  const imp = k => `<div class="seg imp" data-k="${k}">${['off', 'nice', 'must'].map(x => `<button data-imp="${x}" aria-pressed="${P[k].imp === x}">${{off: 'Off', nice: 'Nice', must: 'Must'}[x]}</button>`).join('')}</div>`;
-  const card = (k, label, body) => `<div class="pref${P[k].imp === 'off' ? ' off' : ''}" data-card="${k}"><div class="pref-h"><b>${label}</b>${imp(k)}</div>${body}</div>`;
-  const hsel = (f, val, ph) => `<select data-f="${f}" aria-label="${ph}"><option value="">${ph}</option>${HEIGHTS.map(c => `<option value="${c}"${String(val) === String(c) ? ' selected' : ''}>${fmtH(c)}</option>`).join('')}</select>`;
-  const txt = (f, val, ph) => `<input data-f="${f}" value="${esc(val)}" placeholder="${ph}" aria-label="${ph}">`;
+/* ---------- onboarding ---------- */
+const dots = i => `<div class="dots" aria-label="Step ${i + 1} of 6">${[0, 1, 2, 3, 4, 5].map(k => `<span class="d${k < i ? ' done' : k === i ? ' on' : ''}"></span>`).join('')}</div>`;
+SCENES.onb = () => ({
+  tone: 'sage', eyebrow: '',
+  html: `<div class="onb-art" aria-hidden="true"><span></span><span></span></div>
+  <h1 class="t">Before we meet someone new, let’s understand what matters to you.</h1>
+  <div class="actions"><button class="btn primary" id="go">Start</button><button class="btn" id="ex">Try with example answers</button><button class="btn link" id="skip">Skip for now</button></div>`,
+  mount: r => {
+    on(r, '#go', () => go('onbq', {i: 0}));
+    on(r, '#ex', () => { Object.assign(onb().a, EXAMPLE_ANSWERS); save(); go('onbq', {i: 0}); });
+    on(r, '#skip', () => { onb().done = true; save(); go('chapters', {}, 'reset'); });
+  }
+});
+SCENES.onbq = (o) => {
+  const i = o.i || 0, Q = QS[i];
   return {
-    tone: 'cream', eyebrow: '01 Filter In · Your filters',
-    html: `<h1 class="t">Your filters.</h1>
-    ${card('age', 'Age', `<div class="row2"><input type="number" inputmode="numeric" data-f="age.min" value="${P.age.min}" placeholder="From" aria-label="Age from"><input type="number" inputmode="numeric" data-f="age.max" value="${P.age.max}" placeholder="To" aria-label="Age to"></div>`)}
-    ${card('height', 'Height', `<div class="row2">${hsel('height.min', P.height.min, 'From')}${hsel('height.max', P.height.max, 'To')}</div>`)}
-    ${card('diet', 'Diet', `<div class="seg">${DIETS.map(x => `<button data-diet="${x}" aria-pressed="${P.diet.ok.includes(x)}">${x}</button>`).join('')}</div>`)}
-    ${card('place', 'Location', txt('place.list', P.place.list, 'Pune, Mumbai'))}
-    ${card('edu', 'Education', txt('edu.list', P.edu.list, 'MBA, B.Tech'))}
-    ${card('comm', 'Community', txt('comm.list', P.comm.list, 'Words to look for'))}
-    ${card('manglik', 'Manglik', `<div class="seg">${['No', 'Yes'].map(x => `<button data-mg="${x}" aria-pressed="${P.manglik.want === x}">${x}</button>`).join('')}</div>`)}
-    ${card('interests', 'Interests', txt('interests.list', P.interests.list, 'reading, music'))}
-    <div class="actions"><button class="btn primary" id="done">Done</button></div>`,
+    tone: 'sage', eyebrow: '',
+    html: `${dots(i)}<h1 class="t">${Q.q}</h1>${Q.hint ? `<p class="sub">${Q.hint}</p>` : ''}
+    <textarea class="ans" id="ans" aria-label="${esc(Q.q)}" placeholder="Write freely">${esc(onb().a[Q.k])}</textarea>
+    <div class="actions row2"><button class="btn" id="skip">Skip</button><button class="btn primary" id="next">Continue</button></div>`,
     mount: r => {
-      const setImp = (k, x) => { P[k].imp = x; $$(`[data-k="${k}"] button`, r).forEach(b => b.setAttribute('aria-pressed', b.dataset.imp === x)); $(`[data-card="${k}"]`, r).classList.toggle('off', x === 'off'); save(); };
-      const wake = k => { if (P[k].imp === 'off') setImp(k, k === 'interests' ? 'nice' : 'must'); };
-      on(r, '[data-imp]', (e, b) => setImp(b.parentElement.dataset.k, b.dataset.imp));
-      $$('[data-f]', r).forEach(el => el.addEventListener(el.tagName === 'SELECT' ? 'change' : 'input', () => {
-        const [k, f] = el.dataset.f.split('.'); P[k][f] = el.value.trim(); if (el.value.trim()) wake(k); save();
-      }));
-      on(r, '[data-diet]', (e, b) => { const x = b.dataset.diet, i = P.diet.ok.indexOf(x); if (i >= 0) P.diet.ok.splice(i, 1); else P.diet.ok.push(x); b.setAttribute('aria-pressed', i < 0); if (P.diet.ok.length) wake('diet'); save(); });
-      on(r, '[data-mg]', (e, b) => { P.manglik.want = b.dataset.mg; $$('[data-mg]', r).forEach(x => x.setAttribute('aria-pressed', x === b)); wake('manglik'); save(); });
-      on(r, '#done', back);
+      const ta = $('#ans', r);
+      ta.addEventListener('input', () => { onb().a[Q.k] = ta.value; save(); });
+      const next = () => { if (i < QS.length - 1) go('onbq', {i: i + 1}); else { if (!mine().length) extract(); go('review'); } };
+      on(r, '#next', next); on(r, '#skip', next);
+    }
+  };
+};
+function prefSheet(pref, after) {
+  const isNew = !pref;
+  pref = pref || {id: uid(), text: '', theme: null, pol: 'pos', cat: null, src: [], checked: Date.now()};
+  let cat = pref.cat;
+  sheet(`<h3>${isNew ? 'Add a preference' : 'Edit'}</h3><textarea id="pt" placeholder="e.g. Openness to non-monogamy">${esc(pref.text)}</textarea>
+  <div class="cats">${CATS.map(([k, l]) => `<button data-c="${k}" aria-pressed="${cat === k}">${l}</button>`).join('')}</div>
+  ${pref.src.length ? `<p class="label">From your reflections</p>${pref.src.map(x => `<p class="srcq"><b>${QL[x.q] || ''}</b> “${esc(x.quote)}”</p>`).join('')}` : ''}
+  <div class="row2"><button class="btn" data-rm>${isNew ? 'Cancel' : 'Delete'}</button><button class="btn primary" data-ok>Save</button></div>`, (sh, close) => {
+    on(sh, '[data-c]', (e, b) => { cat = cat === b.dataset.c ? null : b.dataset.c; $$('[data-c]', sh).forEach(x => x.setAttribute('aria-pressed', x.dataset.c === cat)); });
+    $('[data-ok]', sh).onclick = () => {
+      const t = $('#pt', sh).value.trim(); if (!t) { close(); return; }
+      if (t !== pref.text) { const th = detect(t); pref.theme = th ? th.id : null; pref.pol = polOf(th, t, cat === 'avoid' || cat === 'no' ? 'neg' : 'pos'); pref.text = t; }
+      pref.cat = cat; pref.checked = Date.now();
+      if (isNew) mine().push(pref);
+      save(); close(); after ? after() : render();
+    };
+    $('[data-rm]', sh).onclick = () => { if (!isNew) S.mine = mine().filter(x => x !== pref); save(); close(); render(); };
+  });
+}
+function catSheet() {
+  sheet(`<h3>Categories</h3>${CATS.map(([, l, dsc]) => `<p><b style="color:var(--ink)">${l}</b><br>${dsc}</p>`).join('')}<button class="btn primary" data-x>Got it</button>`, (sh, close) => { $('[data-x]', sh).onclick = close; });
+}
+const prow = x => `<div class="prow"><button class="ptxt" data-id="${x.id}">${esc(x.text)}<small>${x.src.length ? esc(QL[x.src[0].q] || '') : 'Added by you'}</small></button><button class="x" data-del="${x.id}" aria-label="Delete">×</button></div>`;
+SCENES.review = () => ({
+  tone: 'sage', eyebrow: '',
+  html: `${dots(4)}<h1 class="t">Here’s what we noticed.</h1><p class="sub">Edit anything. Worked out on this device.</p>
+  <div class="plist">${mine().map(prow).join('') || '<p class="none">Nothing found. Add your own.</p>'}</div>
+  <div class="row2"><button class="btn" id="add">${IC.plus} Add</button><button class="btn" id="more">Find more</button></div>
+  <div class="actions"><button class="btn primary" id="next">Continue</button></div>`,
+  mount: r => {
+    on(r, '.ptxt', (e, b) => prefSheet(mine().find(x => x.id === b.dataset.id)));
+    on(r, '[data-del]', (e, b) => { S.mine = mine().filter(x => x.id !== b.dataset.del); save(); render(); });
+    on(r, '#add', () => prefSheet(null));
+    on(r, '#more', () => { const n = extract(); toast(n ? `${n} more` : 'Nothing new'); render(); });
+    on(r, '#next', () => go('sort'));
+  }
+});
+const catButtons = x => `<div class="cats">${CATS.map(([k, l]) => `<button data-c="${k}" data-id="${x.id}" aria-pressed="${x.cat === k}">${l}</button>`).join('')}</div>`;
+SCENES.sort = () => ({
+  tone: 'sage', eyebrow: '',
+  html: `${dots(5)}<h1 class="t">How important is each of these to you?</h1><button class="btn link" id="what" style="align-self:flex-start;padding-left:0">What do these mean?</button>
+  ${mine().map(x => `<div class="pcard"><p>${esc(x.text)}</p>${catButtons(x)}</div>`).join('') || '<p class="none">No preferences yet.</p>'}
+  <div class="actions"><button class="btn primary" id="done">Done</button></div>`,
+  mount: r => {
+    on(r, '#what', catSheet);
+    on(r, '[data-c]', (e, b) => { const x = mine().find(y => y.id === b.dataset.id); x.cat = x.cat === b.dataset.c ? null : b.dataset.c; x.checked = Date.now(); $$(`[data-id="${x.id}"][data-c]`, r).forEach(y => y.setAttribute('aria-pressed', y.dataset.c === x.cat)); sfx('tuck'); save(); });
+    on(r, '#done', () => { onb().done = true; save(); go('mine', {first: true}, 'reset'); });
+  }
+});
+SCENES.mine = (o) => {
+  const list = mine();
+  const sorted = list.filter(x => x.cat).sort((a, b) => a.checked - b.checked);
+  S.ui.visits = (S.ui.visits || 0) + 1;
+  const pick = !S.ui.checkHidden && sorted[0] && (Date.now() - sorted[0].checked > 864e5 || S.ui.visits % 3 === 0) ? sorted[0] : null;
+  const groups = [...CATS.map(([k, l]) => [k, l]), [null, 'Not sorted']];
+  return {
+    tone: 'sage', eyebrow: 'My preferences',
+    html: `<h1 class="t">My preferences.</h1>
+    ${pick ? `<div class="checkin"><p class="q">Does this still matter to you in the same way?</p><p class="pick">${esc(pick.text)} · ${CATL[pick.cat]}</p><div class="row3"><button class="btn" id="ck-y">Yes</button><button class="btn" id="ck-c">Change it</button><button class="btn" id="ck-n">Not now</button></div></div>` : ''}
+    ${list.length ? groups.map(([k, l]) => { const g = list.filter(x => (x.cat || null) === k); return g.length ? `<p class="label">${l}</p><div class="plist">${g.map(prow).join('')}</div>` : ''; }).join('')
+      : `<div class="checkin"><p class="q">No preferences yet.</p><button class="btn" id="start">Start</button></div>`}
+    <div class="actions"><div class="row2"><button class="btn" id="add">${IC.plus} Add</button><button class="btn" id="refl">My reflections</button></div>
+    ${o.first ? '<button class="btn primary" id="cont">Continue</button>' : ''}
+    <button class="btn link" id="delr">Delete my reflections</button></div>`,
+    mount: r => {
+      on(r, '.ptxt', (e, b) => prefSheet(mine().find(x => x.id === b.dataset.id)));
+      on(r, '[data-del]', (e, b) => { S.mine = mine().filter(x => x.id !== b.dataset.del); save(); render(); });
+      on(r, '#add', () => prefSheet(null));
+      on(r, '#refl', () => go('onbq', {i: 0}));
+      on(r, '#start', () => go('onb'));
+      on(r, '#cont', () => go('chapters', {}, 'reset'));
+      on(r, '#ck-y', () => { pick.checked = Date.now(); save(); toast('Kept'); render(); });
+      on(r, '#ck-c', () => prefSheet(pick));
+      on(r, '#ck-n', () => { S.ui.checkHidden = true; render(); });
+      on(r, '#delr', () => confirmSheet('Delete your reflections?', 'Your answers are erased. Preferences stay.', 'Delete', () => { onb().a = {valued: '', wish: '', avoid: '', surprised: ''}; mine().forEach(x => { x.src = []; }); save(); toast('Deleted'); render(); }));
     }
   };
 };
 
-/* ---------- Part Two ---------- */
+/* ---------- Part Two ---------- *//* ---------- Part Two ---------- */
 const bookById = id => S.books.find(b => b.id === id);
 const COVERS = ['#E9B9B3', '#B5C7A9', '#F0DC9A', '#BCD0E0'];
 const statusText = s => ({unfinished: 'Open', continuing: 'Continuing', paused: 'Paused', closed: 'Closed'}[s] || 'Open');
@@ -1326,7 +1531,7 @@ SCENES.thennow = (o) => {
     tone: 'pink', eyebrow: '02 Continue? · Then vs now',
     html: `<h1 class="t">Then vs now.</h1><p class="sub">No questions carried over.</p>
     <div class="actions"><button class="btn" id="addq">${IC.pen} Add a question</button><button class="btn primary" id="next">Next</button></div>`,
-    mount: r => { on(r, '#addq', () => askText({title: 'Your question', placeholder: 'I wonder…', ok: 'Save'}, t => { if (t) { b.questions.push({id: uid(), text: t, history: [], obj: null}); save(); render(); } })); on(r, '#next', () => go('nextpage', {book: b.id})); }
+    mount: r => { on(r, '#addq', () => askText({title: 'Your question', placeholder: 'I wonder…', ok: 'Save'}, t => { if (t) { b.questions.push({id: uid(), text: t, history: [], obj: null}); save(); render(); } })); on(r, '#next', () => { S.ui.m = 0; go('matters', {book: b.id}); }); }
   };
   const qi = clamp(S.ui.q || 0, 0, qs.length - 1), q = qs[qi];
   const rv = pg.revisits[q.id] || {};
@@ -1346,7 +1551,32 @@ SCENES.thennow = (o) => {
       on(r, '#rev', () => askText({title: 'Edit question', value: q.text, ok: 'Save'}, t => { if (t && t !== q.text) { q.history.push({text: q.text, page: pIdx}); q.text = t; save(); render(); } }));
       on(r, '#open', () => { pg.revisits[q.id] = {note: '', open: true}; save(); advance(); });
       on(r, '#next', advance);
-      function advance() { if (qi < qs.length - 1) { S.ui.q = qi + 1; render(); } else go('nextpage', {book: b.id}); }
+      function advance() { if (qi < qs.length - 1) { S.ui.q = qi + 1; render(); } else { S.ui.m = 0; go('matters', {book: b.id}); } }
+    }
+  };
+};
+
+SCENES.matters = (o) => {
+  const b = bookById(o.book), pg = b && curPage(b); if (!pg) return SCENES.shelf();
+  const order = CATS.map(c => c[0]);
+  const list = mine().filter(x => x.cat && reflectFor(x)).sort((a, b) => order.indexOf(a.cat) - order.indexOf(b.cat)).filter((x, n, all) => all.findIndex(y => reflectFor(y) === reflectFor(x)) === n);
+  if (!list.length) return SCENES.nextpage(o);
+  pg.prefNotes = pg.prefNotes || {};
+  const i = clamp(S.ui.m || 0, 0, list.length - 1), pref = list[i], note = pg.prefNotes[pref.id];
+  return {
+    tone: 'pink', eyebrow: '02 Continue? · What matters',
+    html: `<h1 class="t">${esc(reflectFor(pref))}</h1><span class="status">${CATL[pref.cat]} · ${esc(pref.text)}</span>
+    <div class="exp">${note ? esc(note) : '<span class="ph">…</span>'}</div>
+    ${list.length > 1 ? `<p class="hint">${i + 1} of ${list.length}</p>` : ''}
+    <div class="actions"><div class="row2"><button class="btn" id="ans">${note ? 'Edit' : 'Answer'}</button><button class="btn" id="own">${IC.plus} My own note</button></div>
+    <div class="row2"><button class="btn" id="skip">Skip</button><button class="btn primary" id="next">Next</button></div>
+    <button class="btn link" id="all">Skip all</button></div>`,
+    mount: r => {
+      const next = () => { if (i < list.length - 1) { S.ui.m = i + 1; render(); } else go('nextpage', {book: b.id}); };
+      on(r, '#ans', () => askText({title: reflectFor(pref), value: note || '', placeholder: 'What happened?', ok: 'Save'}, t => { if (t) pg.prefNotes[pref.id] = t; else delete pg.prefNotes[pref.id]; save(); render(); }));
+      on(r, '#own', () => askText({title: 'Your note', placeholder: 'Something you noticed', ok: 'Save'}, t => { if (t) { pg.notes.push({id: uid(), text: t}); save(); toast('Saved'); } }));
+      on(r, '#skip', next); on(r, '#next', next);
+      on(r, '#all', () => go('nextpage', {book: b.id}));
     }
   };
 };
@@ -1385,6 +1615,7 @@ SCENES.book = (o) => {
   const qLine = q => { const v = pg.revisits[q.id]; return `<button class="it q" data-q="${q.id}">${esc(q.text)}${v?.note ? `<span class="obs">${esc(v.note)}</span>` : v?.open ? '<span class="obs">Skipped</span>' : ''}</button>`; };
   const pageHtml = pg ? `<h2 class="pg-h">Encounter ${pad(tab + 1)}</h2><p class="pg-m">${esc(pg.kind || 'Encounter')} · ${new Date(pg.date).toLocaleDateString(undefined, {day: 'numeric', month: 'short'})}</p>
     ${b.questions.length ? `<p class="sec">Questions</p><div class="items">${b.questions.map(qLine).join('')}</div>` : ''}
+    ${Object.keys(pg.prefNotes || {}).length ? `<p class="sec">What matters</p><div class="items">${Object.entries(pg.prefNotes).map(([id, t]) => { const x = mine().find(y => y.id === id); return `<span class="it">${esc(t)}<span class="obs">${esc(x ? x.text : '')}</span></span>`; }).join('')}</div>` : ''}
     <p class="sec">Moments</p><div class="items">${pg.tokens.map(t => `<button class="it tk" data-k="tokens" data-id="${t.id}">${esc(t.label)}${t.note ? `<span class="obs">${esc(t.note)}</span>` : ''}</button>`).join('') || '<span class="pg-m">—</span>'}</div>
     <p class="sec">Fragments</p><div class="items">${pg.fragments.filter(f => f.text).map(f => `<button class="it" data-k="fragments" data-id="${f.id}">“${esc(f.text)}”<span class="obs">${f.who === 'me' ? 'me' : f.who === 'pause' ? 'pause' : 'them'}</span></button>`).join('') || '<span class="pg-m">—</span>'}</div>
     ${pg.next?.text ? `<p class="sec">${pg.next.type === 'question' ? 'Next time' : 'Memory'}</p><div class="items"><button class="it q" data-next>${esc(pg.next.text)}</button></div>` : ''}
@@ -1455,13 +1686,13 @@ function openSettings() {
   <p>Saved only in this browser. Contact details are never kept.</p>
   ${S.archived.length ? `<p class="label">Archived</p>${S.archived.map(a => `<div class="arch"><span>${esc(a.name)} · ${new Date(a.at).toLocaleDateString()}</span><span class="seg"><button data-ro="${a.id}">Reopen</button><button data-da="${a.id}">Delete</button></span></div>`).join('')}` : ''}
   ${S.books.length ? `<p class="label">Scrapbooks</p>${S.books.map(b => `<div class="arch"><span>${esc(b.name)} · ${b.pages.length} page${b.pages.length === 1 ? '' : 's'}</span><span class="seg"><button data-db="${b.id}">Delete</button></span></div>`).join('')}` : ''}
-  <button class="btn" id="s-f">Your filters</button>
+  <button class="btn" id="s-f">My preferences</button>
   <div class="row2"><button class="btn" id="s-all">Delete everything</button><button class="btn primary" data-x>Done</button></div>`, (sh, close) => {
     $('#s-rm', sh).onchange = e => { st.reduced = e.target.checked; applyMotion(); save(); };
     $('#s-snd', sh).onchange = e => { st.sound = e.target.checked; save(); if (st.sound) sfx('page'); };
     $('#s-hap', sh).onchange = e => { st.haptics = e.target.checked; save(); buzz(10); };
     $('[data-x]', sh).onclick = close;
-    $('#s-f', sh).onclick = () => { close(); go('prefs'); };
+    $('#s-f', sh).onclick = () => { close(); go(onb().done && mine().length ? 'mine' : 'onb'); };
     on(sh, '[data-ro]', (e, x) => { const a = S.archived.find(y => y.id === x.dataset.ro); if (S.draft && S.draft.profile) { toast('Finish the current profile first'); return; } S.draft = a.draft; S.archived = S.archived.filter(y => y !== a); save(); close(); go('table'); });
     on(sh, '[data-da]', (e, x) => { S.archived = S.archived.filter(y => y.id !== x.dataset.da); save(); x.closest('.arch').remove(); toast('Deleted'); });
     on(sh, '[data-db]', (e, x) => { const b = bookById(x.dataset.db); close(); confirmSheet(`Delete ${esc(b.name)}?`, 'This can’t be undone.', 'Delete', () => { S.books = S.books.filter(y => y !== b); save(); toast('Deleted'); go('shelf', {}, 'reset'); }); });
