@@ -21,19 +21,20 @@
   --serif:"Fraunces", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
   --sans:"Nunito", "Avenir Next", "Segoe UI", system-ui, sans-serif;
   --spring:cubic-bezier(.34,1.56,.64,1);
+  --stamp-ok:#4F6B45; --stamp-flag:#B4462F;
   --bg:var(--butter-bg);
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --butter-bg:#2B261B; --cream-bg:#27231E; --sage-bg:#212720; --pink-bg:#2D2224; --blue-bg:#1F252B;
   --ink:#F2E9DA; --ink-soft:#C3B6A8; --line:rgba(242,233,218,.2);
   --table:#3A3328; --table-edge:rgba(242,233,218,.12); --shadow:rgba(0,0,0,.4);
-  --coral:#D86A50; color-scheme:dark;
+  --coral:#D86A50; --stamp-ok:#A7C59A; --stamp-flag:#EE937C; color-scheme:dark;
 }}
 :root[data-theme="dark"]{
   --butter-bg:#2B261B; --cream-bg:#27231E; --sage-bg:#212720; --pink-bg:#2D2224; --blue-bg:#1F252B;
   --ink:#F2E9DA; --ink-soft:#C3B6A8; --line:rgba(242,233,218,.2);
   --table:#3A3328; --table-edge:rgba(242,233,218,.12); --shadow:rgba(0,0,0,.4);
-  --coral:#D86A50; color-scheme:dark;
+  --coral:#D86A50; --stamp-ok:#A7C59A; --stamp-flag:#EE937C; color-scheme:dark;
 }
 *{box-sizing:border-box}
 html,body{height:100%}
@@ -376,6 +377,37 @@ textarea.ans{font:400 18px/1.4 var(--serif);min-height:190px;border:1.2px solid 
 .who{display:flex;align-items:flex-end;gap:12px}
 .who img{width:58px;height:58px;object-fit:cover;border-radius:50%;border:1.5px solid var(--ink);flex:none}
 .bio-img{max-width:100%;max-height:50vh;object-fit:contain;border-radius:6px;justify-self:center}
+.flagmark{align-self:flex-start;display:inline-block;font:800 11px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--stamp-ok);border:2.5px double var(--stamp-ok);background:transparent;padding:7px 10px;transform:rotate(-4deg);border-radius:3px;animation:stampIn .5s var(--spring) both}
+.flagmark.flag{color:var(--stamp-flag);border-color:var(--stamp-flag)}
+button.flagmark{cursor:pointer}
+.polaroid{display:block;width:62px;flex:none;background:#FFFCF5;border:1.3px solid #3D3431;padding:4px 4px 12px;transform:rotate(-5deg);box-shadow:0 4px 8px -4px var(--shadow)}
+.polaroid img{display:block;width:100%;aspect-ratio:1;object-fit:cover}
+.scrap{position:relative;background:var(--paper);color:var(--paper-ink);border:1.3px solid var(--paper-ink);padding:16px 14px 20px 30px;display:grid;gap:18px;
+  background-image:repeating-linear-gradient(transparent 0 27px,rgba(61,52,49,.07) 27px 28px);box-shadow:5px 6px 0 -1px var(--n-butter),5px 6px 0 0 var(--paper-ink),0 12px 22px -12px var(--shadow)}
+.scrap::before{content:"";position:absolute;left:9px;top:14px;bottom:14px;width:8px;background:radial-gradient(circle at 4px 6px,transparent 3px,var(--paper-ink) 3.4px,transparent 4.4px) 0 0/8px 34px repeat-y}
+.scrap .rs{gap:14px}
+.scrap h2{font:400 21px/1.15 var(--serif);margin:0;display:inline-block;background:linear-gradient(transparent 62%,rgba(238,139,108,.28) 62% 88%,transparent 88%)}
+.scrap .none{color:var(--paper-soft);font:400 15px var(--serif)}
+.entry{position:relative;display:grid;gap:4px;transform:rotate(var(--r,0deg));transition:opacity .3s}
+.entry.dim{opacity:.5}
+.entry .note{font-size:16px;padding:12px 24px 13px 12px}
+.entry .clip-w{margin:-6px 10px 0 18px}
+.entry-f{display:flex;gap:6px;justify-content:flex-end;align-items:center;margin-top:2px}
+.mstamp{position:absolute;right:26px;top:-9px;z-index:3;font:800 8.5px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;border:2px double currentColor;padding:3px 6px;transform:rotate(6deg);background:rgba(255,252,245,.9)}
+.mstamp.aligned{color:#4F6B45} .mstamp.conflict{color:#B4462F} .mstamp.unknown{color:#7A6D66} .mstamp.related{color:#3F6A8A}
+.tagbtn{position:relative;font:700 11.5px var(--sans);color:var(--paper-ink);background:var(--n-cream);border:1.2px solid var(--paper-ink);border-radius:3px 10px 10px 3px;padding:5px 11px 5px 16px;cursor:pointer;transform:rotate(-1.5deg)}
+.tagbtn::before{content:"";position:absolute;left:5px;top:50%;width:5px;height:5px;margin-top:-2.5px;border-radius:50%;border:1.2px solid var(--paper-ink)}
+.tagbtn:disabled{opacity:.55;cursor:default}
+.hand{font:italic 400 13px var(--serif);color:var(--paper-soft)}
+.clips{display:grid;gap:8px;padding:2px 6px}
+.clip-w{position:relative;filter:drop-shadow(0 2px 2px var(--shadow));transform:rotate(var(--r,0deg))}
+.clip-w .tape{left:44%;top:-7px;z-index:2}
+.clip{background:#FBF7EC;color:#3D3431;padding:11px 14px 12px;font:400 15px/1.35 var(--serif);
+  background-image:repeating-linear-gradient(transparent 0 21px,rgba(61,52,49,.05) 21px 22px);
+  clip-path:polygon(0 6%,3% 0,7% 5%,12% 1%,18% 6%,24% 0,31% 5%,38% 1%,45% 6%,52% 0,59% 5%,66% 1%,73% 6%,80% 0,87% 5%,94% 1%,100% 5%,100% 95%,96% 100%,90% 95%,83% 100%,76% 95%,69% 100%,62% 96%,55% 100%,48% 95%,41% 100%,34% 96%,27% 100%,20% 95%,13% 100%,6% 96%,0 100%)}
+.clip b{display:block;font:800 9px/1.2 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:#7A6D66;margin-bottom:3px}
+.clipline{display:grid;grid-template-columns:44px 1fr;gap:10px;align-items:center}
+.clipline .ic{width:44px;height:44px}
 .none{margin:0;font-size:12.5px;color:var(--ink-soft)}
 .sheet .bd-row b{color:var(--ink-soft)}
 html.rm *,html.rm *::before,html.rm *::after{animation:none!important;transition-duration:.01ms!important}
@@ -1100,7 +1132,7 @@ SCENES.table = (o) => {
   return {
     tone: 'butter', eyebrow: '01 Filter In · The table',
     html: `<h1 class="t">Take a look.</h1>
-    ${objs.length ? `<button class="status" id="rd">${flagText(compare(d.profile, d).flags)}</button>` : ''}
+    ${objs.length ? flagStamp(compare(d.profile, d).flags, 'rd') : ''}
     <p class="label">${known}</p>
     <div class="tabletop" id="tbl" style="aspect-ratio:4/${rows * 1.02}">
       ${objs.length ? '' : `<button class="source" id="src">Add a biodata</button>`}
@@ -1162,7 +1194,7 @@ SCENES.inspect = (o) => {
     <div class="inspect">
       <div class="big" id="big" style="--r:${pos.r}deg" aria-hidden="true">${artFor(ob, d.profile.photo)}</div>
       <div class="rot"><button class="icon-btn" id="ccw" aria-label="Turn left">${IC.ccw}</button><button class="icon-btn" id="cw" aria-label="Turn right">${IC.cw}</button></div>
-      <div class="known"><p class="label">From the form</p><ul>${ob.known.map(k => `<li>${esc(k)}</li>`).join('')}</ul></div>
+      <p class="label">From the form</p><div class="clips">${ob.known.map((k, n) => clipHtml(k, n)).join('')}</div>
       <p class="label w">A question</p>
       <div class="wrow"><div class="note-w" id="wn" tabindex="0" aria-label="Question note. Drag to the pocket or use Save to pocket."><div class="note" id="wt"></div></div>
       <button class="pocket" id="pk" aria-label="Pocket">${POCKET(d.pocket.length)}</button></div>
@@ -1306,6 +1338,18 @@ function archiveDraft(how) {
 }
 
 const flagText = n => n ? `${n} pass flag${n > 1 ? 's' : ''}` : 'No pass flags';
+const flagStamp = (n, id = '') => `<${id ? `button id="${id}"` : 'span'} class="flagmark${n ? ' flag' : ''}">${flagText(n)}</${id ? 'button' : 'span'}>`;
+const STATE_WORD = {aligned: 'Aligned', conflict: 'Conflict', unknown: 'Unknown', related: 'Related'};
+function clipHtml(line, i = 0) {
+  const m = String(line).match(/^([^:]{1,40}):\s*(.+)$/);
+  return `<div class="clip-w" style="--r:${i % 2 ? 1.2 : -1}deg">${i === 0 ? '<span class="tape"></span>' : ''}<div class="clip">${m ? `<b>${esc(m[1])}</b>${esc(m[2])}` : esc(line)}</div></div>`;
+}
+// One scrapbook entry: a note, an optional stamped evidence state, and the clipping it rests on.
+const entry = ({text, color, state, small, quote, foot, n = 0, dim}) => `<div class="entry${dim ? ' dim' : ''}" style="--r:${n % 2 ? 1.4 : -1.2}deg">
+  ${state ? `<span class="mstamp ${state}">${STATE_WORD[state]}</span>` : ''}
+  <div class="note-w"><div class="note ${color || ''}">${esc(text)}${small ? `<small>${esc(small)}</small>` : ''}</div></div>
+  ${quote ? clipHtml(`${quote.k}: “${quote.s}”`, 1) : ''}
+  ${foot ? `<div class="entry-f">${foot}</div>` : ''}</div>`;
 const evPill = st => `<span class="ev ${st}">${{aligned: 'Aligned', conflict: 'Conflict', unknown: 'Unknown', related: 'Related'}[st]}</span>`;
 const quoteHtml = q => q ? `<q>${esc(q.k)}: “${esc(q.s)}”</q>` : '';
 
@@ -1318,12 +1362,16 @@ SCENES.read = () => {
   const none = t => `<p class="none">${t}</p>`;
   return {
     tone: 'butter', eyebrow: '01 Filter In · Filter check',
-    html: `<div class="who">${p.photo ? `<img src="${p.photo}" alt="">` : ''}<h1 class="t">${esc(p.name || 'This profile')}</h1></div>
-    <div class="row-pills"><span class="status">${flagText(c.flags)}</span><button class="btn link" id="bio">View biodata</button></div>
+    html: `<div class="who">${p.photo ? `<span class="polaroid"><img src="${p.photo}" alt=""></span>` : ''}<h1 class="t">${esc(p.name || 'This profile')}</h1></div>
+    <div class="row-pills">${flagStamp(c.flags)}<button class="btn link" id="bio">View biodata</button></div>
     ${!c.items.length ? `<div class="checkin"><p class="q">No sorted preferences yet.</p><button class="btn" id="setup">Set up my preferences</button></div>` : `
-    <section class="rs"><h2>Potential incompatibilities</h2>${inc.map(i => `<div class="ri${i.dismissed ? ' dim' : ''}"><div class="ri-h"><span>${esc(i.pref.text)}</span>${evPill('conflict')}</div>${quoteHtml(i.quote)}<div class="ri-f"><span>${CATL[i.pref.cat]}</span>${i.flag ? `<button data-dis="${i.pref.id}">${i.dismissed ? 'Undo' : 'Not a dealbreaker'}</button>` : '<span>Consider</span>'}</div></div>`).join('') || none('None stated.')}</section>
-    <section class="rs"><h2>Reasons for curiosity</h2>${cur.map(i => `<div class="ri"><div class="ri-h"><span>${esc(i.pref.text)}</span>${evPill(i.rel ? 'related' : 'aligned')}</div>${quoteHtml(i.quote || i.rel)}${i.rel ? '<div class="ri-f"><span>Related, not proof</span></div>' : ''}</div>`).join('') || none('Nothing stated yet.')}</section>
-    <section class="rs"><div class="rs-h"><h2>First questions</h2>${fq.length ? '<button class="btn link" id="saveall">Save all</button>' : ''}</div>${shown.map((x, n) => { const saved = d.pocket.some(m => m.text === x.q); return `<div class="ri"><div class="ri-h"><span>${esc(x.q)}</span></div><div class="ri-f"><span>${esc(x.why)} · ${esc(x.pref.text)}</span><span class="btns"><button data-edq="${n}">Edit</button><button data-ask="${n}"${saved ? ' disabled' : ''}>${saved ? 'Saved' : 'Save'}</button></span></div></div>`; }).join('') || none('Nothing to ask yet.')}${fq.length > shown.length ? `<button class="btn link" id="moreq">${fq.length - shown.length} more</button>` : ''}</section>`}
+    <div class="scrap">
+    <section class="rs"><h2>Potential incompatibilities</h2>${inc.map((i, n) => entry({text: i.pref.text, color: 'pink', state: 'conflict', small: CATL[i.pref.cat], quote: i.quote, n, dim: i.dismissed,
+      foot: i.flag ? `<button class="tagbtn" data-dis="${i.pref.id}">${i.dismissed ? 'Undo' : 'Not a dealbreaker'}</button>` : '<span class="hand">Worth a thought</span>'})).join('') || none('None stated.')}</section>
+    <section class="rs"><h2>Reasons for curiosity</h2>${cur.map((i, n) => entry({text: i.pref.text, color: i.rel ? 'blue' : 'sage', state: i.rel ? 'related' : 'aligned', small: i.rel ? 'Related, not proof' : CATL[i.pref.cat], quote: i.quote || i.rel, n})).join('') || none('Nothing stated yet.')}</section>
+    <section class="rs"><div class="rs-h"><h2>First questions</h2>${fq.length ? '<button class="tagbtn" id="saveall">Save all</button>' : ''}</div>${shown.map((x, n) => { const saved = d.pocket.some(m => m.text === x.q); return entry({text: x.q, color: '', small: `${x.why} · ${x.pref.text}`, n,
+      foot: `<button class="tagbtn" data-edq="${n}">Edit</button><button class="tagbtn" data-ask="${n}"${saved ? ' disabled' : ''}>${saved ? 'Saved' : 'Save'}</button>`}); }).join('') || none('Nothing to ask yet.')}${fq.length > shown.length ? `<button class="btn link" id="moreq">${fq.length - shown.length} more</button>` : ''}</section>
+    </div>`}
     ${c.unsorted ? `<button class="btn link" id="uns">${c.unsorted} not sorted</button>` : ''}
     <div class="actions"><div class="row2"><button class="btn" id="pass">Pass</button><button class="btn primary" id="go">Explore</button></div>
       <button class="btn link" id="other">Try another</button></div>`,
@@ -1628,7 +1676,7 @@ SCENES.thennow = (o) => {
   return {
     tone: 'pink', eyebrow: '02 Continue? · Then vs now',
     html: `<h1 class="t">Then vs now.</h1><p class="sub">Did anything change?</p>
-    ${q.obj ? `<div class="mini-known"><div class="ic">${artFor(q.obj)}</div><div><span class="label">From the form</span><br>${esc(q.obj.known[0] || '')}</div></div>` : ''}
+    ${q.obj ? `<div class="clipline"><div class="ic">${artFor(q.obj)}</div>${clipHtml(q.obj.known[0] || '', 0)}</div>` : ''}
     <div class="tn"><div><p class="label w" style="margin-bottom:8px">Then</p><div class="note-w"><div class="note" style="font-size:16px">${esc(q.text)}${q.history.length ? `<small>revised ${q.history.length}×</small>` : ''}</div></div></div>
     <div><p class="label" style="margin-bottom:8px">Now</p><div class="exp">${rv.note ? esc(rv.note) : rv.open ? '<span class="ph">Skipped</span>' : '<span class="ph">…</span>'}</div></div></div>
     ${earlier.length ? `<div class="trail"><span class="label">Before</span>${earlier.map(x => `<span><b>Encounter ${pad(x.i + 1)}:</b> ${esc(x.v.note)}</span>`).join('')}</div>` : ''}
