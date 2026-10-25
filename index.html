@@ -337,11 +337,16 @@ button.status{cursor:pointer}
 .onb-art span:last-child{left:calc(50% - 20px);background:var(--n-sage);mix-blend-mode:multiply;animation-delay:-3s}
 textarea.ans{font:400 18px/1.4 var(--serif);min-height:190px;border:1.2px solid var(--line);border-radius:8px;padding:14px;background:var(--paper);color:var(--paper-ink);width:100%;resize:vertical}
 .plist{display:grid;gap:6px}
-.prow{display:grid;grid-template-columns:1fr auto;background:var(--paper);border:1px solid var(--line);border-radius:8px;overflow:hidden}
-.ptxt{background:none;border:0;text-align:left;padding:10px 12px;font:400 16px/1.25 var(--serif);color:var(--paper-ink);cursor:pointer}
-.ptxt small{display:block;font:700 9.5px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--paper-soft);margin-top:4px}
-.x{background:none;border:0;border-left:1px solid var(--line);width:42px;font-size:20px;color:var(--paper-soft);cursor:pointer}
-.pcard{background:var(--paper);color:var(--paper-ink);border:1px solid var(--line);border-radius:8px;padding:12px;display:grid;gap:10px}
+.plist{display:grid;gap:12px}
+.prow{position:relative;transform:rotate(var(--r,0deg))}
+.prow .note-w{position:relative;margin-right:14px}
+.ptxt.note{display:block;width:100%;text-align:left;cursor:pointer;font:400 16.5px/1.22 var(--serif);padding:12px 26px 13px 13px}
+.ptxt.note small{margin-top:6px}
+.prow .x{position:absolute;right:0;top:50%;margin-top:-14px;width:28px;height:28px;border-radius:50%;border:1.2px solid var(--paper-ink);background:var(--n-cream);color:var(--paper-ink);font:400 16px/1 var(--sans);cursor:pointer;display:grid;place-items:center;box-shadow:0 2px 3px var(--shadow);z-index:2}
+.scrap .plist .prow:nth-child(3n+1) .note-w::before{content:"";position:absolute;left:38%;top:-7px;width:46px;height:14px;background:rgba(243,226,166,.9);transform:rotate(-4deg);z-index:2}
+.pcard{position:relative;background:var(--paper);color:var(--paper-ink);border:1.3px solid var(--paper-ink);padding:16px 12px 12px;display:grid;gap:10px;box-shadow:3px 4px 0 -1px var(--n-sage),3px 4px 0 0 var(--paper-ink)}
+.pcard::before{content:"";position:absolute;left:42%;top:-7px;width:50px;height:14px;background:rgba(243,226,166,.9);transform:rotate(-3deg)}
+.pcard:nth-child(odd){transform:rotate(-.6deg)} .pcard:nth-child(even){transform:rotate(.6deg)}
 .pcard p{margin:0;font:400 17px/1.25 var(--serif)}
 .cats{display:grid;grid-template-columns:1fr 1fr;gap:6px}
 .cats button{border:1.2px solid var(--line);background:var(--paper);color:var(--paper-ink);border-radius:6px;padding:9px 6px;font:700 12px var(--sans);cursor:pointer;transition:background .2s,transform .25s var(--spring)}
@@ -1466,11 +1471,14 @@ function prefSheet(pref, after) {
 function catSheet() {
   sheet(`<h3>Categories</h3>${CATS.map(([, l, dsc]) => `<p><b style="color:var(--ink)">${l}</b><br>${dsc}</p>`).join('')}<button class="btn primary" data-x>Got it</button>`, (sh, close) => { $('[data-x]', sh).onclick = close; });
 }
-const prow = x => `<div class="prow"><button class="ptxt" data-id="${x.id}">${esc(x.text)}<small>${x.src.length ? esc(QL[x.src[0].q] || '') : 'Added by you'}</small></button><button class="x" data-del="${x.id}" aria-label="Delete">×</button></div>`;
+const CAT_NOTE = {need: 'pink', nice: 'sage', avoid: '', no: 'blue'};
+let prowN = 0;
+// A preference as a taped scrapbook note, coloured by its category.
+const prow = x => `<div class="prow" style="--r:${(prowN++ % 3 - 1) * 1.1}deg"><div class="note-w"><button class="ptxt note ${x.cat ? CAT_NOTE[x.cat] : 'cream'}" data-id="${x.id}">${esc(x.text)}<small>${x.src.length ? esc(QL[x.src[0].q] || '') : 'Added by you'}</small></button></div><button class="x" data-del="${x.id}" aria-label="Delete ${esc(x.text)}">×</button></div>`;
 SCENES.review = () => ({
   tone: 'sage', eyebrow: '',
   html: `${dots(4)}<h1 class="t">Here’s what we noticed.</h1><p class="sub">Edit anything. Worked out on this device.</p>
-  <div class="plist">${mine().map(prow).join('') || '<p class="none">Nothing found. Add your own.</p>'}</div>
+  <div class="scrap"><div class="plist">${mine().map(prow).join('') || '<p class="none">Nothing found. Add your own.</p>'}</div></div>
   <div class="row2"><button class="btn" id="add">${IC.plus} Add</button><button class="btn" id="more">Find more</button></div>
   <div class="actions"><button class="btn primary" id="next">Continue</button></div>`,
   mount: r => {
@@ -1503,7 +1511,7 @@ SCENES.mine = (o) => {
     tone: 'sage', eyebrow: 'My preferences',
     html: `<h1 class="t">My preferences.</h1>
     ${pick ? `<div class="checkin"><p class="q">Does this still matter to you in the same way?</p><p class="pick">${esc(pick.text)} · ${CATL[pick.cat]}</p><div class="row3"><button class="btn" id="ck-y">Yes</button><button class="btn" id="ck-c">Change it</button><button class="btn" id="ck-n">Not now</button></div></div>` : ''}
-    ${list.length ? groups.map(([k, l]) => { const g = list.filter(x => (x.cat || null) === k); return g.length ? `<p class="label">${l}</p><div class="plist">${g.map(prow).join('')}</div>` : ''; }).join('')
+    ${list.length ? '<div class="scrap">' + groups.map(([k, l]) => { const g = list.filter(x => (x.cat || null) === k); return g.length ? `<section class="rs"><h2>${l}</h2><div class="plist">${g.map(prow).join('')}</div></section>` : ''; }).join('') + '</div>'
       : `<div class="checkin"><p class="q">No preferences yet.</p><button class="btn" id="start">Start</button></div>`}
     <div class="actions"><div class="row2"><button class="btn" id="add">${IC.plus} Add</button><button class="btn" id="refl">My reflections</button></div>
     ${o.first ? '<button class="btn primary" id="cont">Continue</button>' : ''}
