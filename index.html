@@ -497,29 +497,29 @@ const RULES = [
 ];
 const CITIES = ['Pune','Mumbai','Bengaluru','Bangalore','New Delhi','Delhi','Hyderabad','Chennai','Kolkata','Nashik','Nagpur','Indore','Ahmedabad','Jaipur','Lucknow','Kochi','Chandigarh','Bhopal','Surat','Vadodara','Coimbatore','Mysuru','Mysore','Goa','Noida','Gurugram','Gurgaon','Patna','Thane','Kolhapur','Aurangabad','Visakhapatnam','Thiruvananthapuram','Mangaluru','Udaipur','Varanasi','Dubai','London','Singapore','New York','Toronto','Sydney','Melbourne','San Francisco','Berlin'];
 const KIND = {
-  occupation: {art: 'briefcase', title: 'A tiny briefcase', about: 'their work', prompts: ['What part of their work would they happily talk about for an hour?', 'What does a good workday look like to them?']},
-  education: {art: 'scroll', title: 'A rolled-up degree', about: 'what they studied', prompts: ['What did they actually enjoy learning, degree aside?', 'Is there something they would study now, just for fun?']},
-  income: {art: 'coins', title: 'A neat stack of coins', about: 'money and plans', prompts: ['What do they think money is mostly for?', 'What would they do with a free month?']},
-  community: {art: 'stamp', title: 'An official-looking stamp', about: 'tradition', prompts: ['Which traditions, if any, matter to them day to day?', 'Which festival do they actually look forward to?']},
-  horoscope: {art: 'kundli', title: 'A horoscope chart', about: 'the horoscope', prompts: ['Do they read their horoscope, or did the family fill this part in?', 'Who in their family cares most about this chart?']},
-  height: {art: 'tape', title: 'A measuring tape', about: '', prompts: []},
-  family: {art: 'photo', title: 'A folded family photo', about: 'their family', prompts: ['Which family tradition would they keep?', 'Who in their family are they most like, by their own telling?']},
-  places: {art: 'map', title: 'A small map', about: 'the places they’ve lived', prompts: ['Which of these places feels most like home to them?', 'Where would they live if they could pick anywhere?']},
-  diet: {art: 'tiffin', title: 'A tiffin box', about: 'food', prompts: ['What is a meal they could eat every week?', 'Do they cook? Would they want to cook together?']},
-  expect: {art: 'list', title: 'A list of expectations', about: 'what they’re looking for', prompts: ['What might these words mean to them in daily life?', 'Who wrote this list: them, their family, or both?']},
-  fine: {art: 'slip', title: 'The fine print', about: '', prompts: []}
+  occupation: {art: 'briefcase', title: 'Work', about: 'their work', prompts: ['What do they like about their work?', 'What’s a good workday for them?']},
+  education: {art: 'scroll', title: 'Education', about: 'what they studied', prompts: ['What did they enjoy studying?', 'Anything they’d learn now just for fun?']},
+  income: {art: 'coins', title: 'Income', about: 'money', prompts: ['What do they like spending on?', 'What would they do with a month off?']},
+  community: {art: 'stamp', title: 'Community', about: 'tradition', prompts: ['Which traditions matter to them?', 'Favourite festival?']},
+  horoscope: {art: 'kundli', title: 'Horoscope', about: 'the horoscope', prompts: ['Do they care about horoscopes?', 'Who in the family cares about this?']},
+  height: {art: 'tape', title: 'Height', about: '', prompts: []},
+  family: {art: 'photo', title: 'Family', about: 'their family', prompts: ['Who are they closest to?', 'Which family tradition would they keep?']},
+  places: {art: 'map', title: 'Places', about: 'where they’ve lived', prompts: ['Which place feels like home?', 'Where would they live if they could pick?']},
+  diet: {art: 'tiffin', title: 'Diet', about: 'food', prompts: ['Favourite meal?', 'Do they cook?']},
+  expect: {art: 'list', title: 'Expectations', about: 'what they’re looking for', prompts: ['What do these words mean to them?', 'Did they write this, or family?']},
+  fine: {art: 'slip', title: 'Other details', about: '', prompts: []}
 };
 const HOBBY = [
-  [/read|book|novel|poetry/i, 'book', 'A tiny book', 'their reading', ['What would you want to ask about something they’ve read recently?', 'Which book would they hand to a friend?']],
-  [/football|soccer/i, 'football', 'A football', 'football', ['Do they play, watch, or both?', 'Which match do they still bring up?']],
-  [/music|sing|song|guitar|piano|tabla|violin/i, 'record', 'A record', 'their music', ['What do they listen to when nobody else is choosing?', 'Is there a song they connect with a particular place?']],
-  [/cricket/i, 'bat', 'A cricket bat', 'cricket', ['Do they play, watch, or argue about it?', 'Is there a match they remember exactly where they watched?']],
-  [/travel|trek|hik|explor/i, 'suitcase', 'A small suitcase', 'their travels', ['Which trip do they tell stories about?', 'Where would they go back to?']],
-  [/movie|film|cinema/i, 'ticket', 'A cinema ticket', 'films', ['Which film do they rewatch?', 'Do they like talking after a film, or sitting with it?']],
-  [/photo/i, 'camera', 'A camera', 'photography', ['What do they like to photograph?', 'Is there one picture they’re proud of?']],
-  [/cook|bak/i, 'pot', 'A cooking pot', 'cooking', ['What dish do they make when cooking for others?', 'Who taught them to cook?']],
-  [/paint|draw|art|sketch|craft/i, 'brush', 'A paintbrush', 'their art', ['What do they make when nobody asks them to?', 'Where do they find things to draw?']],
-  [/garden|plant/i, 'plant', 'A potted plant', 'their plants', ['What are they growing at the moment?', 'Which plant have they kept alive the longest?']]
+  [/read|book|novel|poetry/i, 'book', 'Reading', 'their reading', ['What are they reading now?', 'A book they’d recommend?']],
+  [/football|soccer/i, 'football', 'Football', 'football', ['Play or watch?', 'Favourite team?']],
+  [/music|sing|song|guitar|piano|tabla|violin/i, 'record', 'Music', 'their music', ['What do they listen to?', 'A song on repeat right now?']],
+  [/cricket/i, 'bat', 'Cricket', 'cricket', ['Play or watch?', 'Best match they’ve seen?']],
+  [/travel|trek|hik|explor/i, 'suitcase', 'Travel', 'their travels', ['Best trip so far?', 'Where next?']],
+  [/movie|film|cinema/i, 'ticket', 'Films', 'films', ['A film they rewatch?', 'Favourite kind of film?']],
+  [/photo/i, 'camera', 'Photography', 'photography', ['What do they like to shoot?', 'A favourite photo?']],
+  [/cook|bak/i, 'pot', 'Cooking', 'cooking', ['Their best dish?', 'Who taught them?']],
+  [/paint|draw|art|sketch|craft/i, 'brush', 'Art', 'their art', ['What do they like to make?', 'Where do they get ideas?']],
+  [/garden|plant/i, 'plant', 'Gardening', 'their plants', ['What are they growing?', 'Oldest plant?']]
 ];
 
 const catOf = k => (RULES.find(([, re]) => re.test(k)) || ['fine'])[0];
@@ -575,24 +575,24 @@ function evaluate(p, P) {
   const checks = [];
   const add = (key, label, status, detail) => { if (P[key].imp !== 'off') checks.push({label, imp: P[key].imp, status, detail}); };
   const range = (v, lo, hi) => (lo === '' || v >= +lo) && (hi === '' || v <= +hi);
-  if (P.age.min !== '' || P.age.max !== '') add('age', 'Age', f.age == null ? 'un' : range(f.age, P.age.min, P.age.max) ? 'ok' : 'no', f.age == null ? 'Not on the form' : `${f.age} · you: ${P.age.min || 'any'}–${P.age.max || 'any'}`);
-  if (P.height.min !== '' || P.height.max !== '') add('height', 'Height', f.heightCm == null ? 'un' : range(f.heightCm, P.height.min, P.height.max) ? 'ok' : 'no', f.heightCm == null ? 'Not on the form' : `${fmtH(f.heightCm)} · you: ${P.height.min ? fmtH(P.height.min) : 'any'}–${P.height.max ? fmtH(P.height.max) : 'any'}`);
-  if (P.diet.ok.length) add('diet', 'Diet', !f.diet ? 'un' : P.diet.ok.includes(f.diet) ? 'ok' : 'no', f.diet ? f.diet : 'Not on the form');
-  const kw = (key, label, list, text, none) => { if (!list.length) return; const hit = text && findAny(list, text); add(key, label, !text ? 'un' : hit ? 'ok' : 'no', !text ? none : hit ? `Mentions ${hit}` : `None of: ${list.join(', ')}`); };
-  kw('place', 'Location', words(P.place.list), (f.cities.length || f.cats.has('places')) ? f.all : null, 'Not on the form');
-  kw('edu', 'Education', words(P.edu.list), f.text.education, 'Not on the form');
-  kw('comm', 'Community', words(P.comm.list), f.text.community, 'Not on the form');
-  add('manglik', 'Manglik', f.manglik == null ? 'un' : f.manglik === P.manglik.want ? 'ok' : 'no', f.manglik == null ? 'Not on the form' : `${f.manglik} · you: ${P.manglik.want}`);
-  kw('interests', 'Interests', words(P.interests.list), f.text.hobbies, 'No hobbies listed');
+  if (P.age.min !== '' || P.age.max !== '') add('age', 'Age', f.age == null ? 'un' : range(f.age, P.age.min, P.age.max) ? 'ok' : 'no', f.age == null ? 'Not listed' : `${f.age} (you: ${P.age.min || 'any'}–${P.age.max || 'any'})`);
+  if (P.height.min !== '' || P.height.max !== '') add('height', 'Height', f.heightCm == null ? 'un' : range(f.heightCm, P.height.min, P.height.max) ? 'ok' : 'no', f.heightCm == null ? 'Not listed' : `${fmtH(f.heightCm)} (you: ${P.height.min ? fmtH(P.height.min) : 'any'}–${P.height.max ? fmtH(P.height.max) : 'any'})`);
+  if (P.diet.ok.length) add('diet', 'Diet', !f.diet ? 'un' : P.diet.ok.includes(f.diet) ? 'ok' : 'no', f.diet ? f.diet : 'Not listed');
+  const kw = (key, label, list, text, none) => { if (!list.length) return; const hit = text && findAny(list, text); add(key, label, !text ? 'un' : hit ? 'ok' : 'no', !text ? none : hit ? cap(hit) : 'No match'); };
+  kw('place', 'Location', words(P.place.list), (f.cities.length || f.cats.has('places')) ? f.all : null, 'Not listed');
+  kw('edu', 'Education', words(P.edu.list), f.text.education, 'Not listed');
+  kw('comm', 'Community', words(P.comm.list), f.text.community, 'Not listed');
+  add('manglik', 'Manglik', f.manglik == null ? 'un' : f.manglik === P.manglik.want ? 'ok' : 'no', f.manglik == null ? 'Not listed' : f.manglik);
+  kw('interests', 'Interests', words(P.interests.list), f.text.hobbies, 'Not listed');
   const must = checks.filter(c => c.imp === 'must');
   const verdict = !checks.length ? 'noprefs' : must.some(c => c.status === 'no') ? 'fail' : must.some(c => c.status === 'un') ? 'unclear' : 'pass';
   return {present: basics.length - missing.length, total: basics.length, missing, sufficient: missing.length <= 3 && !must.some(c => c.status === 'un'), checks, verdict};
 }
 const VERDICT = {
-  pass: {t: 'Likely passes your filters.', stamp: 'LIKELY PASS', short: 'Likely pass', c: '#4F6B45'},
-  fail: {t: 'Likely doesn’t pass.', stamp: 'LIKELY FAIL', short: 'Likely fail', c: '#B4462F'},
+  pass: {t: 'Likely pass.', stamp: 'LIKELY PASS', short: 'Likely pass', c: '#4F6B45'},
+  fail: {t: 'Likely fail.', stamp: 'LIKELY FAIL', short: 'Likely fail', c: '#B4462F'},
   unclear: {t: 'Can’t tell yet.', stamp: 'NOT ENOUGH INFO', short: 'Unclear', c: '#7A6D66'},
-  noprefs: {t: 'No filters set yet.', stamp: 'UNSORTED', short: 'No filters set', c: '#7A6D66'}
+  noprefs: {t: 'No filters yet.', stamp: 'UNSORTED', short: 'No filters set', c: '#7A6D66'}
 };
 
 function parseBiodata(text) {
@@ -617,7 +617,7 @@ function parseBiodata(text) {
       const hit = HOBBY.find(([re]) => re.test(h));
       const known = [`${cap(h.toLowerCase())} is listed as an interest.`];
       if (hit) add({kind: hit[1], title: hit[2], about: hit[3], known, prompts: hit[4]});
-      else add({kind: 'tag', word: h.toLowerCase(), title: `A tag that says “${h.toLowerCase()}”`, about: h.toLowerCase(), known, prompts: [`What do they enjoy about ${h.toLowerCase()}?`, `How did ${h.toLowerCase()} start for them?`]});
+      else add({kind: 'tag', word: h.toLowerCase(), title: cap(h.toLowerCase()), about: h.toLowerCase(), known, prompts: [`What do they like about ${h.toLowerCase()}?`, `How did they get into it?`]});
     });
   });
   std('family'); std('horoscope');
@@ -629,7 +629,7 @@ function parseBiodata(text) {
 }
 
 /* ---------- empty spaces: what a form can't hold ---------- */
-const SPACES = ['What makes them laugh?', 'What do they care deeply about?', 'What does independence mean to them?', 'What does an enjoyable relationship feel like to them?', 'What might we actually enjoy doing together?'];
+const SPACES = ['What makes them laugh?', 'What do they care about most?', 'What does independence mean to them?', 'What do they want from a relationship?', 'What could we enjoy doing together?'];
 const NOTE_COLORS = ['', 'pink', 'blue', 'sage'];
 
 /* ---------- navigation ---------- */
@@ -647,7 +647,7 @@ let lastScene = '';
 function render() {
   const sc = SCENES[cur.name](cur.opts || {});
   document.body.dataset.tone = sc.tone;
-  app.innerHTML = `<header class="bar">${sc.back === false ? '' : `<button class="icon-btn back" data-a="back" aria-label="Back">${IC.back}</button>`}<span class="eyebrow">${sc.eyebrow}</span><button class="icon-btn" data-a="settings" aria-label="Privacy and comfort settings">${IC.sliders}</button></header><main class="scene" id="scene">${sc.html}</main><footer class="foot">${IC.lock} A private space. Nothing to prove.</footer>`;
+  app.innerHTML = `<header class="bar">${sc.back === false ? '' : `<button class="icon-btn back" data-a="back" aria-label="Back">${IC.back}</button>`}<span class="eyebrow">${sc.eyebrow}</span><button class="icon-btn" data-a="settings" aria-label="Privacy and comfort settings">${IC.sliders}</button></header><main class="scene" id="scene">${sc.html}</main><footer class="foot">${IC.lock} Private</footer>`;
   $('[data-a=back]', app)?.addEventListener('click', back);
   $('[data-a=settings]', app).addEventListener('click', openSettings);
   const root = $('#scene');
@@ -679,14 +679,14 @@ function sheet(html, bind) {
   setTimeout(() => ($('textarea,input:not([type=checkbox])', sh) || $('button', sh))?.focus(), 60);
   return close;
 }
-function askText({title, sub = '', value = '', placeholder = '', ok = 'Keep it', extra = '', remove = null}, cb) {
+function askText({title, sub = '', value = '', placeholder = '', ok = 'Save', extra = '', remove = null}, cb) {
   sheet(`<h3>${title}</h3>${sub ? `<p>${sub}</p>` : ''}<textarea id="ask-t" placeholder="${esc(placeholder)}">${esc(value)}</textarea>${extra}<div class="row2"><button class="btn" data-x>${remove ? 'Remove' : 'Cancel'}</button><button class="btn primary" data-ok>${ok}</button></div>`, (sh, close) => {
     $('[data-ok]', sh).onclick = () => { cb($('#ask-t', sh).value.trim(), sh); close(); };
     $('[data-x]', sh).onclick = () => { if (remove) remove(); close(); };
   });
 }
 function confirmSheet(title, body, ok, cb) {
-  sheet(`<h3>${title}</h3><p>${body}</p><div class="row2"><button class="btn" data-x>Keep it</button><button class="btn primary" data-ok>${ok}</button></div>`, (sh, close) => {
+  sheet(`<h3>${title}</h3><p>${body}</p><div class="row2"><button class="btn" data-x>Cancel</button><button class="btn primary" data-ok>${ok}</button></div>`, (sh, close) => {
     $('[data-ok]', sh).onclick = () => { close(); cb(); };
     $('[data-x]', sh).onclick = close;
   });
@@ -757,7 +757,7 @@ function layoutTable(objs) {
 const SCENES = {};
 
 SCENES.title = () => ({
-  tone: 'butter', back: false, eyebrow: 'A small game about getting to know',
+  tone: 'butter', back: false, eyebrow: '',
   html: `<h1 class="display">Plot<br>Twist</h1>${IC.squiggle}<p class="lede">People are more than their biodata.</p>
   <div class="hero" aria-hidden="true">
     <div class="float" style="left:44%;top:6px;width:120px;height:150px;--r:6deg;transform:rotate(6deg)">${NOTEBOOK()}</div>
@@ -765,19 +765,19 @@ SCENES.title = () => ({
     <div class="note-w float" style="right:2%;top:150px;width:118px;--r:8deg;transform:rotate(8deg);animation-delay:-2s"><div class="note" style="font-size:15px;padding:10px 18px 12px 10px">What makes you laugh?</div></div>
   </div>
   <div class="actions"><button class="btn primary" data-go>${IC.arrow} Begin</button>
-  <button class="card-btn" data-settings><b>Privacy &amp; comfort settings</b><span>Motion · Sound · Haptics</span></button></div>`,
+  <button class="btn" data-settings>Settings</button></div>`,
   mount: r => { on(r, '[data-go]', () => go('chapters')); on(r, '[data-settings]', openSettings); }
 });
 
 SCENES.chapters = () => {
   const d = S.draft;
-  const ch1 = d?.opened ? 'Return to the table' : 'What makes me curious enough to get to know this person?';
+  const ch1 = d?.opened ? 'Back to the table' : 'Check a profile';
   return {
-    tone: 'cream', eyebrow: 'The shape of the story',
-    html: `<h1 class="t">Two chapters.<br>Your pace.</h1><p class="sub">Curiosity first. Experience after.</p>
+    tone: 'cream', eyebrow: '',
+    html: `<h1 class="t">Pick one.</h1>
     <button class="chapter" data-c="1"><div><h2>01 Filter In</h2><p>${ch1}</p></div><div class="pic">${'<div class="env" style="margin:0;width:100%;transform:rotate(8deg)"><div class="env-body">' + ENV_BODY + '</div><div class="env-front">' + ENV_FRONT + '</div><div class="env-flap">' + ENV_FLAP + '</div></div>'}</div></button>
     <hr class="dash">
-    <button class="chapter flip" data-c="2"><div class="pic" style="width:96px">${NOTEBOOK()}</div><div><h2>02 Continue?</h2><p>What have I experienced, and do I want to explore further?</p></div></button>
+    <button class="chapter flip" data-c="2"><div class="pic" style="width:96px">${NOTEBOOK()}</div><div><h2>02 Continue?</h2><p>After you meet</p></div></button>
     `,
     mount: r => {
       on(r, '[data-c="1"]', () => { const d = S.draft; go(d?.opened ? 'table' : 'arrival'); });
@@ -788,7 +788,7 @@ SCENES.chapters = () => {
 
 SCENES.arrival = () => ({
   tone: 'butter', eyebrow: '01 Filter In · Arrival',
-  html: `<h1 class="t">Someone has arrived. Well, their paperwork has.</h1>
+  html: `<h1 class="t">Someone’s here. Well, their paperwork is.</h1>
   <div class="env" id="env" role="button" tabindex="0" aria-label="Parcel. Drag the flap up or press Enter to open">
     <div class="env-body">${ENV_BODY}</div>
     <div class="env-paper"><span style="font-size:11px">Biodata</span><i></i><i style="width:70%"></i><i style="width:85%"></i></div>
@@ -838,12 +838,12 @@ SCENES.unfold = () => {
         <div class="panel"><p class="bd-om">॥ SHREE GANESHAYA NAMAH ॥</p><p class="bd-title">BIODATA</p>${rowHtml(rows.slice(0, third))}</div>
         <div class="panel shut">${rowHtml(rows.slice(third, third * 2))}</div>
         <div class="panel shut">${rowHtml(rows.slice(third * 2))}</div></div>`
-    : `<div class="fold"><span class="tape"></span><div class="panel"><div class="bd-empty">Your biodata<br>goes here</div></div><div class="panel"><b style="font:700 13px var(--sans)">No profile added yet</b><p style="font-size:11px;color:var(--paper-soft);margin:4px 0 8px">We won’t fill in the blanks.<br>Paperwork has enough opinions.</p></div></div>`;
+    : `<div class="fold"><span class="tape"></span><div class="panel"><div class="bd-empty">Nothing yet</div></div></div>`;
   return {
     tone: 'cream', eyebrow: '01 Filter In · Unfold',
-    html: `<h1 class="t">Paperwork, unfolded.</h1><p class="sub">A form can’t introduce a whole person.</p>${paper}
-    ${p ? `<p class="hint" id="fh">Tap to unfold</p><div class="actions"><button class="btn primary" id="unf">Unfold</button><div class="row2"><button class="btn link" id="fr">First read</button><button class="btn link" id="other">Different paperwork</button></div></div>`
-        : `<p class="hint">Only add a document you have permission to use.</p><div class="actions"><button class="btn primary" id="sample">Unfold the sample biodata</button><button class="btn" id="paste">${IC.plus} Add biodata</button><button class="btn" id="none">Continue without it</button><button class="btn link" id="filters">Set your filters</button></div>`}`,
+    html: `<h1 class="t">The biodata.</h1>${paper}
+    ${p ? `<p class="hint" id="fh">Tap to unfold</p><div class="actions"><button class="btn primary" id="unf">Unfold</button><div class="row2"><button class="btn link" id="fr">Filter check</button><button class="btn link" id="other">Try another</button></div></div>`
+        : `<div class="actions"><button class="btn primary" id="paste">${IC.plus} Add biodata</button><button class="btn" id="sample">Use a sample</button><button class="btn" id="none">Skip</button><button class="btn link" id="filters">Set your filters</button></div>`}`,
     mount: r => {
       on(r, '#sample', () => { d.profile = parseBiodata(SAMPLE); d.sample = true; d.placed = {}; d.seen = []; save(); go('read'); });
       on(r, '#filters', () => go('prefs'));
@@ -856,7 +856,7 @@ SCENES.unfold = () => {
       const step = () => {
         const shut = $('.panel.shut', fold);
         if (shut) { shut.classList.remove('shut'); sfx('page'); buzz(8); }
-        if (!$('.panel.shut', fold)) { btn.textContent = 'Unpack it'; $('#fh', r).textContent = 'Ready to unpack.'; }
+        if (!$('.panel.shut', fold)) { btn.textContent = 'Unpack it'; $('#fh', r).textContent = ''; }
       };
       fold.addEventListener('click', step);
       fold.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); step(); } });
@@ -868,16 +868,16 @@ SCENES.unfold = () => {
 };
 
 function pasteSheet() {
-  sheet(`<h3>Add a biodata</h3><p>One detail per line, like <i>Hobbies: reading</i>. Contact details are skipped.</p>
+  sheet(`<h3>Add a biodata</h3><p>One detail per line, e.g. <i>Hobbies: reading</i></p>
   <textarea id="bt" placeholder="Name: …&#10;Occupation: …&#10;Hobbies: …" style="min-height:180px"></textarea>
-  <label class="tog" style="border:0;padding:0"><span>I have permission to use this document.</span><input type="checkbox" class="sw" id="perm"></label>
-  <div class="row2"><button class="btn" data-x>Cancel</button><button class="btn primary" data-ok>Fold it up</button></div>`, (sh, close) => {
+  <label class="tog" style="border:0;padding:0"><span>I have permission to use this</span><input type="checkbox" class="sw" id="perm"></label>
+  <div class="row2"><button class="btn" data-x>Cancel</button><button class="btn primary" data-ok>Add</button></div>`, (sh, close) => {
     $('[data-x]', sh).onclick = close;
     $('[data-ok]', sh).onclick = () => {
       const t = $('#bt', sh).value;
-      if (!$('#perm', sh).checked) { toast('Tick the permission box first.'); return; }
+      if (!$('#perm', sh).checked) { toast('Tick the permission box'); return; }
       const p = parseBiodata(t);
-      if (!p.rows.length) { toast('No “Label: detail” lines found. Try one detail per line.'); return; }
+      if (!p.rows.length) { toast('Couldn’t read it. Try one detail per line.'); return; }
       const d = draft(); d.profile = p; d.sample = false; d.placed = {}; d.seen = []; save(); close(); go('read');
     };
   });
@@ -889,21 +889,21 @@ SCENES.table = (o) => {
   objs.forEach((ob, i) => { if (!d.placed[ob.id]) { const c = cells[i % cells.length]; d.placed[ob.id] = {x: c[0] + (rnd() - .5) * .08, y: c[1] + (rnd() - .5) * .06, r: Math.round(rnd() * 26 - 13)}; } });
   if (!objs.length) d.spaces = true;
   const pk = d.pocket.length;
-  const known = objs.length ? `Known · ${objs.length} things from the form` : 'Known · no details added';
+  const known = objs.length ? `${objs.length} things from the form` : 'Nothing added';
   return {
     tone: 'butter', eyebrow: '01 Filter In · The table',
-    html: `<h1 class="t">A little room<br>for curiosity.</h1><p class="sub">${objs.length ? 'Drag, turn, tap to look closer.' : 'No source, no assumptions.'}</p>
-    ${objs.length ? `<button class="status" id="rd">Your filters · ${VERDICT[evaluate(d.profile, prefs()).verdict].short}</button>` : ''}
+    html: `<h1 class="t">Take a look.</h1>
+    ${objs.length ? `<button class="status" id="rd">${VERDICT[evaluate(d.profile, prefs()).verdict].short}</button>` : ''}
     <p class="label">${known}</p>
     <div class="tabletop" id="tbl" style="aspect-ratio:4/${rows * 1.02}">
-      ${objs.length ? '' : `<button class="source" id="src"><small>Source paper</small>Add a biodata to unpack its details</button>`}
+      ${objs.length ? '' : `<button class="source" id="src">Add a biodata</button>`}
       ${objs.map(ob => `<button class="obj${d.seen.includes(ob.id) ? ' seen' : ''}${o.arriving ? ' packed' : ''}" data-id="${ob.id}" aria-label="${esc(ob.title)}. Tap to inspect, arrow keys to move." style="left:${d.placed[ob.id].x * 100}%;top:${d.placed[ob.id].y * 100}%;--r:${d.placed[ob.id].r}deg">${artFor(ob)}</button>`).join('')}
       ${d.spaces ? `<button class="space" id="space" style="left:${objs.length ? 12.5 : 70}%;top:${objs.length ? (rows - .5) / rows * 100 : 30}%" aria-label="An empty space. Some things don’t fit on a form.">?</button>` : ''}
       <button class="pocket" id="pocket" style="right:3%;bottom:2%" aria-label="Your pocket, ${pk} questions. Open the curiosity board.">${POCKET(pk)}</button>
     </div>
         <div class="actions">
-      <button class="btn primary" id="board">Follow a thread</button>
-      <div class="${d.spaces ? 'row2' : ''}">${d.spaces ? '<button class="btn" id="spaces">Things a form can’t hold</button>' : ''}<button class="btn" id="done" style="width:100%">Done unpacking</button></div>
+      <button class="btn primary" id="board">My questions</button>
+      <div class="${d.spaces ? 'row2' : ''}">${d.spaces ? '<button class="btn" id="spaces">Not on the form</button>' : ''}<button class="btn" id="done" style="width:100%">Done</button></div>
     </div>`,
     mount: r => {
       const tbl = $('#tbl', r), pocket = $('#pocket', r);
@@ -921,8 +921,8 @@ SCENES.table = (o) => {
             pocket.classList.remove('hot');
             if (over(e, pocket)) {
               const ob = objById(id);
-              if (ob.prompts.length && tuck(ob.prompts[0], id)) { toast('Tucked: “' + ob.prompts[0] + '”'); }
-              else toast(ob.prompts.length ? 'That question is already in your pocket.' : 'Nothing to ask here. Some details are just details.');
+              if (ob.prompts.length && tuck(ob.prompts[0], id)) { toast('Saved'); }
+              else toast(ob.prompts.length ? 'Already saved' : 'Nothing to ask here');
               d.placed[id].y = Math.max(.08, y - .14); place(el, x, d.placed[id].y);
               $('.cnt', pocket).textContent = d.pocket.length + ' in pocket';
             }
@@ -950,33 +950,33 @@ SCENES.inspect = (o) => {
   let pi = 0;
   const pos = d.placed[ob.id] || {r: 0};
   return {
-    tone: 'butter', eyebrow: '01 Filter In · Pick something up',
+    tone: 'butter', eyebrow: '01 Filter In · Inspect',
     html: `<h1 class="t">${esc(ob.title)}</h1>
     <div class="inspect">
       <div class="big" id="big" style="--r:${pos.r}deg" aria-hidden="true">${artFor(ob)}</div>
       <div class="rot"><button class="icon-btn" id="ccw" aria-label="Turn left">${IC.ccw}</button><button class="icon-btn" id="cw" aria-label="Turn right">${IC.cw}</button></div>
-      <div class="known"><p class="label">Known · from the form</p><ul>${ob.known.map(k => `<li>${esc(k)}</li>`).join('')}</ul></div>
-      <p class="label w">Wondering · a question, not a clue</p>
+      <div class="known"><p class="label">From the form</p><ul>${ob.known.map(k => `<li>${esc(k)}</li>`).join('')}</ul></div>
+      <p class="label w">A question</p>
       <div class="wrow"><div class="note-w" id="wn" tabindex="0" aria-label="Question note. Drag to the pocket or use Save to pocket."><div class="note" id="wt"></div></div>
       <button class="pocket" id="pk" aria-label="Pocket">${POCKET(d.pocket.length)}</button></div>
     </div>
         <div class="actions">
-      <button class="btn primary" id="save">Save to pocket</button>
-      <div class="row2"><button class="btn" id="own">${IC.pen} Write my own</button><button class="btn" id="another">Another question</button></div>
-      <button class="btn link" id="leave">Leave it here</button>
+      <button class="btn primary" id="save">Save</button>
+      <div class="row2"><button class="btn" id="own">${IC.pen} Write my own</button><button class="btn" id="another">Another</button></div>
+      <button class="btn link" id="leave">Back</button>
     </div>`,
     mount: r => {
       const big = $('#big', r), wt = $('#wt', r), wn = $('#wn', r), pk = $('#pk', r);
       const show = () => {
         const q = ob.prompts[pi];
-        wt.innerHTML = q ? esc(q) : 'No question needed.<small>Some details are just details.</small>';
+        wt.innerHTML = q ? esc(q) : 'Nothing to ask here.';
         const inPocket = q && d.pocket.some(n => n.text === q);
-        $('#save', r).textContent = inPocket ? 'In your pocket' : 'Save to pocket';
+        $('#save', r).textContent = inPocket ? 'Saved' : 'Save';
         $('#save', r).disabled = !q || inPocket; $('#save', r).style.opacity = (!q || inPocket) ? .55 : 1;
         $('#another', r).hidden = ob.prompts.length < 2;
       };
       show();
-      if (firstReveal) setTimeout(() => toast('Something new on the table: an empty space.'), 500);
+      if (firstReveal) setTimeout(() => toast('New on the table'), 500);
       const turn = deg => { pos.r = ((pos.r || 0) + deg); big.style.setProperty('--r', pos.r + 'deg'); sfx('lift'); save(); };
       on(r, '#ccw', () => turn(-30)); on(r, '#cw', () => turn(30));
       let px = null, r0 = 0;
@@ -986,12 +986,12 @@ SCENES.inspect = (o) => {
       big.addEventListener('pointerup', up); big.addEventListener('pointercancel', up);
       const keep = () => {
         const q = ob.prompts[pi]; if (!q) return;
-        if (tuck(q, ob.id)) { toast('Saved to your pocket.'); $('.cnt', pk).textContent = d.pocket.length + ' in pocket'; pk.classList.add('hot'); setTimeout(() => pk.classList.remove('hot'), 350); }
+        if (tuck(q, ob.id)) { toast('Saved'); $('.cnt', pk).textContent = d.pocket.length + ' in pocket'; pk.classList.add('hot'); setTimeout(() => pk.classList.remove('hot'), 350); }
         show();
       };
       on(r, '#save', keep);
       on(r, '#another', () => { pi = (pi + 1) % ob.prompts.length; wn.style.transform = 'rotate(4deg) translateY(-6px)'; setTimeout(() => wn.style.transform = '', 220); sfx('page'); show(); });
-      on(r, '#own', () => askText({title: 'Write your own question', sub: 'It stays a question. It won’t be treated as a fact about them.', placeholder: 'I wonder…', ok: 'Tuck it in'}, t => { if (t && tuck(t, ob.id)) { toast('Your question is in the pocket.'); $('.cnt', pk).textContent = d.pocket.length + ' in pocket'; } }));
+      on(r, '#own', () => askText({title: 'Your question', placeholder: 'I wonder…', ok: 'Save'}, t => { if (t && tuck(t, ob.id)) { toast('Saved'); $('.cnt', pk).textContent = d.pocket.length + ' in pocket'; } }));
       on(r, '#leave', back);
       // drag the note into the pocket
       let sx = 0, sy = 0, pid = null;
@@ -1008,26 +1008,24 @@ SCENES.inspect = (o) => {
 SCENES.board = () => {
   const d = draft();
   return {
-    tone: 'sage', eyebrow: '01 Filter In · Follow a thread',
-    html: `<h1 class="t">Let curiosity wander.</h1><p class="sub">No set to complete.</p>
-    <p class="label">Wondering · player-chosen</p>
-    <div class="board" id="bd">${d.pocket.length ? d.pocket.map(n => `<div class="pin" data-id="${n.id}" tabindex="0" role="button" aria-label="${esc(n.text)}. Tap to edit, arrow keys to move." style="left:${n.x * 100}%;top:${n.y * 100}%;--r:${n.r}deg"><div class="note-w"><div class="note ${n.c}">${esc(n.text)}${n.src && objById(n.src) ? `<small>from ${esc(objById(n.src).title.replace(/^An? /, '').toLowerCase())}</small>` : n.src === 'space' ? '<small>from an empty space</small>' : ''}</div></div></div>`).join('')
-      : `<div class="empty">Nothing pinned yet.<br>Pick something up from the table, or write your own.</div>`}</div>
-    <p class="hint">Drag anywhere · tap to edit</p>
-    <div class="actions"><button class="btn primary" id="carry">Carry these questions</button>
-    <div class="row2"><button class="btn" id="own">${IC.pen} Write my own</button><button class="btn" id="tbl">Back to the table</button></div></div>`,
+    tone: 'sage', eyebrow: '01 Filter In · Questions',
+    html: `<h1 class="t">Your questions.</h1>
+    <div class="board" id="bd">${d.pocket.length ? d.pocket.map(n => `<div class="pin" data-id="${n.id}" tabindex="0" role="button" aria-label="${esc(n.text)}. Tap to edit, arrow keys to move." style="left:${n.x * 100}%;top:${n.y * 100}%;--r:${n.r}deg"><div class="note-w"><div class="note ${n.c}">${esc(n.text)}${n.src && objById(n.src) ? `<small>from ${esc(objById(n.src).title.replace(/^An? /, '').toLowerCase())}</small>` : n.src === 'space' ? '' : ''}</div></div></div>`).join('')
+      : `<div class="empty">Nothing here yet.</div>`}</div>
+        <div class="actions"><button class="btn primary" id="carry">Done</button>
+    <div class="row2"><button class="btn" id="own">${IC.pen} Write my own</button><button class="btn" id="tbl">Table</button></div></div>`,
     mount: r => {
       const bd = $('#bd', r);
       $$('.pin', r).forEach(el => {
         const n = d.pocket.find(x => x.id === el.dataset.id);
         drag(el, {stage: bd, min: .1, max: .9, get: () => n, set: (x, y) => { n.x = x; n.y = y; place(el, x, y); }, end: save,
-          tap: () => sheet(`<h3>Edit this question</h3><textarea id="et">${esc(n.text)}</textarea><div class="swatches">${NOTE_COLORS.map((c, i) => `<button aria-label="Colour ${i + 1}" data-c="${c}" aria-pressed="${n.c === c}" style="background:var(--n-${c || 'butter'})"></button>`).join('')}</div><div class="row2"><button class="btn" data-rm>Let it go</button><button class="btn primary" data-ok>Keep it</button></div>`, (sh, close) => {
+          tap: () => sheet(`<h3>Edit</h3><textarea id="et">${esc(n.text)}</textarea><div class="swatches">${NOTE_COLORS.map((c, i) => `<button aria-label="Colour ${i + 1}" data-c="${c}" aria-pressed="${n.c === c}" style="background:var(--n-${c || 'butter'})"></button>`).join('')}</div><div class="row2"><button class="btn" data-rm>Remove</button><button class="btn primary" data-ok>Keep it</button></div>`, (sh, close) => {
             on(sh, '[data-c]', (e, b) => { n.c = b.dataset.c; $$('[data-c]', sh).forEach(x => x.setAttribute('aria-pressed', x === b)); });
             $('[data-ok]', sh).onclick = () => { const t = $('#et', sh).value.trim(); if (t) n.text = t; close(); render(); };
             $('[data-rm]', sh).onclick = () => { d.pocket = d.pocket.filter(x => x !== n); d.kept = (d.kept || []).filter(t => t !== n.text); close(); render(); };
           })});
       });
-      on(r, '#own', () => askText({title: 'Write your own question', placeholder: 'I wonder…', ok: 'Pin it'}, t => { if (t) { tuck(t, 'own'); render(); } }));
+      on(r, '#own', () => askText({title: 'Your question', placeholder: 'I wonder…', ok: 'Save'}, t => { if (t) { tuck(t, 'own'); render(); } }));
       on(r, '#tbl', () => go('table'));
       on(r, '#carry', () => go('pack'));
     }
@@ -1037,17 +1035,16 @@ SCENES.board = () => {
 SCENES.spaces = () => {
   const d = draft(); d.kept = d.kept || [];
   return {
-    tone: 'sage', eyebrow: '01 Filter In · Room for the unwritten',
-    html: `<h1 class="t">Some things don’t fit in a form.</h1><p class="sub">Invitations, not missing fields.</p>
-    <p class="label">Wondering</p>
-    <div class="sil-wrap">${SPACES.map((q, i) => `<button class="sil${d.kept.includes(q) ? ' kept' : ''}" data-i="${i}" aria-pressed="${d.kept.includes(q)}">${esc(q)}<small>${d.kept.includes(q) ? 'kept in your pocket' : 'an empty space'}</small></button>`).join('')}</div>
-    <p class="hint">Tap one to keep it.</p>
-    <div class="actions row2"><button class="btn" id="keep">Keep wondering</button><button class="btn" id="skip">Skip freely</button></div>`,
+    tone: 'sage', eyebrow: '01 Filter In · Not on the form',
+    html: `<h1 class="t">Not on the form.</h1>
+    <div class="sil-wrap">${SPACES.map((q, i) => `<button class="sil${d.kept.includes(q) ? ' kept' : ''}" data-i="${i}" aria-pressed="${d.kept.includes(q)}">${esc(q)}<small>${d.kept.includes(q) ? 'saved' : ''}</small></button>`).join('')}</div>
+    <p class="hint">Tap to save</p>
+    <div class="actions row2"><button class="btn" id="keep">My questions</button><button class="btn" id="skip">Back</button></div>`,
     mount: r => {
       on(r, '.sil', (e, b) => {
         const q = SPACES[+b.dataset.i];
-        if (d.kept.includes(q)) { d.kept = d.kept.filter(x => x !== q); d.pocket = d.pocket.filter(n => n.text !== q); b.classList.remove('kept'); b.setAttribute('aria-pressed', false); $('small', b).textContent = 'an empty space'; sfx('page'); }
-        else { d.kept.push(q); tuck(q, 'space'); b.classList.add('kept'); b.setAttribute('aria-pressed', true); $('small', b).textContent = 'kept in your pocket'; }
+        if (d.kept.includes(q)) { d.kept = d.kept.filter(x => x !== q); d.pocket = d.pocket.filter(n => n.text !== q); b.classList.remove('kept'); b.setAttribute('aria-pressed', false); $('small', b).textContent = ''; sfx('page'); }
+        else { d.kept.push(q); tuck(q, 'space'); b.classList.add('kept'); b.setAttribute('aria-pressed', true); $('small', b).textContent = 'saved'; }
         save();
       });
       on(r, '#keep', () => go('board'));
@@ -1063,15 +1060,14 @@ SCENES.pack = (o) => {
   d.packSel = d.packSel || d.pocket.map(n => n.id);
   return {
     tone: 'butter', eyebrow: '01 Filter In · Packing up',
-    html: `<h1 class="t">A question to carry.</h1><p class="sub">${packing ? 'Leave anything out.' : 'No need to decide what comes next.'}</p>
-    <p class="label">Wondering · saved to pocket</p>
-    <div class="boxstage" id="bs">${top ? `<div class="note-w"><div class="note ${top.c}" style="font-size:17px">${esc(top.text)}</div></div>` : ''}<div class="box">${BOX(d.pocket.length ? 'still wondering' : 'nothing yet')}</div></div>
-    ${packing ? `<div class="chips">${d.pocket.map(n => `<button class="chip" data-id="${n.id}" aria-pressed="${d.packSel.includes(n.id)}">${esc(n.text)}</button>`).join('') || '<p class="hint">Your pocket is empty. The box can travel empty too.</p>'}</div>
-      <div class="field"><label for="bkname">Name on the scrapbook</label><input id="bkname" value="${esc(d.profile?.name || '')}" placeholder="A first name, initials, anything"></div>
+    html: `<h1 class="t">${packing ? 'Pack your questions.' : 'What next?'}</h1>
+    <div class="boxstage" id="bs">${top ? `<div class="note-w"><div class="note ${top.c}" style="font-size:17px">${esc(top.text)}</div></div>` : ''}<div class="box">${BOX(d.pocket.length ? 'questions' : 'empty')}</div></div>
+    ${packing ? `<div class="chips">${d.pocket.map(n => `<button class="chip" data-id="${n.id}" aria-pressed="${d.packSel.includes(n.id)}">${esc(n.text)}</button>`).join('') || '<p class="hint">No questions saved</p>'}</div>
+      <div class="field"><label for="bkname">Name</label><input id="bkname" value="${esc(d.profile?.name || '')}" placeholder="Name"></div>
       <div class="actions"><button class="btn primary" id="close">Close the box</button></div>`
     : `      <div class="actions"><button class="btn" id="leave">Leave for now</button><button class="btn" id="arch">Archive</button><button class="btn" id="know">Get to know them</button></div>`}`,
     mount: r => {
-      on(r, '#leave', () => { toast('Left on the table. It’ll be here.'); go('chapters', {}, 'reset'); });
+      on(r, '#leave', () => { toast('Saved for later'); go('chapters', {}, 'reset'); });
       on(r, '#arch', archiveDraft);
       on(r, '#know', () => { d.packSel = d.pocket.map(n => n.id); go('pack', {packing: true}, 'replace'); });
       on(r, '.chip', (e, b) => {
@@ -1090,7 +1086,7 @@ SCENES.pack = (o) => {
         S.books.unshift(book);
         S.draft = null; // the paperwork itself isn't kept: only what you chose to carry
         $('#bs', r).classList.add('closed'); sfx('open'); buzz(14);
-        setTimeout(() => { toast('Packed. The paperwork stays behind.'); go('after', {book: book.id}, 'reset'); }, S.settings.reduced ? 100 : 900);
+        setTimeout(() => { toast('Packed'); go('after', {book: book.id}, 'reset'); }, S.settings.reduced ? 100 : 900);
       });
     }
   };
@@ -1099,7 +1095,7 @@ SCENES.pack = (o) => {
 function archiveDraft() {
   const d = draft();
   S.archived.unshift({id: d.id, name: d.profile?.name || 'Unnamed paperwork', at: Date.now(), draft: d});
-  S.draft = null; save(); toast('Archived. Find it in settings.'); go('chapters', {}, 'reset');
+  S.draft = null; save(); toast('Archived'); go('chapters', {}, 'reset');
 }
 
 SCENES.read = () => {
@@ -1108,15 +1104,15 @@ SCENES.read = () => {
   const ev = evaluate(p, prefs()), v = VERDICT[ev.verdict];
   const mark = {ok: '✓', no: '✕', un: '?'};
   return {
-    tone: 'butter', eyebrow: '01 Filter In · First read',
-    html: `<h1 class="t">${v.t}</h1><p class="sub">Your filters against what the form says. Nothing inferred.</p>
+    tone: 'butter', eyebrow: '01 Filter In · Filter check',
+    html: `<h1 class="t">${v.t}</h1>
     <div class="fold readpaper"><span class="tape"></span><div class="panel"><p class="bd-om">॥ SHREE GANESHAYA NAMAH ॥</p><p class="bd-title">BIODATA</p>${p.rows.slice(0, 7).map(x => `<div class="bd-row${x.hide ? ' hide' : ''}"><b>${esc(x.k)}</b><span>${esc(x.v)}</span></div>`).join('')}</div><span class="stamp-mark" style="--sc:${v.c}">${v.stamp}</span></div>
-    <div class="suff${ev.sufficient ? '' : ' thin'}"><b>${ev.sufficient ? 'Enough to go on' : 'Thin paperwork'}</b><span>${ev.present} of ${ev.total} basics${ev.missing.length ? `<br>missing ${ev.missing.join(', ')}` : ''}</span></div>
+    <div class="suff${ev.sufficient ? '' : ' thin'}"><b>${ev.sufficient ? 'Enough info' : 'Not much info'}</b><span>${ev.present}/${ev.total}${ev.missing.length ? `<br>missing ${ev.missing.join(', ')}` : ''}</span></div>
     ${ev.checks.length ? `<p class="label">Your filters</p><div class="checks">${ev.checks.map(c => `<div class="ck ${c.status}"><i>${mark[c.status]}</i><div>${c.label}<span>${esc(c.detail)}</span></div><em>${c.imp === 'must' ? 'Must' : 'Nice'}</em></div>`).join('')}</div>` : ''}
     <div class="actions">${ev.verdict === 'noprefs'
-      ? `<button class="btn primary" id="pf">Set your filters</button><button class="btn" id="go">Unfold &amp; unpack</button>`
-      : `<button class="btn primary" id="go">Unfold &amp; unpack</button><div class="row2"><button class="btn" id="pf">Edit filters</button><button class="btn" id="ar">Archive</button></div>`}
-      <button class="btn link" id="other">Different paperwork</button></div>`,
+      ? `<button class="btn primary" id="pf">Set your filters</button><button class="btn" id="go">Open it</button>`
+      : `<button class="btn primary" id="go">Open it</button><div class="row2"><button class="btn" id="pf">Edit filters</button><button class="btn" id="ar">Archive</button></div>`}
+      <button class="btn link" id="other">Try another</button></div>`,
     mount: r => {
       if (!S.settings.reduced) setTimeout(() => { sfx('drop'); buzz(20); }, 450);
       say(v.t);
@@ -1136,13 +1132,13 @@ SCENES.prefs = () => {
   const txt = (f, val, ph) => `<input data-f="${f}" value="${esc(val)}" placeholder="${ph}" aria-label="${ph}">`;
   return {
     tone: 'cream', eyebrow: '01 Filter In · Your filters',
-    html: `<h1 class="t">Your filters.</h1><p class="sub">Set by you. Kept on this device.</p>
+    html: `<h1 class="t">Your filters.</h1>
     ${card('age', 'Age', `<div class="row2"><input type="number" inputmode="numeric" data-f="age.min" value="${P.age.min}" placeholder="From" aria-label="Age from"><input type="number" inputmode="numeric" data-f="age.max" value="${P.age.max}" placeholder="To" aria-label="Age to"></div>`)}
     ${card('height', 'Height', `<div class="row2">${hsel('height.min', P.height.min, 'From')}${hsel('height.max', P.height.max, 'To')}</div>`)}
     ${card('diet', 'Diet', `<div class="seg">${DIETS.map(x => `<button data-diet="${x}" aria-pressed="${P.diet.ok.includes(x)}">${x}</button>`).join('')}</div>`)}
     ${card('place', 'Location', txt('place.list', P.place.list, 'Pune, Mumbai'))}
     ${card('edu', 'Education', txt('edu.list', P.edu.list, 'MBA, B.Tech'))}
-    ${card('comm', 'Community', txt('comm.list', P.comm.list, 'Any words to look for'))}
+    ${card('comm', 'Community', txt('comm.list', P.comm.list, 'Words to look for'))}
     ${card('manglik', 'Manglik', `<div class="seg">${['No', 'Yes'].map(x => `<button data-mg="${x}" aria-pressed="${P.manglik.want === x}">${x}</button>`).join('')}</div>`)}
     ${card('interests', 'Interests', txt('interests.list', P.interests.list, 'reading, music'))}
     <div class="actions"><button class="btn primary" id="done">Done</button></div>`,
@@ -1163,19 +1159,19 @@ SCENES.prefs = () => {
 /* ---------- Part Two ---------- */
 const bookById = id => S.books.find(b => b.id === id);
 const COVERS = ['#E9B9B3', '#B5C7A9', '#F0DC9A', '#BCD0E0'];
-const statusText = s => ({unfinished: 'Still unfinished', continuing: 'You chose to continue', paused: 'Paused', closed: 'Chapter closed'}[s] || 'Still unfinished');
+const statusText = s => ({unfinished: 'Open', continuing: 'Continuing', paused: 'Paused', closed: 'Closed'}[s] || 'Open');
 
 SCENES.shelf = () => ({
-  tone: 'pink', eyebrow: '02 Continue? · Your books',
-  html: `<h1 class="t">Your scrapbooks.</h1><p class="sub">One connection, one book.</p>
+  tone: 'pink', eyebrow: '02 Continue? · Scrapbooks',
+  html: `<h1 class="t">Your scrapbooks.</h1>
   ${S.books.length ? `<div class="shelf">${S.books.map((b, i) => `<button class="bk" data-id="${b.id}"><div class="cover">${NOTEBOOK(COVERS[i % 4], DOODLES[i % 4])}<span class="name">${esc(b.name)}</span></div>${b.pages.length} encounter${b.pages.length === 1 ? '' : 's'}<span class="st">${b.example ? 'Example · ' : ''}${statusText(b.status)}</span></button>`).join('')}</div>`
     : `<div class="nb-stage" style="height:220px"><div class="nb" style="left:24%;width:52%">${'<div class="cover">' + NOTEBOOK() + '</div>'}</div></div><p class="hint">No scrapbooks yet.</p>`}
   <div class="actions"><button class="btn primary" id="add">${IC.plus} Add a scrapbook</button>
-  ${S.books.some(b => b.example) ? '' : '<button class="btn" id="ex">Peek at an example book</button>'}
-  <button class="btn link" id="priv">Privacy &amp; deleting scrapbooks</button></div>`,
+  ${S.books.some(b => b.example) ? '' : '<button class="btn" id="ex">See an example</button>'}
+  <button class="btn link" id="priv">Privacy</button></div>`,
   mount: r => {
     on(r, '.bk', (e, b) => { S.ui.tab = 0; go('book', {book: b.dataset.id}); });
-    on(r, '#add', () => askText({title: 'A new scrapbook', sub: 'No paperwork needed. What should the cover say?', placeholder: 'A first name or initials', ok: 'Make the book'}, t => {
+    on(r, '#add', () => askText({title: 'New scrapbook', placeholder: 'Name', ok: 'Create'}, t => {
       const b = {id: uid(), name: (t || 'Someone').slice(0, 24), created: Date.now(), status: 'unfinished', questions: [], pages: []};
       S.books.unshift(b); save(); go('after', {book: b.id});
     }));
@@ -1188,14 +1184,13 @@ SCENES.after = (o) => {
   const b = bookById(o.book); if (!b) return SCENES.shelf();
   const q = b.questions[0];
   return {
-    tone: 'pink', eyebrow: '02 Continue? · After the encounter',
-    html: `<h1 class="t">So, what happened?</h1><p class="sub">Optional, private, in your own words.</p>
-    <div class="nb-stage"><div class="nb" id="nb"><div class="inner"><span class="label" style="color:var(--paper-soft)">Encounter ${pad(b.pages.length + 1)}</span><br>A page for what you experienced.</div><div class="cover" id="cv" role="button" tabindex="0" aria-label="Open the scrapbook">${NOTEBOOK('#E9B9B3')}<span class="nb-label">${esc(b.name)}:<br>an encounter, unfolding</span></div></div>
+    tone: 'pink', eyebrow: '02 Continue? · After',
+    html: `<h1 class="t">So, what happened?</h1>
+    <div class="nb-stage"><div class="nb" id="nb"><div class="inner"><span class="label" style="color:var(--paper-soft)">Encounter ${pad(b.pages.length + 1)}</span></div><div class="cover" id="cv" role="button" tabindex="0" aria-label="Open the scrapbook">${NOTEBOOK('#E9B9B3')}<span class="nb-label">${esc(b.name)}</span></div></div>
     ${q ? `<div class="note-w" style="position:absolute;left:0;bottom:22%;width:150px;transform:rotate(-12deg);z-index:3"><div class="note" style="font-size:14px;padding:10px 18px 12px 10px">${esc(q.text)}</div></div>` : ''}
     <div class="kbox">${BOX(b.questions.length ? b.questions.length + ' question' + (b.questions.length > 1 ? 's' : '') : 'keepsakes')}</div></div>
-    <p class="label">What kind of encounter? · optional</p>
-    <div class="seg" id="kind">${['A call', 'Messages', 'A conversation', 'A date', 'Something else'].map(k => `<button aria-pressed="false">${k}</button>`).join('')}</div>
-        <div class="actions"><button class="btn primary" id="start">Start a page</button><button class="btn" id="blank">Leave blank</button></div>`,
+        <div class="seg" id="kind">${['A call', 'Messages', 'A conversation', 'A date', 'Something else'].map(k => `<button aria-pressed="false">${k}</button>`).join('')}</div>
+        <div class="actions"><button class="btn primary" id="start">Start a page</button><button class="btn" id="blank">Not now</button></div>`,
     mount: r => {
       let kind = '';
       on(r, '#kind button', (e, btn) => { const was = btn.getAttribute('aria-pressed') === 'true'; $$('#kind button', r).forEach(x => x.setAttribute('aria-pressed', 'false')); btn.setAttribute('aria-pressed', String(!was)); kind = was ? '' : btn.textContent; });
@@ -1215,7 +1210,7 @@ SCENES.after = (o) => {
   };
 };
 const defaultFragments = () => [
-  {id: uid(), prompt: 'What part stayed with you?', text: '', who: 'them', x: .4, y: .2, r: -2, b: ''},
+  {id: uid(), prompt: 'What stuck with you?', text: '', who: 'them', x: .4, y: .2, r: -2, b: ''},
   {id: uid(), prompt: 'Something you didn’t ask?', text: '', who: 'me', x: .6, y: .52, r: 2, b: 'var(--n-butter)'},
   {id: uid(), prompt: 'Anything surprising?', text: '', who: 'them', x: .4, y: .82, r: -1, b: 'var(--n-blue)'}
 ];
@@ -1225,12 +1220,11 @@ SCENES.fragments = (o) => {
   const b = bookById(o.book), pg = b && curPage(b); if (!pg) return SCENES.shelf();
   const bub = f => `<div class="bub ${f.who === 'me' ? 'me' : ''}${f.who === 'pause' ? ' pause' : ''}" data-id="${f.id}" tabindex="0" role="button" aria-label="${esc(f.text || f.prompt)}. Tap to write, arrow keys to move." style="left:${f.x * 100}%;top:${f.y * 100}%;--r:${f.r}deg;${f.b ? `--b:${f.b}` : ''}">${f.who === 'pause' && !f.text ? '<span class="pr">…a pause</span>' : f.text ? esc(f.text) : `<span class="pr">${esc(f.prompt)}</span>`}${f.text && f.prompt ? `<small>${esc(f.prompt)}</small>` : ''}</div>`;
   return {
-    tone: 'pink', eyebrow: '02 Continue? · Words that linger',
-    html: `<h1 class="t">Keep a fragment.<br>Or a pause.</h1><p class="sub">A little is enough. Blank is, too.</p>
-    <p class="label">Experienced · your words</p>
+    tone: 'pink', eyebrow: '02 Continue? · Words',
+    html: `<h1 class="t">What was said?</h1>
     <div class="page drop" id="pg">${pg.fragments.map(bub).join('')}</div>
     <p class="hint">Tap a bubble to write</p>
-    <div class="actions"><button class="btn primary" id="next">Keep this page</button><div class="row2"><button class="btn" id="add">${IC.plus} Add my fragment</button><button class="btn" id="skip">Leave blank</button></div></div>`,
+    <div class="actions"><button class="btn primary" id="next">Next</button><div class="row2"><button class="btn" id="add">${IC.plus} Add</button><button class="btn" id="skip">Skip</button></div></div>`,
     mount: r => {
       const st = $('#pg', r);
       $$('.bub', r).forEach(el => {
@@ -1244,9 +1238,9 @@ SCENES.fragments = (o) => {
     }
   };
   function editFragment(f, isNew) {
-    sheet(`<h3>${esc(f.prompt || 'A fragment')}</h3><p>Write it the way you remember it. A word is plenty.</p><textarea id="ft" placeholder="They said… / I said… / We both…">${esc(f.text)}</textarea>
-    <div class="seg" id="who">${[['them', 'Their words'], ['me', 'My words'], ['pause', 'A pause']].map(([k, l]) => `<button data-w="${k}" aria-pressed="${f.who === k}">${l}</button>`).join('')}</div>
-    <div class="row2"><button class="btn" data-rm>Remove</button><button class="btn primary" data-ok>Keep it</button></div>`, (sh, close) => {
+    sheet(`<h3>${esc(f.prompt || 'A fragment')}</h3><textarea id="ft" placeholder="They said… / I said… / We both…">${esc(f.text)}</textarea>
+    <div class="seg" id="who">${[['them', 'Them'], ['me', 'Me'], ['pause', 'Pause']].map(([k, l]) => `<button data-w="${k}" aria-pressed="${f.who === k}">${l}</button>`).join('')}</div>
+    <div class="row2"><button class="btn" data-rm>Remove</button><button class="btn primary" data-ok>Save</button></div>`, (sh, close) => {
       on(sh, '[data-w]', (e, x) => { f.who = x.dataset.w; $$('[data-w]', sh).forEach(y => y.setAttribute('aria-pressed', y === x)); });
       $('[data-ok]', sh).onclick = () => { f.text = $('#ft', sh).value.trim(); close(); save(); render(); };
       $('[data-rm]', sh).onclick = () => { pg.fragments = pg.fragments.filter(x => x !== f); close(); save(); render(); };
@@ -1259,20 +1253,19 @@ SCENES.moments = (o) => {
   let sel = null;
   const tokHtml = (t, i) => `<button class="tok" data-id="${t.id}" aria-label="${esc(t.label)}${t.note ? ': ' + esc(t.note) : ''}. Tap to add a note, arrow keys to move." style="left:${t.x * 100}%;top:${t.y * 100}%;--r:${t.r}deg">${tokenSvg(t.type, i)}<span>${esc(t.label)}</span>${t.note ? '<i class="nt"></i>' : ''}</button>`;
   return {
-    tone: 'pink', eyebrow: '02 Continue? · A moment has many shapes',
-    html: `<h1 class="t">What shape was the moment?</h1><p class="sub">Every feeling gets the same room.</p>
-    <p class="label">Experienced · optional moment tokens</p>
-    <div class="page drop" id="mp" style="aspect-ratio:1/.82">${pg.tokens.map(tokHtml).join('')}${pg.tokens.length ? '' : '<div class="empty" style="font-size:14px">Your page. Place a moment anywhere.</div>'}</div>
+    tone: 'pink', eyebrow: '02 Continue? · Moments',
+    html: `<h1 class="t">How did it feel?</h1>
+    <div class="page drop" id="mp" style="aspect-ratio:1/.82">${pg.tokens.map(tokHtml).join('')}</div>
     <div class="tray" id="tray">${Object.keys(TOKENS).map((k, i) => `<button data-t="${k}" aria-pressed="false">${tokenSvg(k, i)}${TOKENS[k].label}</button>`).join('')}</div>
-    <p class="hint" id="mh">Drag a token onto the page, or tap then place.</p>
-    <div class="actions row2"><button class="btn primary" id="next">Keep this page</button><button class="btn" id="skip">Leave blank</button></div>`,
+    <p class="hint" id="mh">Drag a token onto the page</p>
+    <div class="actions row2"><button class="btn primary" id="next">Next</button><button class="btn" id="skip">Skip</button></div>`,
     mount: r => {
       const mp = $('#mp', r), mh = $('#mh', r);
       let sel_label = '';
       const bindTok = el => {
         const t = pg.tokens.find(x => x.id === el.dataset.id);
         drag(el, {stage: mp, min: .08, max: .92, get: () => t, set: (x, y) => { t.x = x; t.y = y; place(el, x, y); }, end: save,
-          tap: () => askText({title: t.label, sub: 'What was this moment? Optional.', value: t.note || '', placeholder: 'When…', ok: 'Keep note', remove: () => { pg.tokens = pg.tokens.filter(x => x !== t); save(); render(); }}, txt => { t.note = txt; save(); render(); })});
+          tap: () => askText({title: t.label, value: t.note || '', placeholder: 'Add a note', ok: 'Save', remove: () => { pg.tokens = pg.tokens.filter(x => x !== t); save(); render(); }}, txt => { t.note = txt; save(); render(); })});
       };
       $$('.tok', r).forEach(bindTok);
       const addTok = (type, x, y, label) => {
@@ -1285,7 +1278,7 @@ SCENES.moments = (o) => {
       };
       const choose = (type, then) => {
         if (type !== 'custom') return then(TOKENS[type].label);
-        askText({title: 'A custom moment', sub: 'Name it in your own words.', placeholder: 'e.g. the long walk back', ok: 'Make token'}, t => { if (t) then(t.slice(0, 22)); });
+        askText({title: 'Your own', placeholder: 'e.g. the walk back', ok: 'Add'}, t => { if (t) then(t.slice(0, 22)); });
       };
       $$('#tray button', r).forEach(btn => {
         const type = btn.dataset.t; let pid = null, sx = 0, sy = 0, ghost = null;
@@ -1308,17 +1301,17 @@ SCENES.moments = (o) => {
           if (e.type !== 'pointerup') return;
           const was = sel === type;
           $$('#tray button', r).forEach(x => x.setAttribute('aria-pressed', 'false'));
-          if (was) { sel = null; mh.innerHTML = 'Tap a token, then tap the page.'; return; }
-          choose(type, label => { sel = type; sel_label = label; btn.setAttribute('aria-pressed', 'true'); mh.textContent = `Now tap the page to place “${label}”.`; });
+          if (was) { sel = null; mh.textContent = 'Drag a token onto the page'; return; }
+          choose(type, label => { sel = type; sel_label = label; btn.setAttribute('aria-pressed', 'true'); mh.textContent = 'Tap the page'; });
         };
         btn.addEventListener('pointerup', up); btn.addEventListener('pointercancel', up);
-        btn.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); choose(type, label => { addTok(type, .2 + rnd() * .6, .2 + rnd() * .6, label); say(label + ' placed on the page.'); }); } });
+        btn.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); choose(type, label => { addTok(type, .2 + rnd() * .6, .2 + rnd() * .6, label); say(label + ' placed'); }); } });
       });
       mp.addEventListener('click', e => {
         if (!sel || e.target.closest('.tok')) return;
         const rc = mp.getBoundingClientRect();
         addTok(sel, clamp((e.clientX - rc.left) / rc.width, .08, .92), clamp((e.clientY - rc.top) / rc.height, .08, .92), sel_label);
-        sel = null; $$('#tray button', r).forEach(x => x.setAttribute('aria-pressed', 'false')); mh.textContent = 'Placed. Drag it anywhere, or tap it to add a note.';
+        sel = null; $$('#tray button', r).forEach(x => x.setAttribute('aria-pressed', 'false')); mh.textContent = 'Tap it to add a note';
       });
       on(r, '#next', () => { S.ui.q = 0; go('thennow', {book: b.id}); });
       on(r, '#skip', () => { S.ui.q = 0; go('thennow', {book: b.id}); });
@@ -1330,29 +1323,27 @@ SCENES.thennow = (o) => {
   const b = bookById(o.book), pg = b && curPage(b); if (!pg) return SCENES.shelf();
   const qs = b.questions, pIdx = b.pages.indexOf(pg);
   if (!qs.length) return {
-    tone: 'pink', eyebrow: '02 Continue? · Expectation & reality',
-    html: `<h1 class="t">Then, and now.</h1><p class="sub">Nothing was carried over. That’s fine.</p>
-    <div class="actions"><button class="btn" id="addq">${IC.pen} Add a question to carry</button><button class="btn primary" id="next">Turn the page</button></div>`,
-    mount: r => { on(r, '#addq', () => askText({title: 'A question to carry', placeholder: 'I wonder…', ok: 'Carry it'}, t => { if (t) { b.questions.push({id: uid(), text: t, history: [], obj: null}); save(); render(); } })); on(r, '#next', () => go('nextpage', {book: b.id})); }
+    tone: 'pink', eyebrow: '02 Continue? · Then vs now',
+    html: `<h1 class="t">Then vs now.</h1><p class="sub">No questions carried over.</p>
+    <div class="actions"><button class="btn" id="addq">${IC.pen} Add a question</button><button class="btn primary" id="next">Next</button></div>`,
+    mount: r => { on(r, '#addq', () => askText({title: 'Your question', placeholder: 'I wonder…', ok: 'Save'}, t => { if (t) { b.questions.push({id: uid(), text: t, history: [], obj: null}); save(); render(); } })); on(r, '#next', () => go('nextpage', {book: b.id})); }
   };
   const qi = clamp(S.ui.q || 0, 0, qs.length - 1), q = qs[qi];
   const rv = pg.revisits[q.id] || {};
-  const lead = q.obj?.about ? `You were curious about ${esc(q.obj.about)}.` : `You wondered: “${esc(q.text)}”`;
-  const earlier = b.pages.map((p, i) => ({i, v: p.revisits[q.id]})).filter(x => x.i !== pIdx && x.v && x.v.note);
+    const earlier = b.pages.map((p, i) => ({i, v: p.revisits[q.id]})).filter(x => x.i !== pIdx && x.v && x.v.note);
   return {
-    tone: 'pink', eyebrow: '02 Continue? · Expectation & reality',
-    html: `<h1 class="t">Then, and now.</h1><p class="sub">${lead} Did anything change?</p>
-    ${q.obj ? `<div class="mini-known"><div class="ic">${artFor(q.obj)}</div><div><span class="label">Known · from the form</span><br>${esc(q.obj.known[0] || '')}</div></div>` : ''}
-    <div class="tn"><div><p class="label w" style="margin-bottom:8px">Wondering</p><div class="note-w"><div class="note" style="font-size:16px">${esc(q.text)}${q.history.length ? `<small>revised ${q.history.length}×</small>` : ''}</div></div></div>
-    <div><p class="label" style="margin-bottom:8px">Experienced</p><div class="exp">${rv.note ? esc(rv.note) : rv.open ? '<span class="ph">Left unanswered, for now.</span>' : '<span class="ph">Your observation goes here.</span>'}<small>${rv.note ? 'In your words, from encounter ' + pad(pIdx + 1) + '.' : 'Reflect on what you experienced. Nothing assumed.'}</small></div></div></div>
-    ${earlier.length ? `<div class="trail"><span class="label">Earlier pages</span>${earlier.map(x => `<span><b>Encounter ${pad(x.i + 1)}:</b> ${esc(x.v.note)}</span>`).join('')}</div>` : ''}
+    tone: 'pink', eyebrow: '02 Continue? · Then vs now',
+    html: `<h1 class="t">Then vs now.</h1><p class="sub">Did anything change?</p>
+    ${q.obj ? `<div class="mini-known"><div class="ic">${artFor(q.obj)}</div><div><span class="label">From the form</span><br>${esc(q.obj.known[0] || '')}</div></div>` : ''}
+    <div class="tn"><div><p class="label w" style="margin-bottom:8px">Then</p><div class="note-w"><div class="note" style="font-size:16px">${esc(q.text)}${q.history.length ? `<small>revised ${q.history.length}×</small>` : ''}</div></div></div>
+    <div><p class="label" style="margin-bottom:8px">Now</p><div class="exp">${rv.note ? esc(rv.note) : rv.open ? '<span class="ph">Skipped</span>' : '<span class="ph">…</span>'}</div></div></div>
+    ${earlier.length ? `<div class="trail"><span class="label">Before</span>${earlier.map(x => `<span><b>Encounter ${pad(x.i + 1)}:</b> ${esc(x.v.note)}</span>`).join('')}</div>` : ''}
     ${qs.length > 1 ? `<p class="hint">${qi + 1} of ${qs.length}</p>` : ''}
-    <div class="actions"><div class="row2"><button class="btn" id="obs">Add observation</button><button class="btn" id="rev">Revise note</button></div>
-    <button class="btn" id="open">Leave unanswered</button>
-    <button class="btn primary" id="next">${qi < qs.length - 1 ? 'Next question' : 'Turn the page'}</button></div>`,
+    <div class="actions"><div class="row2"><button class="btn" id="obs">Add a note</button><button class="btn" id="rev">Edit question</button></div>
+    <div class="row2"><button class="btn" id="open">Skip</button><button class="btn primary" id="next">Next</button></div></div>`,
     mount: r => {
-      on(r, '#obs', () => askText({title: 'What did you notice?', sub: 'What you experienced, in your words. Not a conclusion about them.', value: rv.note || '', placeholder: 'When we talked about…', ok: 'Keep it'}, t => { pg.revisits[q.id] = {note: t, open: !t}; save(); render(); }));
-      on(r, '#rev', () => askText({title: 'Revise the question', sub: 'The earlier version is kept, so you can see how it changed.', value: q.text, ok: 'Revise'}, t => { if (t && t !== q.text) { q.history.push({text: q.text, page: pIdx}); q.text = t; save(); render(); } }));
+      on(r, '#obs', () => askText({title: q.text, value: rv.note || '', placeholder: 'What happened?', ok: 'Save'}, t => { pg.revisits[q.id] = {note: t, open: !t}; save(); render(); }));
+      on(r, '#rev', () => askText({title: 'Edit question', value: q.text, ok: 'Save'}, t => { if (t && t !== q.text) { q.history.push({text: q.text, page: pIdx}); q.text = t; save(); render(); } }));
       on(r, '#open', () => { pg.revisits[q.id] = {note: '', open: true}; save(); advance(); });
       on(r, '#next', advance);
       function advance() { if (qi < qs.length - 1) { S.ui.q = qi + 1; render(); } else go('nextpage', {book: b.id}); }
@@ -1364,22 +1355,21 @@ SCENES.nextpage = (o) => {
   const b = bookById(o.book), pg = b && curPage(b); if (!pg) return SCENES.shelf();
   const n = pg.next;
   return {
-    tone: 'sage', eyebrow: '02 Continue? · The next blank page',
-    html: `<h1 class="t">What, if anything, would you like to discover next?</h1><p class="sub">An unfinished chapter can stay unfinished.</p>
-    <div class="np">${n && n.text ? `<div class="written"><small>${n.type === 'question' ? 'A question for next time' : 'A memory'}</small>${esc(n.text)}</div>` : ''}
-      <button id="wq">${IC.pen} ${n?.type === 'question' ? 'Rewrite the question' : 'Write a question'}</button>
+    tone: 'sage', eyebrow: '02 Continue? · Next',
+    html: `<h1 class="t">What next?</h1>
+    <div class="np">${n && n.text ? `<div class="written"><small>${n.type === 'question' ? 'Next time' : 'Memory'}</small>${esc(n.text)}</div>` : ''}
+      <button id="wq">${IC.pen} ${n?.type === 'question' ? 'Edit question' : 'Write a question'}</button>
       <button id="am">${IC.plus} Add a memory</button>
       <button id="lb">${IC.arrow} Leave blank</button></div>
-    <p class="motto">Unpack the person. Unpack the encounter.<br>Write your own story.</p>
-    <div class="actions"><button class="btn" data-s="continuing">Continue</button><button class="btn" data-s="paused">Pause</button><button class="btn" data-s="closed">Close the chapter</button><button class="btn link" data-s="later">Decide later</button></div>`,
+    <div class="actions"><button class="btn" data-s="continuing">Continue</button><button class="btn" data-s="paused">Pause</button><button class="btn" data-s="closed">Close the chapter</button><button class="btn link" data-s="later">Later</button></div>`,
     mount: r => {
-      on(r, '#wq', () => askText({title: 'A question for next time', value: n?.type === 'question' ? n.text : '', placeholder: 'Next time I’d like to ask…', ok: 'Write it'}, t => { pg.next = t ? {type: 'question', text: t} : null; save(); render(); }));
-      on(r, '#am', () => askText({title: 'Add a memory', value: n?.type === 'memory' ? n.text : '', placeholder: 'I want to remember…', ok: 'Keep it'}, t => { pg.next = t ? {type: 'memory', text: t} : null; save(); render(); }));
-      on(r, '#lb', () => { pg.next = null; save(); toast('Left blank.'); });
+      on(r, '#wq', () => askText({title: 'Next time', value: n?.type === 'question' ? n.text : '', placeholder: 'I’d like to ask…', ok: 'Save'}, t => { pg.next = t ? {type: 'question', text: t} : null; save(); render(); }));
+      on(r, '#am', () => askText({title: 'Memory', value: n?.type === 'memory' ? n.text : '', placeholder: 'Something to remember', ok: 'Save'}, t => { pg.next = t ? {type: 'memory', text: t} : null; save(); render(); }));
+      on(r, '#lb', () => { pg.next = null; save(); render(); });
       on(r, '[data-s]', (e, btn) => {
         const s = btn.dataset.s;
         if (s !== 'later') b.status = s;
-        save(); sfx('page'); toast(s === 'later' ? 'Nothing decided. That’s allowed.' : statusText(s) + '.');
+        save(); sfx('page'); if (s !== 'later') toast(statusText(s));
         S.ui.tab = b.pages.indexOf(pg);
         go('book', {book: b.id, closing: true}, 'reset'); stack.push({name: 'shelf', opts: {}});
       });
@@ -1392,50 +1382,49 @@ SCENES.book = (o) => {
   const n = b.pages.length;
   let tab = S.ui.tab ?? 0; if (tab !== 'time') tab = clamp(+tab || 0, 0, Math.max(0, n - 1));
   const pg = tab === 'time' ? null : b.pages[tab];
-  const qLine = q => { const v = pg.revisits[q.id]; return `<button class="it q" data-q="${q.id}">${esc(q.text)}${v?.note ? `<span class="obs">Experienced: ${esc(v.note)}</span>` : v?.open ? '<span class="obs">Left unanswered</span>' : ''}</button>`; };
-  const pageHtml = pg ? `<h2 class="pg-h">Encounter ${pad(tab + 1)}</h2><p class="pg-m">${esc(pg.kind || 'An encounter')} · ${new Date(pg.date).toLocaleDateString(undefined, {day: 'numeric', month: 'short'})}</p>
-    ${b.questions.length ? `<p class="sec">Questions carried forward</p><div class="items">${b.questions.map(qLine).join('')}</div>` : ''}
-    <p class="sec">Moments</p><div class="items">${pg.tokens.map(t => `<button class="it tk" data-k="tokens" data-id="${t.id}">${esc(t.label)}${t.note ? `<span class="obs">${esc(t.note)}</span>` : ''}</button>`).join('') || '<span class="pg-m">None placed.</span>'}</div>
-    <p class="sec">Fragments</p><div class="items">${pg.fragments.filter(f => f.text).map(f => `<button class="it" data-k="fragments" data-id="${f.id}">“${esc(f.text)}”<span class="obs">${f.who === 'me' ? 'my words' : f.who === 'pause' ? 'a pause' : 'their words'}</span></button>`).join('') || '<span class="pg-m">Blank, and that’s fine.</span>'}</div>
-    ${pg.next?.text ? `<p class="sec">${pg.next.type === 'question' ? 'To discover next' : 'A memory'}</p><div class="items"><button class="it q" data-next>${esc(pg.next.text)}</button></div>` : ''}
-    <p class="sec">Margin notes</p><div class="items">${pg.notes.map(t => `<button class="it" data-k="notes" data-id="${t.id}">${esc(t.text)}</button>`).join('')}<button class="it" id="ann" style="border-style:dashed">${'+ annotate'}</button></div>`
-    : tab === 'time' ? `<h2 class="pg-h">How questions changed</h2><p class="pg-m">Across ${n} encounter${n === 1 ? '' : 's'}. No score, no verdict.</p>
-      <div class="evo">${b.questions.map(q => `<div>${q.history.map(h => `<s>${esc(h.text)}</s>`).join('')}<div class="q">${esc(q.text)}</div><ul>${b.pages.map((p, i) => p.revisits[q.id] ? `<li><b>Encounter ${pad(i + 1)}:</b> ${p.revisits[q.id].note ? esc(p.revisits[q.id].note) : 'left unanswered'}</li>` : '').join('') || '<li>Still a question.</li>'}</ul></div>`).join('') || '<p class="pg-m">No questions carried yet.</p>'}</div>`
-    : `<h2 class="pg-h">No pages yet</h2><p class="pg-m">This book is waiting for its first encounter, whenever that happens.</p>`;
+  const qLine = q => { const v = pg.revisits[q.id]; return `<button class="it q" data-q="${q.id}">${esc(q.text)}${v?.note ? `<span class="obs">${esc(v.note)}</span>` : v?.open ? '<span class="obs">Skipped</span>' : ''}</button>`; };
+  const pageHtml = pg ? `<h2 class="pg-h">Encounter ${pad(tab + 1)}</h2><p class="pg-m">${esc(pg.kind || 'Encounter')} · ${new Date(pg.date).toLocaleDateString(undefined, {day: 'numeric', month: 'short'})}</p>
+    ${b.questions.length ? `<p class="sec">Questions</p><div class="items">${b.questions.map(qLine).join('')}</div>` : ''}
+    <p class="sec">Moments</p><div class="items">${pg.tokens.map(t => `<button class="it tk" data-k="tokens" data-id="${t.id}">${esc(t.label)}${t.note ? `<span class="obs">${esc(t.note)}</span>` : ''}</button>`).join('') || '<span class="pg-m">—</span>'}</div>
+    <p class="sec">Fragments</p><div class="items">${pg.fragments.filter(f => f.text).map(f => `<button class="it" data-k="fragments" data-id="${f.id}">“${esc(f.text)}”<span class="obs">${f.who === 'me' ? 'me' : f.who === 'pause' ? 'pause' : 'them'}</span></button>`).join('') || '<span class="pg-m">—</span>'}</div>
+    ${pg.next?.text ? `<p class="sec">${pg.next.type === 'question' ? 'Next time' : 'Memory'}</p><div class="items"><button class="it q" data-next>${esc(pg.next.text)}</button></div>` : ''}
+    <p class="sec">Notes</p><div class="items">${pg.notes.map(t => `<button class="it" data-k="notes" data-id="${t.id}">${esc(t.text)}</button>`).join('')}<button class="it" id="ann" style="border-style:dashed">+ note</button></div>`
+    : tab === 'time' ? `<h2 class="pg-h">Over time</h2>
+      <div class="evo">${b.questions.map(q => `<div>${q.history.map(h => `<s>${esc(h.text)}</s>`).join('')}<div class="q">${esc(q.text)}</div><ul>${b.pages.map((p, i) => p.revisits[q.id] ? `<li><b>Encounter ${pad(i + 1)}:</b> ${p.revisits[q.id].note ? esc(p.revisits[q.id].note) : 'skipped'}</li>` : '').join('') || '<li>—</li>'}</ul></div>`).join('') || '<p class="pg-m">No questions yet.</p>'}</div>`
+    : `<h2 class="pg-h">No pages yet</h2>`;
   return {
-    tone: 'pink', eyebrow: '02 Continue? · Across encounters',
-    html: `<h1 class="t">A story can change shape.</h1><p class="sub">Revisit moments. Revise questions.</p>
-    <span class="status">${esc(b.name)} · ${statusText(b.status)}${b.example ? ' · example' : ''}</span>
-    <div class="book" id="book"><div class="tabs">${b.pages.map((p, i) => `<button data-tab="${i}" aria-current="${tab === i}" aria-label="Encounter ${i + 1}">${pad(i + 1)}</button>`).join('')}${n ? `<button data-tab="time" aria-current="${tab === 'time'}" aria-label="How questions changed">≈</button>` : ''}</div><div class="page">${pageHtml}</div></div>
+    tone: 'pink', eyebrow: '02 Continue? · Scrapbook',
+    html: `<h1 class="t">${esc(b.name)}</h1>
+    <span class="status">${statusText(b.status)}${b.example ? ' · example' : ''}</span>
+    <div class="book" id="book"><div class="tabs">${b.pages.map((p, i) => `<button data-tab="${i}" aria-current="${tab === i}" aria-label="Encounter ${i + 1}">${pad(i + 1)}</button>`).join('')}${n ? `<button data-tab="time" aria-current="${tab === 'time'}" aria-label="Over time">≈</button>` : ''}</div><div class="page">${pageHtml}</div></div>
         <div class="actions"><div class="row2"><button class="btn" id="add">${IC.plus} Add a page</button><button class="btn" id="turn">Turn the page</button></div>
-    ${pg ? '<button class="btn" id="reopen">Revisit this encounter</button>' : ''}
-    <button class="btn" id="where">Where this goes</button>
-    <button class="btn primary" id="close">Close the book</button>
-    <button class="btn link" id="del">Delete this scrapbook</button></div>`,
+    ${pg ? '<button class="btn" id="reopen">Edit this page</button>' : ''}
+    <div class="row2"><button class="btn" id="where">Status</button><button class="btn primary" id="close">Close</button></div>
+    <button class="btn link" id="del">Delete</button></div>`,
     mount: r => {
       on(r, '[data-tab]', (e, t) => { S.ui.tab = t.dataset.tab === 'time' ? 'time' : +t.dataset.tab; sfx('page'); render(); });
       on(r, '#turn', () => { const order = [...b.pages.map((_, i) => i), 'time']; const i = order.indexOf(tab); S.ui.tab = order[(i + 1) % order.length]; sfx('page'); render(); });
       on(r, '#add', () => go('after', {book: b.id}));
       on(r, '#reopen', () => { S.ui.page = tab; S.ui.q = 0; go('fragments', {book: b.id}); });
       on(r, '#close', () => { const bk = $('#book', r); bk.classList.add('closing'); sfx('open'); setTimeout(() => { go('shelf', {}, 'reset'); stack.push({name: 'chapters', opts: {}}); }, S.settings.reduced ? 50 : 650); });
-      on(r, '#where', () => sheet(`<h3>Where does this go?</h3><p>Your decision, in your time. Every choice is quiet here, and a book can stay unfinished for as long as you like.</p>
-        <div class="seg">${['continuing', 'paused', 'closed', 'unfinished'].map(s => `<button data-s="${s}" aria-pressed="${b.status === s}">${{continuing: 'Continue', paused: 'Pause', closed: 'Close the chapter', unfinished: 'Leave it unfinished'}[s]}</button>`).join('')}</div>`, (sh, close) => {
+      on(r, '#where', () => sheet(`<h3>Status</h3>
+        <div class="seg">${['continuing', 'paused', 'closed', 'unfinished'].map(s => `<button data-s="${s}" aria-pressed="${b.status === s}">${{continuing: 'Continue', paused: 'Pause', closed: 'Close the chapter', unfinished: 'Keep open'}[s]}</button>`).join('')}</div>`, (sh, close) => {
           on(sh, '[data-s]', (e, x) => { b.status = x.dataset.s; save(); close(); render(); });
         }));
-      on(r, '#del', () => confirmSheet('Delete this scrapbook?', `Every page about ${esc(b.name)} will be erased from this browser. This can’t be undone.`, 'Delete it', () => { S.books = S.books.filter(x => x !== b); save(); toast('Deleted.'); go('shelf', {}, 'reset'); }));
-      on(r, '#ann', () => askText({title: 'A margin note', sub: 'Annotate this page. Earlier pages stay as they were.', placeholder: 'Looking back…', ok: 'Add note'}, t => { if (t) { pg.notes.push({id: uid(), text: t}); save(); render(); } }));
-      on(r, '[data-q]', (e, el) => { const q = b.questions.find(x => x.id === el.dataset.q); const v = pg.revisits[q.id] || {}; askText({title: q.text, sub: 'What you experienced on this encounter.', value: v.note || '', ok: 'Keep it'}, t => { pg.revisits[q.id] = {note: t, open: !t}; save(); render(); }); });
+      on(r, '#del', () => confirmSheet(`Delete ${esc(b.name)}?`, 'This can’t be undone.', 'Delete', () => { S.books = S.books.filter(x => x !== b); save(); toast('Deleted'); go('shelf', {}, 'reset'); }));
+      on(r, '#ann', () => askText({title: 'Note', placeholder: 'Add a note', ok: 'Save'}, t => { if (t) { pg.notes.push({id: uid(), text: t}); save(); render(); } }));
+      on(r, '[data-q]', (e, el) => { const q = b.questions.find(x => x.id === el.dataset.q); const v = pg.revisits[q.id] || {}; askText({title: q.text, value: v.note || '', placeholder: 'What happened?', ok: 'Save'}, t => { pg.revisits[q.id] = {note: t, open: !t}; save(); render(); }); });
       on(r, '[data-next]', () => go('nextpage', {book: b.id}));
       on(r, '[data-k]', (e, el) => {
         const kind = el.dataset.k, item = pg[kind].find(x => x.id === el.dataset.id);
         const label = kind === 'tokens' ? item.label : (item.text || '');
         const others = b.pages.map((p, i) => ({p, i})).filter(x => x.p !== pg);
-        sheet(`<h3>${esc(label)}</h3>${kind !== 'notes' ? `<textarea id="nt" placeholder="${kind === 'tokens' ? 'What was this moment?' : 'Your words'}">${esc(kind === 'tokens' ? item.note || '' : item.text)}</textarea>` : `<textarea id="nt">${esc(item.text)}</textarea>`}
-          ${others.length ? `<p>Move to another page</p><div class="seg">${others.map(x => `<button data-mv="${x.i}">Encounter ${pad(x.i + 1)}</button>`).join('')}</div>` : ''}
-          <div class="row2"><button class="btn" data-rm>Remove</button><button class="btn primary" data-ok>Keep</button></div>`, (sh, close) => {
+        sheet(`<h3>${esc(label)}</h3>${kind !== 'notes' ? `<textarea id="nt" placeholder="${kind === 'tokens' ? 'Add a note' : 'Words'}">${esc(kind === 'tokens' ? item.note || '' : item.text)}</textarea>` : `<textarea id="nt">${esc(item.text)}</textarea>`}
+          ${others.length ? `<p>Move to</p><div class="seg">${others.map(x => `<button data-mv="${x.i}">Encounter ${pad(x.i + 1)}</button>`).join('')}</div>` : ''}
+          <div class="row2"><button class="btn" data-rm>Remove</button><button class="btn primary" data-ok>Save</button></div>`, (sh, close) => {
           $('[data-ok]', sh).onclick = () => { const v = $('#nt', sh).value.trim(); if (kind === 'tokens') item.note = v; else item.text = v; save(); close(); render(); };
           $('[data-rm]', sh).onclick = () => { pg[kind] = pg[kind].filter(x => x !== item); save(); close(); render(); };
-          on(sh, '[data-mv]', (e2, m) => { const to = b.pages[+m.dataset.mv]; pg[kind] = pg[kind].filter(x => x !== item); to[kind].push(item); save(); close(); toast(`Moved to encounter ${pad(+m.dataset.mv + 1)}.`); render(); });
+          on(sh, '[data-mv]', (e2, m) => { const to = b.pages[+m.dataset.mv]; pg[kind] = pg[kind].filter(x => x !== item); to[kind].push(item); save(); close(); toast('Moved'); render(); });
         });
       });
     }
@@ -1459,12 +1448,12 @@ function exampleBook() {
 /* ---------- settings + privacy ---------- */
 function openSettings() {
   const st = S.settings;
-  sheet(`<h3>Privacy &amp; comfort</h3>
+  sheet(`<h3>Settings</h3>
   <label class="tog"><span>Reduced motion</span><input type="checkbox" class="sw" id="s-rm" ${st.reduced ? 'checked' : ''}></label>
   <label class="tog"><span>Paper sounds</span><input type="checkbox" class="sw" id="s-snd" ${st.sound ? 'checked' : ''}></label>
   <label class="tog"><span>Haptics</span><input type="checkbox" class="sw" id="s-hap" ${st.haptics ? 'checked' : ''}></label>
-  <p>Everything stays in this browser. Contact details are never kept. Packed paperwork is let go.</p>
-  ${S.archived.length ? `<p class="label">Archived paperwork</p>${S.archived.map(a => `<div class="arch"><span>${esc(a.name)} · ${new Date(a.at).toLocaleDateString()}</span><span class="seg"><button data-ro="${a.id}">Reopen</button><button data-da="${a.id}">Delete</button></span></div>`).join('')}` : ''}
+  <p>Saved only in this browser. Contact details are never kept.</p>
+  ${S.archived.length ? `<p class="label">Archived</p>${S.archived.map(a => `<div class="arch"><span>${esc(a.name)} · ${new Date(a.at).toLocaleDateString()}</span><span class="seg"><button data-ro="${a.id}">Reopen</button><button data-da="${a.id}">Delete</button></span></div>`).join('')}` : ''}
   ${S.books.length ? `<p class="label">Scrapbooks</p>${S.books.map(b => `<div class="arch"><span>${esc(b.name)} · ${b.pages.length} page${b.pages.length === 1 ? '' : 's'}</span><span class="seg"><button data-db="${b.id}">Delete</button></span></div>`).join('')}` : ''}
   <button class="btn" id="s-f">Your filters</button>
   <div class="row2"><button class="btn" id="s-all">Delete everything</button><button class="btn primary" data-x>Done</button></div>`, (sh, close) => {
@@ -1473,10 +1462,10 @@ function openSettings() {
     $('#s-hap', sh).onchange = e => { st.haptics = e.target.checked; save(); buzz(10); };
     $('[data-x]', sh).onclick = close;
     $('#s-f', sh).onclick = () => { close(); go('prefs'); };
-    on(sh, '[data-ro]', (e, x) => { const a = S.archived.find(y => y.id === x.dataset.ro); if (S.draft && S.draft.profile) { toast('There’s already paperwork on the table. Pack or archive it first.'); return; } S.draft = a.draft; S.archived = S.archived.filter(y => y !== a); save(); close(); go('table'); });
-    on(sh, '[data-da]', (e, x) => { S.archived = S.archived.filter(y => y.id !== x.dataset.da); save(); x.closest('.arch').remove(); toast('Deleted.'); });
-    on(sh, '[data-db]', (e, x) => { const b = bookById(x.dataset.db); close(); confirmSheet('Delete this scrapbook?', `Every page about ${esc(b.name)} will be erased from this browser.`, 'Delete it', () => { S.books = S.books.filter(y => y !== b); save(); toast('Deleted.'); go('shelf', {}, 'reset'); }); });
-    $('#s-all', sh).onclick = () => { close(); confirmSheet('Delete everything?', 'Paperwork, pockets, archived profiles and every scrapbook will be erased from this browser. This can’t be undone.', 'Delete everything', () => { const keep = S.settings; S = fresh(); S.settings = keep; try { localStorage.removeItem(KEY); } catch (e) {} save(); toast('Everything is gone.'); go('title', {}, 'reset'); }); };
+    on(sh, '[data-ro]', (e, x) => { const a = S.archived.find(y => y.id === x.dataset.ro); if (S.draft && S.draft.profile) { toast('Finish the current profile first'); return; } S.draft = a.draft; S.archived = S.archived.filter(y => y !== a); save(); close(); go('table'); });
+    on(sh, '[data-da]', (e, x) => { S.archived = S.archived.filter(y => y.id !== x.dataset.da); save(); x.closest('.arch').remove(); toast('Deleted'); });
+    on(sh, '[data-db]', (e, x) => { const b = bookById(x.dataset.db); close(); confirmSheet(`Delete ${esc(b.name)}?`, 'This can’t be undone.', 'Delete', () => { S.books = S.books.filter(y => y !== b); save(); toast('Deleted'); go('shelf', {}, 'reset'); }); });
+    $('#s-all', sh).onclick = () => { close(); confirmSheet('Delete everything?', 'This can’t be undone.', 'Delete', () => { const keep = S.settings; S = fresh(); S.settings = keep; try { localStorage.removeItem(KEY); } catch (e) {} save(); toast('Deleted'); go('title', {}, 'reset'); }); };
   });
 }
 
