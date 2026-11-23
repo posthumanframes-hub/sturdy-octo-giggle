@@ -24,6 +24,7 @@ A small, mobile-first scrapbook game for matching matrimonial profiles against y
 - **Edit** any journal entry from the timeline to change how you felt, the type or the text. Saving re-tags it, but tags you recoloured or cleared yourself stay as you left them.
 - Tap any tag to see the sentence it came from, change its colour, or clear it. *Re-check* re-runs the first match after you change your preferences.
 - Auto-tagging is a simple keyword reading that runs on the device (nothing is sent anywhere), so it will miss things and sometimes misread them. That's why every tag can be changed.
+- **Photos:** each folder has a strip of polaroids. Tap *Add photos* to add one or several at once. Tap a photo to see it large, make it the **cover** (shown in the folder header and on Home), or remove it. Photos are shrunk before saving. If the browser's storage fills up, the app tells you instead of silently dropping anything.
 - Each folder has a status (Exploring, Paused, Closed, Passed) and can be renamed or deleted.
 
 ## Rules it keeps

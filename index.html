@@ -603,6 +603,13 @@ button.bk-stamp.lg{position:static;font-size:11px;padding:7px 10px;transform:rot
 .helper-list{display:grid;gap:6px;width:100%;animation:fadeIn .3s ease both}
 .helper-list button{background:var(--n-cream);color:var(--paper-ink);border:1.2px dashed var(--edge);border-radius:8px;padding:8px 10px;font:italic 400 14.5px/1.35 var(--serif);text-align:left;cursor:pointer}
 .tl-btns{display:flex;gap:6px}
+.photos{display:flex;gap:12px;overflow-x:auto;padding:6px 4px 12px;margin-top:-8px;scroll-snap-type:x proximity}
+.ph{position:relative;flex:none;width:96px;background:#FFFCF5;border:1.2px solid var(--edge);padding:5px 5px 18px;transform:rotate(var(--r,0deg));cursor:pointer;box-shadow:0 6px 10px -6px var(--shadow);scroll-snap-align:start;transition:transform .3s var(--spring)}
+.ph:hover,.ph:focus-visible{transform:rotate(0) scale(1.04)}
+.ph img{display:block;width:100%;aspect-ratio:1;object-fit:cover}
+.ph-cv{position:absolute;left:0;right:0;bottom:3px;text-align:center;font:800 8.5px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:#7A6D66}
+.ph.add{display:grid;place-items:center;align-content:center;gap:6px;height:118px;border-style:dashed;background:transparent;color:var(--ink-soft);font:700 11.5px var(--sans);box-shadow:none}
+.ph.add svg{width:20px;height:20px}
 html.rm *,html.rm *::before,html.rm *::after{animation:none!important;transition-duration:.01ms!important}
 @media (prefers-reduced-motion: reduce){.float{animation:none}}
 </style>
@@ -635,7 +642,7 @@ const fresh = () => ({v: 1, settings: {reduced: matchMedia('(prefers-reduced-mot
 let S;
 try { S = JSON.parse(localStorage.getItem(KEY)); } catch (e) { S = null; }
 if (!S || S.v !== 1) S = fresh();
-const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} };
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); return true; } catch (e) { return false; } };
 const applyMotion = () => document.documentElement.classList.toggle('rm', !!S.settings.reduced);
 applyMotion();
 // Look: mode (system/light/dark) and palette live on the root element as data-mode and data-pal.
@@ -735,9 +742,9 @@ function attachPhoto(prof, url) {
   if (url && !prof.objects.some(o => o.kind === 'picture')) prof.objects.push({id: 'o' + prof.objects.length + 'p', kind: 'picture', title: 'Photo', about: '', known: ['A photo is attached to the form.'], prompts: []});
   if (!url) prof.objects = prof.objects.filter(o => o.kind !== 'picture');
 }
-function pickImage(cb) {
-  const inp = document.createElement('input'); inp.type = 'file'; inp.accept = 'image/*';
-  inp.onchange = () => { const f = inp.files && inp.files[0]; if (f) cb(f); };
+function pickImage(cb, multiple) {
+  const inp = document.createElement('input'); inp.type = 'file'; inp.accept = 'image/*'; inp.multiple = !!multiple;
+  inp.onchange = () => { const fs = [...(inp.files || [])]; if (fs.length) cb(multiple ? fs : fs[0]); };
   inp.click();
 }
 
@@ -1276,6 +1283,27 @@ const folders = () => S.folders || (S.folders = []);
 const folderById = id => folders().find(f => f.id === id);
 const fmtDate = t => new Date(t).toLocaleDateString(undefined, {day: 'numeric', month: 'short'});
 const toPrefs = () => go('mine');
+const coverOf = f => { const ph = f.photos || []; return (ph.find(x => x.id === f.cover) || ph[0] || {}).src || (f.profile && f.profile.photo) || ''; };
+async function addPhotos(f, files) {
+  f.photos = f.photos || [];
+  let added = 0;
+  for (const file of files) {
+    let src; try { src = await shrinkImage(file, 720); } catch (e) { continue; }
+    const ph = {id: uid(), src, date: Date.now()};
+    f.photos.push(ph);
+    if (!save()) { f.photos.pop(); save(); toast(added ? `Added ${added}. Storage is full, remove a few to add more.` : 'Storage is full. Remove a few photos to add more.'); render(); return; }
+    added++;
+  }
+  sfx('tuck'); buzz(8); toast(added === 1 ? 'Photo added' : `${added} photos added`); render();
+}
+function photoSheet(f, ph) {
+  const isCover = coverOf(f) === ph.src;
+  sheet(`<h3>${esc(f.name)}</h3><img class="bio-img" src="${ph.src}" alt="Photo of ${esc(f.name)}">
+  <div class="row2"><button class="btn" data-rm>Remove</button><button class="btn primary" data-cv ${isCover ? 'disabled' : ''}>${isCover ? 'Cover photo' : 'Make cover'}</button></div>`, (sh, close) => {
+    $('[data-cv]', sh).onclick = () => { f.cover = ph.id; save(); close(); toast('Cover set'); render(); };
+    $('[data-rm]', sh).onclick = () => { f.photos = f.photos.filter(x => x !== ph); if (f.cover === ph.id) f.cover = null; save(); close(); render(); };
+  });
+}
 const squiggle = () => S.settings.reduced ? IC.squiggle : IC.squiggle.replace('"/></svg>', '"><animate attributeName="d" dur="2.6s" begin="0.9s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines=".45 0 .55 1;.45 0 .55 1" values="M3 8c14-5 24 4 38-1s24-4 38 0 26 3 40-2 10-1 14 0;M3 8c14 5 24-4 38 1s24 4 38 0 26-3 40 2 10 1 14 0;M3 8c14-5 24 4 38-1s24-4 38 0 26 3 40-2 10-1 14 0"/></path></svg>');
 
 // First level of matching: what the profile says in its own words, against your preferences.
@@ -1395,7 +1423,7 @@ function newFolder() {
 SCENES.home = () => {
   const fs = folders(), live = fs.filter(f => f.status !== 'passed'), passed = fs.filter(f => f.status === 'passed');
   const s1 = mine().some(x => x.cat), s2 = fs.length > 0, s3 = fs.some(f => f.profile);
-  const tile = (f, i) => { const s = summary(f); return `<button class="ftile" data-id="${f.id}"><span class="ft-art">${folderArt(FOLDER_COLORS[i % 4])}</span><span class="ft-name">${esc(f.name)}</span><span class="bk-stamp s-${f.status}">${STATUS[f.status]}</span>${f.profile && f.profile.photo ? `<span class="bk-pic"><img src="${f.profile.photo}" alt=""></span>` : ''}${tally(s.n)}</button>`; };
+  const tile = (f, i) => { const s = summary(f); return `<button class="ftile" data-id="${f.id}"><span class="ft-art">${folderArt(FOLDER_COLORS[i % 4])}</span><span class="ft-name">${esc(f.name)}</span><span class="bk-stamp s-${f.status}">${STATUS[f.status]}</span>${coverOf(f) ? `<span class="bk-pic"><img src="${coverOf(f)}" alt=""></span>` : ''}${tally(s.n)}</button>`; };
   return {
     tone: 'butter', back: false, eyebrow: '',
     html: `<h1 class="display home-t">Plot<br>Twist</h1>${squiggle()}
@@ -1484,10 +1512,12 @@ SCENES.folder = (o) => {
   const p = f.profile, s = summary(f), fresh = S.ui.fresh; S.ui.fresh = null;
   return {
     tone: 'pink', eyebrow: 'Folder',
-    html: `<div class="who">${p && p.photo ? `<span class="polaroid"><img src="${p.photo}" alt=""></span>` : ''}<h1 class="t">${esc(f.name)}</h1></div>
+    html: `<div class="who">${coverOf(f) ? `<span class="polaroid"><img src="${coverOf(f)}" alt=""></span>` : ''}<h1 class="t">${esc(f.name)}</h1></div>
     <div class="row-pills"><button class="bk-stamp lg s-${f.status}" id="st">${STATUS[f.status]}</button>${p ? '<button class="btn link" id="prof">View profile</button>' : ''}</div>
     ${p ? `<div class="balance">${seesaw(s)}<div class="ss-labels"><span class="ss-l spark"><b>Spark</b>${s.chemW}</span><span class="ss-l fit"><b>Fit</b>${s.compW}</span></div><p class="bline">${s.line}</p>${tally(s.n)}</div>`
       : `<button class="checkin setup" id="addp"><span class="q">Add their profile</span><span class="pick">Paste a biodata or add an image. It gets matched against your preferences.</span></button>`}
+    <div class="rs-h"><p class="label">Photos</p></div>
+    <div class="photos"><button class="ph add" id="addph">${IC.plus}<span>Add photos</span></button>${(f.photos || []).map((ph, n) => `<button class="ph" data-ph="${ph.id}" style="--r:${n % 2 ? 2.5 : -2}deg" aria-label="Photo ${n + 1}${f.cover === ph.id ? ', cover' : ''}"><img src="${ph.src}" alt="">${f.cover === ph.id ? '<span class="ph-cv">cover</span>' : ''}</button>`).join('')}</div>
     ${f.entries.length ? `<p class="label">Timeline</p><div class="tl">${f.entries.map((e, i) => entryHtml(e, i, f, e.id === fresh)).join('')}</div>` : ''}
     <div class="actions">${p ? `<button class="btn primary" id="ci">${IC.plus} Journal entry</button>` : `<button class="btn primary" id="addp2">${IC.plus} Add profile</button>`}</div>`,
     mount: r => {
@@ -1499,6 +1529,8 @@ SCENES.folder = (o) => {
       on(r, '[data-recheck]', () => { const old = f.entries.find(e => e.type === 'match'), nu = matchEntry(p, old.date);
         nu.flags.forEach(x => { if (old.flags.some(y => y.prefId === x.prefId && y.level === x.level && y.cleared)) x.cleared = true; });
         f.entries[f.entries.indexOf(old)] = nu; S.ui.fresh = nu.id; save(); toast('Re-checked'); render(); });
+      on(r, '#addph', () => pickImage(files => addPhotos(f, files), true));
+      on(r, '[data-ph]', (e, b) => photoSheet(f, f.photos.find(x => x.id === b.dataset.ph)));
       on(r, '[data-edit]', (e, b) => go('checkin', {f: f.id, edit: b.dataset.edit}));
       on(r, '[data-dele]', (e, b) => confirmSheet('Remove this entry?', 'Its tags go too.', 'Remove', () => { f.entries = f.entries.filter(x => x.id !== b.dataset.dele); save(); render(); }));
       on(r, '[data-flag]', (e, b) => { const [eid, xid] = b.dataset.flag.split(':'), x = f.entries.find(y => y.id === eid).flags.find(y => y.id === xid);
