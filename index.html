@@ -547,11 +547,16 @@ button.bk-stamp.lg{position:static;font-size:11px;padding:7px 10px;transform:rot
 .ft-box{position:relative;display:block;width:100%}
 .ftile .tally{color:var(--paper-soft)}
 .ftile:hover,.ftile:focus-visible{transform:translateY(-3px);box-shadow:0 14px 22px -12px var(--shadow)}
-.ft-art{display:block;width:100%;aspect-ratio:120/96;filter:drop-shadow(0 6px 6px var(--shadow))}
-.ft-name{position:absolute;left:14%;right:14%;top:50%;background:#FFFCF5;color:#3D3431;border:1.2px solid var(--edge);font:400 15px/1.15 var(--serif);padding:6px 6px;text-align:center;overflow-wrap:anywhere;transform:rotate(-1.5deg)}
+.ft-art{display:block;width:100%;aspect-ratio:120/96;filter:drop-shadow(0 5px 6px var(--shadow))}
+.folder-art{filter:none}
+.ft-name{position:absolute;left:16%;right:16%;top:57%;background:#FFFCF5;color:#3D3431;border:1px solid rgba(61,52,49,.16);border-radius:7px;font:400 15px/1.15 var(--serif);padding:6px 6px;text-align:center;overflow-wrap:anywhere;box-shadow:0 2px 4px -2px rgba(61,52,49,.25)}
 .ftile.add .ft-name{background:transparent;border-style:dashed}
-.ftile .bk-stamp{left:auto;right:4%;bottom:auto;top:22%}
-.ftile .bk-pic{right:auto;left:6%;top:8%}
+.ftile{padding-top:38px}
+.ftile.add{padding-top:16px}
+.ft-status{position:absolute;top:10px;right:10px;font:800 9px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--sc,#4F6B45);background:color-mix(in srgb,var(--sc,#4F6B45) 13%,var(--paper));padding:5px 8px;border-radius:999px}
+.ftile .s-talking,.ftile .s-exploring{--sc:#4F6B45} .ftile .s-paused,.ftile .s-closed{--sc:#7A6D66} .ftile .s-passed{--sc:#B4462F}
+.ft-pic{position:absolute;top:7px;left:9px;width:28px;height:28px;border-radius:50%;overflow:hidden;border:2px solid var(--paper);box-shadow:0 0 0 1px var(--edge)}
+.ft-pic img{width:100%;height:100%;object-fit:cover;display:block}
 .tally{display:inline-flex;gap:12px;font:700 12.5px var(--sans);color:var(--ink-soft)}
 .tally > span{display:inline-flex;align-items:center;gap:3px}
 .flag{width:13px;height:16px;flex:none}
@@ -1308,7 +1313,14 @@ const CAT_FLAG = {need: 'red', nice: 'yellow', avoid: 'yellow', no: 'red'};
 const flagFor = k => k === 'nice' ? flagSvg('green') : k === 'need' ? '<span class="nn">★</span>' : flagSvg(CAT_FLAG[k]);
 // Folder fronts take their colours from the active palette.
 const FOLDER_COLORS = ['var(--n-butter)', 'var(--n-pink)', 'var(--n-sage)', 'var(--n-blue)'];
-const folderArt = c => svg(`<path d="M6 14h36l8 9h64v65H6z" fill="#C9A57C" ${K}/><rect x="14" y="20" width="84" height="40" fill="#FFFCF5" ${K} transform="rotate(-3 56 40)"/><path d="M4 32h112l-6 56H10z" style="fill:${c}" ${K}/>`, '0 0 120 96');
+const FS = 'stroke="#3D3431" stroke-opacity=".38" stroke-width="1.4" stroke-linejoin="round"';
+const folderArt = c => `<svg class="ill folder-art" viewBox="0 0 120 96" aria-hidden="true">
+  <path d="M8 20a5 5 0 0 1 5-5h25a5 5 0 0 1 4 2l5 6h60a5 5 0 0 1 5 5v54a5 5 0 0 1-5 5H13a5 5 0 0 1-5-5z" style="fill:color-mix(in srgb, ${c} 62%, #8A6A4F)" ${FS}/>
+  <rect x="17" y="22" width="84" height="44" rx="3" fill="#FFFCF5" ${FS} transform="rotate(-2.5 59 44)"/>
+  <path d="M24 32h44M24 39h56" stroke="#3D3431" stroke-opacity=".14" stroke-width="2" stroke-linecap="round" transform="rotate(-2.5 59 44)"/>
+  <path d="M5 40a5 5 0 0 1 5-5h100a5 5 0 0 1 5 5.4l-3.2 43a5 5 0 0 1-5 4.6H13.2a5 5 0 0 1-5-4.6z" style="fill:${c}" ${FS}/>
+  <path d="M11 41h98" stroke="#FFFFFF" stroke-opacity=".55" stroke-width="1.6" stroke-linecap="round"/>
+</svg>`;
 const STATUS = {exploring: 'Exploring', paused: 'Paused', closed: 'Closed', passed: 'Passed'};
 const FEEL = [[1, 'Off', 'discomfort'], [2, 'Meh', 'silence'], [3, 'Okay', 'curiosity'], [4, 'Warm', 'affection'], [5, 'Sparks', 'laughter']];
 const KINDS = ['Call', 'Messages', 'Coffee', 'Date', 'Other'];
@@ -1456,7 +1468,7 @@ function newFolder() {
 SCENES.home = () => {
   const fs = folders(), live = fs.filter(f => f.status !== 'passed'), passed = fs.filter(f => f.status === 'passed');
   const s1 = mine().some(x => x.cat), s2 = fs.length > 0, s3 = fs.some(f => f.profile);
-  const tile = (f, i) => { const s = summary(f); return `<button class="ftile" data-id="${f.id}"><span class="ft-box"><span class="ft-art">${folderArt(FOLDER_COLORS[i % 4])}</span><span class="ft-name">${esc(f.name)}</span><span class="bk-stamp s-${f.status}">${STATUS[f.status]}</span>${coverOf(f) ? `<span class="bk-pic"><img src="${coverOf(f)}" alt=""></span>` : ''}</span>${tally(s.n)}</button>`; };
+  const tile = (f, i) => { const s = summary(f); return `<button class="ftile" data-id="${f.id}"><span class="ft-status s-${f.status}">${STATUS[f.status]}</span>${coverOf(f) ? `<span class="ft-pic"><img src="${coverOf(f)}" alt=""></span>` : ''}<span class="ft-box"><span class="ft-art">${folderArt(FOLDER_COLORS[i % 4])}</span><span class="ft-name">${esc(f.name)}</span></span>${tally(s.n)}</button>`; };
   return {
     tone: 'butter', back: false, eyebrow: '',
     html: `<div class="home-head"><span class="burst" aria-hidden="true"><i></i><i></i><i></i></span><h1 class="display home-t">Plot Twist</h1><span class="burst r" aria-hidden="true"><i></i><i></i><i></i></span></div><div class="home-sq">${squiggle()}</div>
