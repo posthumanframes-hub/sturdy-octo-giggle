@@ -24,6 +24,7 @@ A small, mobile-first scrapbook game for matching matrimonial profiles against y
 - **Edit** any journal entry from the timeline to change how you felt, the type or the text. Saving re-tags it, but tags you recoloured or cleared yourself stay as you left them.
 - Tap any tag to see the sentence it came from, change its colour, or clear it. *Re-check* re-runs the first match after you change your preferences.
 - Auto-tagging is a simple keyword reading that runs on the device (nothing is sent anywhere), so it will miss things and sometimes misread them. That's why every tag can be changed.
+- **View profile** shows the form as a grid of little objects (tap one to see it up close). The full biodata lines and any attached image are folded away under *Full profile* until you tap it.
 - **Photos:** each folder has a strip of polaroids. Tap *Add photos* to add one or several at once. Tap a photo to see it large, make it the **cover** (shown in the folder header and on Home), or remove it. Photos are shrunk before saving. If the browser's storage fills up, the app tells you instead of silently dropping anything.
 - Each folder has a status (Exploring, Paused, Closed, Passed) and can be renamed or deleted.
 
@@ -31,7 +32,7 @@ A small, mobile-first scrapbook game for matching matrimonial profiles against y
 
 - Objects come only from lines that are actually on the form, and evidence only comes from what the profile states in its own words (about me, expectations, lifestyle lines such as smoking). The match never reads anything into job, education, caste, religion, family background or hobbies.
 - An unknown is never a flag. Flags are reviewable and can be cleared.
-- Privacy: everything stays in the browser's `localStorage`. Contact details are dropped when the biodata is parsed, and preference suggestions are worked out on the device. Settings can delete everything, and each folder has its own delete.
+- Privacy: everything is stored **on this device only**, in the browser's IndexedDB, which has room for photos (with `localStorage` as a fallback). Older saves move over automatically. Contact details are dropped when the biodata is parsed, and preference suggestions are worked out on the device. Settings can delete everything, and each folder has its own delete.
 - **Look:** in Settings, choose **Mode** (System, Light or Dark) and one of three **palettes**: Butter (warm butter and coral), Lagoon (sea-glass blue and teal) or Plum (mauve, plum and marigold). Each palette has a light and a dark version. System follows your device or the Claude viewer.
 - Reduced motion, sound and haptics can be toggled.
 

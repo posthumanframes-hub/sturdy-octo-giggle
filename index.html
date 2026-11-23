@@ -360,9 +360,10 @@ textarea.ans{font:400 18px/1.4 var(--serif);min-height:190px;border:1.2px solid 
 .cats button[data-c=no][aria-pressed=true]{background:var(--n-pink)}
 .srcq{font-size:12.5px;line-height:1.4}
 .srcq b{display:block;font:800 9px var(--sans);letter-spacing:.08em;text-transform:uppercase}
-.checkin{background:var(--n-butter);color:var(--paper-ink);border:1.2px solid var(--edge);border-radius:8px;padding:12px;display:grid;gap:8px}
+.checkin{position:relative;background:var(--paper);color:var(--paper-ink);border:1.3px dashed var(--edge);border-radius:4px;padding:16px 14px 14px;display:grid;gap:8px;box-shadow:0 8px 14px -10px var(--shadow)}
+.checkin::before{content:"";position:absolute;left:50%;top:-8px;width:56px;height:15px;margin-left:-28px;background:var(--n-butter);opacity:.85;transform:rotate(-3deg)}
 .checkin .q{font:400 17px/1.25 var(--serif);margin:0}
-.checkin .pick{margin:0;font-size:12.5px}
+.checkin .pick{margin:0;font-size:12.5px;color:var(--paper-soft)}
 .row3{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
 .row3 .btn{padding:10px 6px;font-size:12px}
 .row-pills{display:flex;justify-content:space-between;align-items:center;gap:8px}
@@ -478,7 +479,9 @@ button.flagmark{cursor:pointer}
 .inspect .big > .pic-obj{width:auto;height:100%;max-height:250px;aspect-ratio:.82/1}
 /* simple game: home, check, person, meeting */
 .home-t{font-size:clamp(46px,14vw,60px);margin-top:10px}
-.setup{display:grid;gap:3px;text-align:left;cursor:pointer;transform:rotate(-1deg)}
+.setup{display:grid;gap:3px;text-align:left;cursor:pointer;transform:rotate(-1deg);padding-right:52px;transition:transform .3s var(--spring)}
+.setup::after{content:"+";position:absolute;right:14px;top:50%;width:30px;height:30px;margin-top:-15px;border-radius:50%;border:1.3px solid var(--edge);display:grid;place-items:center;font:400 20px/1 var(--sans);color:var(--coral)}
+.setup:hover,.setup:focus-visible{transform:rotate(0) translateY(-2px)}
 .setup .q{font:400 18px/1.2 var(--serif)} .setup .pick{font-size:12.5px}
 .home-empty{margin-block:auto;display:grid;place-items:center;padding:10px 0}
 .home-empty .env{margin:0}
@@ -610,6 +613,12 @@ button.bk-stamp.lg{position:static;font-size:11px;padding:7px 10px;transform:rot
 .ph-cv{position:absolute;left:0;right:0;bottom:3px;text-align:center;font:800 8.5px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:#7A6D66}
 .ph.add{display:grid;place-items:center;align-content:center;gap:6px;height:118px;border-style:dashed;background:transparent;color:var(--ink-soft);font:700 11.5px var(--sans);box-shadow:none}
 .ph.add svg{width:20px;height:20px}
+.fullprof{display:grid;gap:10px}
+.fullprof summary{list-style:none;justify-self:start;cursor:pointer}
+.fullprof summary::-webkit-details-marker{display:none}
+.fullprof summary::after{content:" ▸";font-size:10px}
+.fullprof[open] summary::after{content:" ▾"}
+.fullprof[open] > :not(summary){animation:fadeIn .3s ease both}
 html.rm *,html.rm *::before,html.rm *::after{animation:none!important;transition-duration:.01ms!important}
 @media (prefers-reduced-motion: reduce){.float{animation:none}}
 </style>
@@ -642,7 +651,18 @@ const fresh = () => ({v: 1, settings: {reduced: matchMedia('(prefers-reduced-mot
 let S;
 try { S = JSON.parse(localStorage.getItem(KEY)); } catch (e) { S = null; }
 if (!S || S.v !== 1) S = fresh();
-const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); return true; } catch (e) { return false; } };
+// Everything is kept on this device only: in the browser's IndexedDB (room for photos), or localStorage where that's unavailable.
+const idb = new Promise(res => {
+  try { const rq = indexedDB.open('plot-twist', 1); rq.onupgradeneeded = () => rq.result.createObjectStore('kv'); rq.onsuccess = () => res(rq.result); rq.onerror = rq.onblocked = () => res(null); }
+  catch (e) { res(null); }
+});
+const idbGet = () => idb.then(d => d && new Promise(r => { try { const q = d.transaction('kv').objectStore('kv').get('state'); q.onsuccess = () => r(q.result || null); q.onerror = () => r(null); } catch (e) { r(null); } }));
+const lsSave = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); return true; } catch (e) { return false; } };
+// resolves true once saved, false if the device's storage is full
+const save = () => idb.then(d => {
+  if (!d) return lsSave();
+  return new Promise(r => { try { const t = d.transaction('kv', 'readwrite'); t.objectStore('kv').put(S, 'state'); t.oncomplete = () => r(true); t.onerror = t.onabort = () => r(false); } catch (e) { r(false); } });
+});
 const applyMotion = () => document.documentElement.classList.toggle('rm', !!S.settings.reduced);
 applyMotion();
 // Look: mode (system/light/dark) and palette live on the root element as data-mode and data-pal.
@@ -1291,7 +1311,7 @@ async function addPhotos(f, files) {
     let src; try { src = await shrinkImage(file, 720); } catch (e) { continue; }
     const ph = {id: uid(), src, date: Date.now()};
     f.photos.push(ph);
-    if (!save()) { f.photos.pop(); save(); toast(added ? `Added ${added}. Storage is full, remove a few to add more.` : 'Storage is full. Remove a few photos to add more.'); render(); return; }
+    if (!(await save())) { f.photos.pop(); save(); toast(added ? `Added ${added}. Storage is full, remove a few to add more.` : 'Storage is full. Remove a few photos to add more.'); render(); return; }
     added++;
   }
   sfx('tuck'); buzz(8); toast(added === 1 ? 'Photo added' : `${added} photos added`); render();
@@ -1489,9 +1509,11 @@ function inspectSheet(ob, p) {
   });
 }
 function profileSheet(p) {
-  sheet(`<h3>${esc(p.name || 'Profile')}</h3>${p.photo ? `<img class="bio-img" src="${p.photo}" alt="Attached image">` : ''}
+  sheet(`<h3>${esc(p.name || 'Profile')}</h3>
   <div class="objgrid">${p.objects.map(ob => `<button class="mini-obj" data-o="${ob.id}" data-anim="${IDLE[ob.kind] || 'float'}" aria-label="${esc(ob.title)}">${artFor(ob, p.photo)}<span>${esc(ob.title)}</span></button>`).join('')}</div>
-  <div>${p.rows.map(x => `<div class="bd-row${x.hide ? ' hide' : ''}" style="color:var(--ink)"><b>${esc(x.k)}</b><span>${esc(x.v)}</span></div>`).join('')}</div>
+  <details class="fullprof"><summary class="tagbtn">Full profile</summary>
+  ${p.photo ? `<img class="bio-img" src="${p.photo}" alt="Attached image">` : ''}
+  <div>${p.rows.map(x => `<div class="bd-row${x.hide ? ' hide' : ''}" style="color:var(--ink)"><b>${esc(x.k)}</b><span>${esc(x.v)}</span></div>`).join('')}</div></details>
   <button class="btn primary" data-x>Close</button>`, (sh, close) => {
     $('[data-x]', sh).onclick = close;
     on(sh, '.mini-obj', (e, x) => inspectSheet(p.objects.find(ob => ob.id === x.dataset.o), p));
@@ -1613,7 +1635,7 @@ function openSettings() {
   <label class="tog"><span>Reduced motion</span><input type="checkbox" class="sw" id="s-rm" ${st.reduced ? 'checked' : ''}></label>
   <label class="tog"><span>Paper sounds</span><input type="checkbox" class="sw" id="s-snd" ${st.sound ? 'checked' : ''}></label>
   <label class="tog"><span>Haptics</span><input type="checkbox" class="sw" id="s-hap" ${st.haptics ? 'checked' : ''}></label>
-  <p>Saved only in this browser. Contact details are never kept.</p>
+  <p>Everything is stored on this device only. Contact details are never kept.</p>
   <button class="btn" id="s-f">My preferences</button>
   <div class="row2"><button class="btn" id="s-all">Delete everything</button><button class="btn primary" data-x>Done</button></div>`, (sh, close) => {
     on(sh, '#s-mode button', (e, x) => { st.mode = x.dataset.mode; applyLook(); save(); $$('#s-mode button', sh).forEach(y => y.setAttribute('aria-pressed', y === x)); sfx('tuck'); });
@@ -1628,7 +1650,12 @@ function openSettings() {
 }
 
 cur = {name: 'home', opts: {}};
-render();
+// wait for what is stored before the first render, so nothing saved is ever overwritten by an empty start
+idbGet().then(async v => {
+  if (v && v.v === 1) { S = v; applyMotion(); applyLook(); }
+  else if (v === null) { const ok = await save(); if (ok) { try { localStorage.removeItem(KEY); } catch (e) {} } }
+  render();
+});
 })();
 </script>
 </body>
