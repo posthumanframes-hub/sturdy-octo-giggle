@@ -496,7 +496,8 @@ button.flagmark{cursor:pointer}
 html:not(.rm) .burst i{animation:burst 2.6s ease-in-out infinite}
 @keyframes burst{0%,70%,100%{opacity:1;width:16px}80%{opacity:.4;width:10px}}
 .home-sq{display:flex;justify-content:center;margin-top:-4px}
-.btn.pill{border-radius:999px;background:color-mix(in srgb,var(--coral) 18%,var(--paper));border-color:transparent;padding:15px 14px;box-shadow:0 4px 10px -6px var(--shadow)}
+.btn.pill{border-radius:999px;background:var(--action-primary);color:var(--action-on-primary);border-color:transparent;padding:15px 14px;box-shadow:0 6px 14px -8px var(--shadow)}
+.scene > .fgrid{margin-block:auto}
 .setup{display:grid;gap:3px;text-align:left;cursor:pointer;transform:rotate(-1deg);padding-right:52px;transition:transform .3s var(--spring)}
 .setup::after{content:"+";position:absolute;right:14px;top:50%;width:30px;height:30px;margin-top:-15px;border-radius:50%;border:1.3px solid var(--edge);display:grid;place-items:center;font:400 20px/1 var(--sans);color:var(--coral)}
 .setup:hover,.setup:focus-visible{transform:rotate(0) translateY(-2px)}
