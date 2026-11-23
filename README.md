@@ -37,3 +37,12 @@ A small, mobile-first scrapbook game for matching matrimonial profiles against y
 - Reduced motion, sound and haptics can be toggled.
 
 The bundled sample biodata (Rohan Deshpande) is fictional.
+
+## Design system
+
+Follows *Plot Twist: Source-grounded design system* (v4, unified edition):
+- Fraunces carries titles and anything you read or write. Nunito runs the interface. Metadata is at least 11px.
+- Semantic aliases (`--surface-*`, `--text-*`, `--action-primary`, `--border-*`, `--status-*-paper`) sit on top of the original palette tokens. Spacing (`--space-1` to `--space-10`), `--radius-control` (8px) and `--touch-target` (44px) are tokens too.
+- Paper objects stay light in dark mode and can be tilted or irregular. Controls are 8px-radius, 44px, and never rotated. Flag colours mean the same thing in every palette.
+- Checked across Butter, Lagoon and Plum in light and dark, at 320px and 375px wide: meaningful text meets WCAG AA contrast. The operating system's reduced-motion setting turns off all animation.
+
