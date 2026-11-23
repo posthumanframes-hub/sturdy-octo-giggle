@@ -544,11 +544,19 @@ button.bk-stamp.lg{position:static;font-size:11px;padding:7px 10px;transform:rot
 .balance{background:var(--paper);color:var(--paper-ink);border:1.3px solid var(--paper-ink);padding:14px;display:grid;gap:10px;transform:rotate(-.5deg);box-shadow:4px 5px 0 -1px var(--n-butter),4px 5px 0 0 var(--paper-ink)}
 .balance .tally{color:var(--paper-soft)}
 .balance .tally .flag{width:16px;height:20px}
-.meter{display:grid;grid-template-columns:100px 1fr 74px;align-items:center;gap:10px;font:700 12.5px var(--sans)}
-.m-bar{display:flex;gap:4px}
-.m-bar i{flex:1;height:13px;border:1.2px solid var(--paper-ink);border-radius:3px}
-.meter.chem .m-bar i.on{background:var(--n-pink)} .meter.comp .m-bar i.on{background:var(--n-sage)}
-.m-w{font:400 15px var(--serif);text-align:right}
+.seesaw{display:block;width:100%;height:auto;overflow:visible;margin:-4px 0 -2px}
+.seesaw .plank{transform-box:view-box;transform-origin:150px 96px;transform:rotate(var(--tilt));animation:tip 1.6s var(--spring) both}
+@keyframes tip{0%{transform:rotate(calc(var(--tilt) * -1.8))}45%{transform:rotate(calc(var(--tilt) * 1.25))}100%{transform:rotate(var(--tilt))}}
+.seesaw .bud{animation:hop 2.8s ease-in-out infinite;animation-delay:var(--d)}
+@keyframes hop{0%,82%,100%{transform:translateY(0)}88%{transform:translateY(-6px)}94%{transform:translateY(0)}}
+.ss-labels{display:flex;justify-content:space-between;gap:10px;margin-top:-6px}
+.ss-l{display:grid;gap:1px;font:400 16px/1.15 var(--serif);padding:6px 10px 7px;border:1.2px solid var(--paper-ink);transform:rotate(-2deg)}
+.ss-l b{font:800 9.5px var(--sans);letter-spacing:.12em;text-transform:uppercase}
+.ss-l.spark{background:var(--n-pink)} .ss-l.fit{background:var(--n-sage);transform:rotate(2deg);text-align:right}
+.balance .tally{justify-content:center;gap:8px}
+.balance .tally > span{background:var(--n-cream);border:1.2px solid var(--paper-ink);border-radius:14px;padding:3px 10px 3px 6px;color:var(--paper-ink);transform:rotate(-2deg)}
+.balance .tally > span:nth-child(2){transform:rotate(1.5deg)}
+.bline{text-align:center}
 .bline{font:italic 400 15px/1.35 var(--serif);margin:0}
 .fchart{background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:10px 12px}
 .fchart .label{color:var(--paper-soft)}
@@ -1264,7 +1272,7 @@ function pickPrompts(f) {
     .filter(x => { const t = reflectFor(x); if (seen.has(t)) return false; seen.add(t); return true; })
     .slice(0, 3);
 }
-// Chemistry comes from how you felt; compatibility from the flags so far.
+// Spark comes from how you felt; Fit from the flags so far.
 function summary(f) {
   const n = {green: 0, yellow: 0, red: 0};
   f.entries.forEach(e => (e.flags || []).forEach(x => { if (!x.cleared) n[x.level]++; }));
@@ -1273,15 +1281,15 @@ function summary(f) {
   const tot = n.green + n.yellow + n.red;
   const compLv = tot ? clamp(Math.round((n.green + .5) / (n.green + n.yellow + 2 * n.red + 1) * 5), 1, 5) : 0;
   let line;
-  if (!chemLv && !compLv) line = f.profile ? 'Check in after you talk to see the balance.' : 'Add their profile to start.';
-  else if (!chemLv) line = 'Check in after you talk to see how it feels.';
-  else if (!compLv) line = 'Answer a few prompts to see how it lines up.';
-  else if (chemLv - compLv >= 2) line = 'Chemistry is running ahead of compatibility.';
-  else if (compLv - chemLv >= 2) line = 'Lines up on paper. The chemistry is still building.';
-  else if (chemLv >= 4 && compLv >= 4) line = 'A good balance of chemistry and compatibility.';
+  if (!chemLv && !compLv) line = f.profile ? 'Check in after you talk to see where the seesaw lands.' : 'Add their profile to start.';
+  else if (!chemLv) line = 'Check in after you talk to feel the spark.';
+  else if (!compLv) line = 'Answer a few prompts to see the fit.';
+  else if (chemLv - compLv >= 2) line = 'All spark so far. The fit is still catching up.';
+  else if (compLv - chemLv >= 2) line = 'Fits on paper. The spark is still warming up.';
+  else if (chemLv >= 4 && compLv >= 4) line = 'Spark and fit, nicely balanced.';
   else if (chemLv <= 2 && compLv <= 2) line = 'Not much pulling either way yet.';
-  else line = 'Chemistry and compatibility are moving together.';
-  return {n, chemLv, compLv, chemW: ['Not yet', 'Low', 'Cool', 'Okay', 'Warm', 'Strong'][chemLv], compW: ['Too early', 'Shaky', 'Mixed', 'Mixed', 'Promising', 'Strong'][compLv], line};
+  else line = 'Spark and fit are moving together.';
+  return {n, chemLv, compLv, chemW: ['Not yet', 'Fizzled', 'Faint', 'Flickering', 'Glowing', 'Sparks flying'][chemLv], compW: ['Not yet', 'Shaky', 'Patchy', 'Patchy', 'Good fit', 'Great fit'][compLv], line};
 }
 // How the flags pile up, entry by entry.
 function flagChart(f) {
@@ -1295,7 +1303,21 @@ function flagChart(f) {
   return `<div class="fchart"><p class="label">Flags over time</p><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Flags over time: ${run.green} green, ${run.yellow} yellow, ${run.red} red"><line x1="${P}" y1="${H - P}" x2="${W - P}" y2="${H - P}" stroke="#3D3431" stroke-opacity=".25" stroke-dasharray="3 4"/>${lines}</svg></div>`;
 }
 const tally = n => `<span class="tally">${['green', 'yellow', 'red'].map(l => `<span title="${l} flags">${flagSvg(l)}${n[l]}</span>`).join('')}</span>`;
-const meter = (cls, label, lv, word) => `<div class="meter ${cls}"><span>${label}</span><span class="m-bar">${[1, 2, 3, 4, 5].map(i => `<i class="${i <= lv ? 'on' : ''}"></i>`).join('')}</span><span class="m-w">${word}</span></div>`;
+// Spark and Fit sit on a seesaw: each grows and cheers up as it rises, and the heavier side tips down.
+function seesaw(s) {
+  const tilt = (s.compLv - s.chemLv) * 4.5;
+  const buddy = (lv, x, fill) => {
+    if (!lv) return `<g transform="translate(${x - 17} 58)"><path d="${BLOBS[0]}" transform="scale(.58)" fill="none" stroke="#3D3431" stroke-width="2.6" stroke-dasharray="4 4"/><text x="17" y="22" text-anchor="middle" font-family="Fraunces,Georgia,serif" font-size="15" fill="#7A6D66">?</text></g>`;
+    const sc = .5 + lv * .09, face = TOKENS[FEEL[lv - 1][2]].face;
+    return `<g class="bud" style="--d:${x > 150 ? .15 : 0}s"><g transform="translate(${x - 30 * sc} ${91 - 55 * sc}) scale(${sc})"><path d="${BLOBS[lv % 3]}" fill="${fill}" stroke="#3D3431" stroke-width="${2.2 / sc}" stroke-linejoin="round"/><g transform="translate(0 -2)">${face}</g></g></g>`;
+  };
+  return `<svg class="seesaw" viewBox="0 0 300 132" role="img" aria-label="Spark ${s.chemW}, Fit ${s.compW}">
+    <path d="M10 126h280" stroke="#3D3431" stroke-opacity=".35" stroke-width="2" stroke-dasharray="2 6" stroke-linecap="round"/>
+    <g class="plank" style="--tilt:${tilt}deg">${buddy(s.chemLv, 62, '#EDC3BC')}${buddy(s.compLv, 238, '#C3D3B8')}
+      <rect x="22" y="91" width="256" height="9" rx="4.5" fill="#D8B387" stroke="#3D3431" stroke-width="2"/></g>
+    <path d="M150 96l-17 30h34z" fill="#F3E2A6" stroke="#3D3431" stroke-width="2" stroke-linejoin="round"/><circle cx="150" cy="99" r="3" fill="#3D3431"/>
+  </svg>`;
+}
 const fchip = (e, x) => `<button class="fchip ${x.level}${x.cleared ? ' cleared' : ''}" data-flag="${e.id}:${x.id}">${flagSvg(x.level)}<span>${esc(x.text)}</span></button>`;
 function entryHtml(e, i, f, fresh) {
   const feel = e.feel && FEEL[e.feel - 1];
@@ -1417,7 +1439,7 @@ SCENES.folder = (o) => {
     tone: 'pink', eyebrow: 'Folder',
     html: `<div class="who">${p && p.photo ? `<span class="polaroid"><img src="${p.photo}" alt=""></span>` : ''}<h1 class="t">${esc(f.name)}</h1></div>
     <div class="row-pills"><button class="bk-stamp lg s-${f.status}" id="st">${STATUS[f.status]}</button>${p ? '<button class="btn link" id="prof">View profile</button>' : ''}</div>
-    ${p ? `<div class="balance">${meter('chem', 'Chemistry', s.chemLv, s.chemW)}${meter('comp', 'Compatibility', s.compLv, s.compW)}<p class="bline">${s.line}</p>${tally(s.n)}</div>${flagChart(f)}`
+    ${p ? `<div class="balance">${seesaw(s)}<div class="ss-labels"><span class="ss-l spark"><b>Spark</b>${s.chemW}</span><span class="ss-l fit"><b>Fit</b>${s.compW}</span></div><p class="bline">${s.line}</p>${tally(s.n)}</div>${flagChart(f)}`
       : `<button class="checkin setup" id="addp"><span class="q">Add their profile</span><span class="pick">Paste a biodata or add an image. It gets matched against your preferences.</span></button>`}
     ${f.entries.length ? `<p class="label">Timeline</p><div class="tl">${f.entries.map((e, i) => entryHtml(e, i, f, e.id === fresh)).join('')}</div>` : ''}
     <div class="actions">${p ? `<button class="btn primary" id="ci">${IC.plus} Check in</button>` : `<button class="btn primary" id="addp2">${IC.plus} Add profile</button>`}</div>`,
@@ -1440,7 +1462,7 @@ SCENES.folder = (o) => {
   };
 };
 
-// A check-in after talking: how it felt (chemistry), a few prompts from your preferences (compatibility).
+// A check-in after talking: how it felt (Spark), a few prompts from your preferences (Fit).
 SCENES.checkin = (o) => {
   const f = folderById(o.f); if (!f) return SCENES.home();
   const ci = o.ci || (cur.opts.ci = {feel: 0, kind: '', answers: [], note: '', prompts: pickPrompts(f).map(x => x.id)});
@@ -1448,10 +1470,10 @@ SCENES.checkin = (o) => {
   return {
     tone: 'pink', eyebrow: `${esc(f.name)} · ${fmtDate(Date.now())}`,
     html: `<h1 class="t">How was it?</h1>
-    <p class="label">How did you feel with them?</p>
+    <p class="label">Spark · how did you feel with them?</p>
     <div class="tokrow feelrow">${FEEL.map(([v, l, t]) => `<button class="tokbtn" data-feel="${v}" aria-pressed="${ci.feel === v}">${tokenSvg(t, v)}<span>${l}</span></button>`).join('')}</div>
     <div class="seg" id="kind">${KINDS.map(k => `<button data-k="${k}" aria-pressed="${ci.kind === k}">${k}</button>`).join('')}</div>
-    ${prompts.length ? `<div class="deck-wrap"><p class="label">${curP ? `Prompt ${ci.answers.length + 1} of ${prompts.length}` : 'Prompts'}</p>
+    ${prompts.length ? `<div class="deck-wrap"><p class="label">${curP ? `Fit · prompt ${ci.answers.length + 1} of ${prompts.length}` : 'Fit'}</p>
       <div class="deck">${curP ? `${prompts.length - ci.answers.length > 1 ? '<div class="card-under"></div>' : ''}<div class="card" id="card"><div class="note-w"><div class="note">${esc(reflectFor(curP))}<small>${esc(curP.text)} · ${CATL[curP.cat]}</small></div></div></div>` : '<div class="deck-done">All answered.</div>'}</div>
       ${curP ? '<div class="ans3"><button class="btn" data-ans="good">Felt right</button><button class="btn" data-ans="unsure">Not sure</button><button class="btn" data-ans="off">Felt off</button></div>' : ''}
       <div class="earned" aria-live="polite">${ci.answers.map(a => a.flag ? flagSvg(a.flag) : '').join('')}</div></div>`

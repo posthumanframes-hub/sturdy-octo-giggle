@@ -2,7 +2,7 @@
 
 *Check profiles against what matters to you.*
 
-A small, mobile-first scrapbook game for matching matrimonial profiles against your own preferences, then tracking how you feel with a person and whether there's a good balance of chemistry and compatibility. Open `index.html` in any modern browser. There's no build step and nothing to install.
+A small, mobile-first scrapbook game for matching matrimonial profiles against your own preferences, then tracking how you feel with a person and whether there's a good balance of **Spark** (how it feels) and **Fit** (how it lines up with what matters to you). Open `index.html` in any modern browser. There's no build step and nothing to install.
 
 ## Three steps
 
@@ -17,10 +17,10 @@ A small, mobile-first scrapbook game for matching matrimonial profiles against y
 ## The timeline
 
 - **Check in** after a call, chat or date:
-  - how you felt with them (Off, Meh, Okay, Warm, Sparks): that's **chemistry**
-  - three prompts drawn from your preferences, starting with what the profile couldn't answer, each answered *Felt right*, *Not sure* or *Felt off*: that's **compatibility**
+  - how you felt with them (Off, Meh, Okay, Warm, Sparks): that's **Spark**
+  - three prompts drawn from your preferences, starting with what the profile couldn't answer, each answered *Felt right*, *Not sure* or *Felt off*: that's **Fit**
   - *Felt off* raises a flag in that preference's colour, *Felt right* earns a green flag, and *Not sure* adds nothing
-- The folder shows a **Chemistry** and a **Compatibility** meter with a one-line read on the balance, a tally of green, yellow and red flags, and a **Flags over time** chart showing how they accumulate.
+- The folder shows Spark and Fit on a **seesaw**. Each is a little character that grows and cheers up as it rises, and the plank tips toward whichever is ahead and sits level when they're balanced. Below it are a one-line read, a tally of green, yellow and red flags, and a **Flags over time** chart showing how they accumulate.
 - Tap any flag to see where it came from, or clear it if it no longer applies. *Re-check* re-runs the first match after you change your preferences.
 - Each folder has a status (Exploring, Paused, Closed, Passed) and can be renamed or deleted.
 
