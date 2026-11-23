@@ -591,6 +591,13 @@ button.bk-stamp.lg{position:static;font-size:11px;padding:7px 10px;transform:rot
 .sw3{display:flex}
 .sw3 i{width:20px;height:20px;border-radius:50%;border:1.2px solid #3D3431;margin-left:-5px}
 .sw3 i:first-child{margin-left:0}
+.journal{display:grid;gap:8px}
+.journal textarea{font:400 17px/1.45 var(--serif);min-height:170px;border:1.3px solid var(--paper-ink);padding:14px 14px 14px 18px;background:var(--paper);color:var(--paper-ink);width:100%;resize:vertical;
+  background-image:repeating-linear-gradient(transparent 0 24px,rgba(61,52,49,.08) 24px 25px);background-position:0 10px;box-shadow:4px 5px 0 -1px var(--n-butter),4px 5px 0 0 var(--paper-ink)}
+.nudge{justify-self:start;background:none;border:0;padding:2px 0;font:italic 400 14px/1.35 var(--serif);color:var(--ink-soft);cursor:pointer;text-align:left}
+.fchip.pop-in{animation:pop .45s var(--spring)}
+#tags .none{font-size:12.5px}
+.seg .flag{width:12px;height:15px;vertical-align:-2px}
 html.rm *,html.rm *::before,html.rm *::after{animation:none!important;transition-duration:.01ms!important}
 @media (prefers-reduced-motion: reduce){.float{animation:none}}
 </style>
@@ -1272,10 +1279,42 @@ function matchEntry(profile, date) {
   const flags = c.items.filter(i => i.state !== 'unknown').map(i => ({id: uid(), level: i.state === 'aligned' ? 'green' : CAT_FLAG[i.pref.cat], prefId: i.pref.id, text: flagLabel(i.pref, i.state === 'aligned' ? 'green' : CAT_FLAG[i.pref.cat]), src: i.quote ? `${i.quote.k}: “${i.quote.s}”` : '', cleared: false}));
   return {id: uid(), type: 'match', date: date || Date.now(), unknown: c.items.filter(i => i.state === 'unknown').map(i => i.pref.id), flags, note: ''};
 }
-// A check-in answer becomes a flag only when it leans one way.
 // A flag's label says which way it leaned: something you want that's missing, or something you don't want that isn't there.
 const flagLabel = (pref, level) => { const want = pref.cat === 'need' || pref.cat === 'nice'; return want && level !== 'green' ? `${pref.text} · lacking` : !want && level === 'green' ? `${pref.text} · not an issue` : pref.text; };
-const answerFlag = (pref, a) => a === 'good' ? 'green' : a === 'off' ? CAT_FLAG[pref.cat] : null;
+// Auto-tagging a journal entry against your flags. A simple on-device reading: find the sentence that
+// talks about a preference, then read which way it leans from the wording.
+const POS_W = /\b(lov(e|ed|ing)|great|kind|laugh\w*|easy|listen\w*|respect\w*|heard|fun|warm|thoughtful|curious|asked|honest|open(ed)?|calm\w*|car(e|ed|ing)|help\w*|shared|support\w*|sweet|comfortable|relaxed|enjoy\w*|lovely|nice|happy|patient|gentle|own decisions|together)\b/gi;
+const NEG_W = /\b(rude|annoy\w*|upset|uncomfortable|awkward|pushy|pressur\w*|ignor\w*|dismiss\w*|late|cancel\w*|phone|quiet|silen\w*|cold|distant|angry|shout\w*|jealous|controll?\w*|checked on|lied|lying|hid|judg\w*|mock\w*|interrupt\w*|bored?|boring|tense|hurt|disrespect\w*|condescend\w*|smok\w*|drunk|changed the subject|avoid\w*)\b/gi;
+const NEGATION = /(n't|\bnot\b|\bnever\b|\bno\b|\bbarely\b|\bhardly\b|\bwithout\b)/i;
+const STOP = new Set('want wants wanted someone being person really about their there with have that this more less like good very make makes into from what when who your yours mine them they open'.split(' '));
+const prefMatches = (pref, sen) => {
+  const th = THEME[pref.theme];
+  if (th) return th.t.test(sen) || (th.negT && th.negT.test(sen)) || (th.posT && th.posT.test(sen));
+  return pref.text.toLowerCase().split(/[^a-z']+/).filter(w => w.length >= 4 && !STOP.has(w)).some(w => new RegExp('\\b' + w.slice(0, 5), 'i').test(sen));
+};
+function lean(pref, sen) {
+  const th = THEME[pref.theme], neg = NEGATION.test(sen);
+  if (th && th.posT && th.posT.test(sen)) return 'good';
+  if (th && th.negT && th.negT.test(sen) && pref.pol === 'neg') return neg ? 'good' : 'off';
+  const pos = (sen.match(POS_W) || []).length, bad = (sen.match(NEG_W) || []).length;
+  // for something you want, a negative read means it's lacking; for something you don't want, a negative read means it showed up
+  let score = neg && pos && !bad ? -1 : neg && bad && !pos ? 1 : pos - bad;
+  // a plain mention of something you typed yourself (no theme to read) counts as support, or as lacking if negated
+  if (!score) return th ? null : neg ? 'off' : 'good';
+  return score > 0 ? 'good' : 'off';
+}
+function autoTag(text) {
+  const out = [], sens = sentences(text), rank = {green: 0, yellow: 1, red: 2};
+  mine().filter(x => x.cat).forEach(pref => {
+    const sen = sens.find(x => prefMatches(pref, x)); if (!sen) return;
+    const l = lean(pref, sen); if (!l) return;
+    const level = l === 'good' ? 'green' : CAT_FLAG[pref.cat];
+    const key = pref.theme || pref.id, prev = out.find(x => x.key === key);
+    if (prev) { if (rank[level] > rank[prev.level]) Object.assign(prev, {level, prefId: pref.id, text: flagLabel(pref, level), src: sen}); return; }
+    out.push({id: uid(), key, level, prefId: pref.id, text: flagLabel(pref, level), src: sen, cleared: false});
+  });
+  return out.map(({key, ...x}) => x);
+}
 // Prompts for a check-in: what the profile couldn't answer first, then whatever has been asked least.
 function pickPrompts(f) {
   const order = {need: 0, no: 1, nice: 2, avoid: 3}, asked = {}, seen = new Set();
@@ -1295,26 +1334,15 @@ function summary(f) {
   const tot = n.green + n.yellow + n.red;
   const compLv = tot ? clamp(Math.round((n.green + .5) / (n.green + n.yellow + 2 * n.red + 1) * 5), 1, 5) : 0;
   let line;
-  if (!chemLv && !compLv) line = f.profile ? 'Check in after you talk to see where the seesaw lands.' : 'Add their profile to start.';
-  else if (!chemLv) line = 'Check in after you talk to feel the spark.';
-  else if (!compLv) line = 'Answer a few prompts to see the fit.';
+  if (!chemLv && !compLv) line = f.profile ? 'Write a journal entry after you talk to see where the seesaw lands.' : 'Add their profile to start.';
+  else if (!chemLv) line = 'Tap how you felt in a journal entry to see the spark.';
+  else if (!compLv) line = 'Write about what happened to see the fit.';
   else if (chemLv - compLv >= 2) line = 'All spark so far. The fit is still catching up.';
   else if (compLv - chemLv >= 2) line = 'Fits on paper. The spark is still warming up.';
   else if (chemLv >= 4 && compLv >= 4) line = 'Spark and fit, nicely balanced.';
   else if (chemLv <= 2 && compLv <= 2) line = 'Not much pulling either way yet.';
   else line = 'Spark and fit are moving together.';
   return {n, chemLv, compLv, chemW: ['Not yet', 'Fizzled', 'Faint', 'Flickering', 'Glowing', 'Sparks flying'][chemLv], compW: ['Not yet', 'Shaky', 'Patchy', 'Patchy', 'Good fit', 'Great fit'][compLv], line};
-}
-// How the flags pile up, entry by entry.
-function flagChart(f) {
-  const es = f.entries; if (es.length < 2) return '';
-  const W = 300, H = 96, P = 12, run = {green: 0, yellow: 0, red: 0}, cum = {green: [], yellow: [], red: []};
-  es.forEach(e => { (e.flags || []).forEach(x => { if (!x.cleared) run[x.level]++; }); Object.keys(run).forEach(l => cum[l].push(run[l])); });
-  if (!run.green && !run.yellow && !run.red) return '';
-  const max = Math.max(1, run.green, run.yellow, run.red);
-  const x = i => P + i * (W - 2 * P) / (es.length - 1), y = v => H - P - v * (H - 2 * P) / max;
-  const lines = ['green', 'yellow', 'red'].map(l => `<polyline points="${cum[l].map((v, i) => `${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ')}" fill="none" stroke="${FLAGC[l]}" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>` + cum[l].map((v, i) => `<circle cx="${x(i).toFixed(1)}" cy="${y(v).toFixed(1)}" r="3" fill="${FLAGC[l]}" stroke="#3D3431" stroke-width="1"/>`).join('')).join('');
-  return `<div class="fchart"><p class="label">Flags over time</p><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Flags over time: ${run.green} green, ${run.yellow} yellow, ${run.red} red"><line x1="${P}" y1="${H - P}" x2="${W - P}" y2="${H - P}" stroke="#3D3431" stroke-opacity=".25" stroke-dasharray="3 4"/>${lines}</svg></div>`;
 }
 const tally = n => `<span class="tally">${['green', 'yellow', 'red'].map(l => `<span title="${l} flags">${flagSvg(l)}${n[l]}</span>`).join('')}</span>`;
 // Spark and Fit sit on a seesaw: each grows and cheers up as it rises, and the heavier side tips down.
@@ -1335,7 +1363,7 @@ function seesaw(s) {
 const fchip = (e, x) => `<button class="fchip ${x.level}${x.cleared ? ' cleared' : ''}" data-flag="${e.id}:${x.id}">${flagSvg(x.level)}<span>${esc(x.text)}</span></button>`;
 function entryHtml(e, i, f, fresh) {
   const feel = e.feel && FEEL[e.feel - 1];
-  const head = e.type === 'match' ? 'First match' : (e.kind || 'Check-in');
+  const head = e.type === 'match' ? 'First match' : (e.kind || (e.type === 'journal' ? 'Journal' : 'Check-in'));
   return `<div class="tl-e${fresh ? ' fresh' : ''}"><span class="tl-dot k-${e.type}"></span><div class="tl-card" style="--r:${i % 2 ? .6 : -.6}deg">
     <div class="tl-h"><span>${fmtDate(e.date)} · ${esc(head)}</span>${e.type === 'match' ? '<button class="tagbtn" data-recheck>Re-check</button>' : `<button class="tagbtn" data-dele="${e.id}">Remove</button>`}</div>
     ${feel ? `<div class="tl-feel">${tokenSvg(feel[2], e.feel)}<span>Felt ${feel[1].toLowerCase()}</span></div>` : ''}
@@ -1453,10 +1481,10 @@ SCENES.folder = (o) => {
     tone: 'pink', eyebrow: 'Folder',
     html: `<div class="who">${p && p.photo ? `<span class="polaroid"><img src="${p.photo}" alt=""></span>` : ''}<h1 class="t">${esc(f.name)}</h1></div>
     <div class="row-pills"><button class="bk-stamp lg s-${f.status}" id="st">${STATUS[f.status]}</button>${p ? '<button class="btn link" id="prof">View profile</button>' : ''}</div>
-    ${p ? `<div class="balance">${seesaw(s)}<div class="ss-labels"><span class="ss-l spark"><b>Spark</b>${s.chemW}</span><span class="ss-l fit"><b>Fit</b>${s.compW}</span></div><p class="bline">${s.line}</p>${tally(s.n)}</div>${flagChart(f)}`
+    ${p ? `<div class="balance">${seesaw(s)}<div class="ss-labels"><span class="ss-l spark"><b>Spark</b>${s.chemW}</span><span class="ss-l fit"><b>Fit</b>${s.compW}</span></div><p class="bline">${s.line}</p>${tally(s.n)}</div>`
       : `<button class="checkin setup" id="addp"><span class="q">Add their profile</span><span class="pick">Paste a biodata or add an image. It gets matched against your preferences.</span></button>`}
     ${f.entries.length ? `<p class="label">Timeline</p><div class="tl">${f.entries.map((e, i) => entryHtml(e, i, f, e.id === fresh)).join('')}</div>` : ''}
-    <div class="actions">${p ? `<button class="btn primary" id="ci">${IC.plus} Check in</button>` : `<button class="btn primary" id="addp2">${IC.plus} Add profile</button>`}</div>`,
+    <div class="actions">${p ? `<button class="btn primary" id="ci">${IC.plus} Journal entry</button>` : `<button class="btn primary" id="addp2">${IC.plus} Add profile</button>`}</div>`,
     mount: r => {
       if (fresh && !S.settings.reduced) setTimeout(() => { sfx('drop'); buzz(16); }, 500);
       on(r, '#st', () => folderSheet(f));
@@ -1466,52 +1494,52 @@ SCENES.folder = (o) => {
       on(r, '[data-recheck]', () => { const old = f.entries.find(e => e.type === 'match'), nu = matchEntry(p, old.date);
         nu.flags.forEach(x => { if (old.flags.some(y => y.prefId === x.prefId && y.level === x.level && y.cleared)) x.cleared = true; });
         f.entries[f.entries.indexOf(old)] = nu; S.ui.fresh = nu.id; save(); toast('Re-checked'); render(); });
-      on(r, '[data-dele]', (e, b) => confirmSheet('Remove this check-in?', 'Its flags go too.', 'Remove', () => { f.entries = f.entries.filter(x => x.id !== b.dataset.dele); save(); render(); }));
+      on(r, '[data-dele]', (e, b) => confirmSheet('Remove this entry?', 'Its tags go too.', 'Remove', () => { f.entries = f.entries.filter(x => x.id !== b.dataset.dele); save(); render(); }));
       on(r, '[data-flag]', (e, b) => { const [eid, xid] = b.dataset.flag.split(':'), x = f.entries.find(y => y.id === eid).flags.find(y => y.id === xid);
-        sheet(`<h3>${flagSvg(x.level)} ${esc(x.text)}</h3>${x.src ? `<div class="clips">${clipHtml(x.src, 0)}</div>` : ''}<div class="row2"><button class="btn" data-x>Close</button><button class="btn primary" data-c>${x.cleared ? 'Restore flag' : 'Clear flag'}</button></div>`, (sh, close) => {
-          $('[data-x]', sh).onclick = close;
+        const pref = mine().find(y => y.id === x.prefId);
+        sheet(`<h3>${flagSvg(x.level)} ${esc(x.text)}</h3>${x.src ? `<div class="clips">${clipHtml(x.src, 0)}</div>` : ''}
+          <p class="label">Tagged as</p><div class="seg" id="lv">${['green', 'yellow', 'red'].map(l => `<button data-l="${l}" aria-pressed="${x.level === l}">${flagSvg(l)} ${cap(l)}</button>`).join('')}</div>
+          <div class="row2"><button class="btn" data-c>${x.cleared ? 'Restore tag' : 'Clear tag'}</button><button class="btn primary" data-x>Done</button></div>`, (sh, close) => {
+          on(sh, '[data-l]', (e2, y) => { x.level = y.dataset.l; if (pref) x.text = flagLabel(pref, x.level); save(); $$('[data-l]', sh).forEach(z => z.setAttribute('aria-pressed', z === y)); sfx('tuck'); });
+          $('[data-x]', sh).onclick = () => { close(); render(); };
           $('[data-c]', sh).onclick = () => { x.cleared = !x.cleared; save(); close(); render(); };
         }); });
     }
   };
 };
 
-// A check-in after talking: how it felt (Spark), a few prompts from your preferences (Fit).
+// A journal entry: how it felt (Spark) and what happened in your own words, auto-tagged against your flags (Fit).
 SCENES.checkin = (o) => {
   const f = folderById(o.f); if (!f) return SCENES.home();
-  const ci = o.ci || (cur.opts.ci = {feel: 0, kind: '', answers: [], note: '', prompts: pickPrompts(f).map(x => x.id)});
-  const prompts = ci.prompts.map(id => mine().find(x => x.id === id)).filter(Boolean), curP = prompts[ci.answers.length];
+  const ci = o.ci || (cur.opts.ci = {feel: 0, kind: '', text: '', nudge: 0});
+  const nudges = pickPrompts(f).map(x => reflectFor(x));
+  const tagsHtml = t => { const tags = autoTag(t); return tags.length ? tags.map(x => `<span class="fchip ${x.level}">${flagSvg(x.level)}<span>${esc(x.text)}</span></span>`).join('') : `<span class="none">${t.trim() ? 'No tags yet. Write about what happened.' : 'Tags appear here as you write.'}</span>`; };
   return {
     tone: 'pink', eyebrow: `${esc(f.name)} · ${fmtDate(Date.now())}`,
-    html: `<h1 class="t">How was it?</h1>
+    html: `<h1 class="t">Journal entry.</h1>
     <p class="label">Spark · how did you feel with them?</p>
     <div class="tokrow feelrow">${FEEL.map(([v, l, t]) => `<button class="tokbtn" data-feel="${v}" aria-pressed="${ci.feel === v}">${tokenSvg(t, v)}<span>${l}</span></button>`).join('')}</div>
     <div class="seg" id="kind">${KINDS.map(k => `<button data-k="${k}" aria-pressed="${ci.kind === k}">${k}</button>`).join('')}</div>
-    ${prompts.length ? `<div class="deck-wrap"><p class="label">${curP ? `Fit · prompt ${ci.answers.length + 1} of ${prompts.length}` : 'Fit'}</p>
-      <div class="deck">${curP ? `${prompts.length - ci.answers.length > 1 ? '<div class="card-under"></div>' : ''}<div class="card" id="card"><div class="note-w"><div class="note">${esc(reflectFor(curP))}<small>${esc(curP.text)} · ${CATL[curP.cat]}</small></div></div></div>` : '<div class="deck-done">All answered.</div>'}</div>
-      ${curP ? '<div class="ans3"><button class="btn" data-ans="good">Felt right</button><button class="btn" data-ans="unsure">Not sure</button><button class="btn" data-ans="off">Felt off</button></div>' : ''}
-      <div class="earned" aria-live="polite">${ci.answers.map(a => a.flag ? flagSvg(a.flag) : '').join('')}</div></div>`
-      : `<button class="checkin setup" id="setp"><span class="q">No preferences yet</span><span class="pick">Add some to get prompts here.</span></button>`}
-    <textarea class="note-area" id="nt" aria-label="Note" placeholder="Anything else? (optional)">${esc(ci.note)}</textarea>
+    <div class="journal"><textarea id="jt" aria-label="What happened" placeholder="What happened? Write it the way you'd tell a friend.">${esc(ci.text)}</textarea>
+    ${nudges.length ? `<button class="nudge" id="nudge">Stuck? ${esc(nudges[ci.nudge % nudges.length])}</button>` : ''}</div>
+    <p class="label">Fit · auto tags from your flags</p>
+    <div class="fchips" id="tags" aria-live="polite">${tagsHtml(ci.text)}</div>
+    ${mine().some(x => x.cat) ? '' : '<button class="checkin setup" id="setp"><span class="q">No preferences yet</span><span class="pick">Add some so entries can be tagged.</span></button>'}
     <div class="actions"><button class="btn primary" id="save">Add to timeline</button></div>`,
     mount: r => {
       on(r, '[data-feel]', (e, x) => { ci.feel = ci.feel === +x.dataset.feel ? 0 : +x.dataset.feel; $$('[data-feel]', r).forEach(y => { y.setAttribute('aria-pressed', +y.dataset.feel === ci.feel); y.classList.remove('pop'); }); if (ci.feel) { void x.offsetWidth; x.classList.add('pop'); } sfx('tuck'); buzz(6); });
       on(r, '#kind button', (e, x) => { ci.kind = ci.kind === x.dataset.k ? '' : x.dataset.k; $$('#kind button', r).forEach(y => y.setAttribute('aria-pressed', y.dataset.k === ci.kind)); sfx('tuck'); });
-      on(r, '[data-ans]', (e, x) => {
-        const a = x.dataset.ans, flag = answerFlag(curP, a);
-        ci.answers.push({prefId: curP.id, text: reflectFor(curP), a, flag});
-        const card = $('#card', r); card.style.transition = 'transform .25s ease, opacity .25s';
-        card.style.transform = `translateX(${a === 'good' ? 130 : a === 'off' ? -130 : 0}%) translateY(${a === 'unsure' ? 40 : 0}px) rotate(${a === 'good' ? 14 : a === 'off' ? -14 : 0}deg)`; card.style.opacity = 0;
-        sfx(flag === 'red' ? 'drop' : 'tuck'); buzz(flag ? 14 : 6);
-        setTimeout(render, S.settings.reduced ? 0 : 230);
-      });
+      on(r, '#nudge', (e, x) => { ci.nudge++; x.textContent = 'Stuck? ' + nudges[ci.nudge % nudges.length]; sfx('page'); });
       on(r, '#setp', toPrefs);
-      $('#nt', r).addEventListener('input', e => { ci.note = e.target.value; });
+      let tm = null, last = '';
+      $('#jt', r).addEventListener('input', e => {
+        ci.text = e.target.value; clearTimeout(tm);
+        tm = setTimeout(() => { const box = $('#tags', r), html = tagsHtml(ci.text); if (html !== last) { last = html; box.innerHTML = html; $$('.fchip', box).forEach(c => c.classList.add('pop-in')); } }, 350);
+      });
       on(r, '#save', () => {
-        if (!ci.feel && !ci.kind && !ci.answers.length && !ci.note.trim()) { back(); return; }
-        const e = {id: uid(), type: 'checkin', date: Date.now(), feel: ci.feel || null, kind: ci.kind, answers: ci.answers, note: ci.note.trim(),
-          flags: ci.answers.filter(a => a.flag).map(a => { const pr = mine().find(x => x.id === a.prefId); return {id: uid(), level: a.flag, prefId: a.prefId, text: pr ? flagLabel(pr, a.flag) : a.text, src: `${a.text} · ${{good: 'Felt right', off: 'Felt off'}[a.a]}`, cleared: false}; })};
-        f.entries.push(e); S.ui.fresh = e.id; save(); toast('Added'); back();
+        if (!ci.feel && !ci.kind && !ci.text.trim()) { back(); return; }
+        const e = {id: uid(), type: 'journal', date: Date.now(), feel: ci.feel || null, kind: ci.kind, note: ci.text.trim(), flags: autoTag(ci.text)};
+        f.entries.push(e); S.ui.fresh = e.id; save(); toast(e.flags.length ? `Added · ${e.flags.length} tag${e.flags.length > 1 ? 's' : ''}` : 'Added'); back();
       });
     }
   };
@@ -1521,12 +1549,10 @@ SCENES.checkin = (o) => {
 function exampleFolder() {
   const day = 864e5, p = parseBiodata(SAMPLE);
   const f = {id: uid(), name: 'Rohan', example: true, created: Date.now() - 20 * day, status: 'exploring', profile: p, entries: [matchEntry(p, Date.now() - 20 * day)]};
-  const mk = (ago, feel, kind, ans, note) => { const ps = pickPrompts(f), answers = ps.map((pr, i) => ({prefId: pr.id, text: reflectFor(pr), a: ans[i] || 'unsure', flag: answerFlag(pr, ans[i] || 'unsure')}));
-    f.entries.push({id: uid(), type: 'checkin', date: Date.now() - ago * day, feel, kind, answers, note,
-      flags: answers.filter(a => a.flag).map(a => ({id: uid(), level: a.flag, prefId: a.prefId, text: flagLabel(mine().find(x => x.id === a.prefId), a.flag), src: `${a.text} · ${{good: 'Felt right', off: 'Felt off'}[a.a]}`, cleared: false}))}); };
-  mk(14, 4, 'Call', ['good', 'unsure', 'good'], 'Talked about books for ages. He rereads the same three.');
-  mk(8, 3, 'Coffee', ['off', 'good'], 'He checked his phone a lot. Funny story about a football trophy.');
-  mk(3, 5, 'Date', ['good', 'good', 'unsure'], 'Easy. Lost track of time.');
+  const mk = (ago, feel, kind, text) => f.entries.push({id: uid(), type: 'journal', date: Date.now() - ago * day, feel, kind, note: text, flags: autoTag(text)});
+  mk(14, 4, 'Call', 'We talked about books for ages and he was really curious about what I read. He laughed a lot, easy to talk to.');
+  mk(8, 3, 'Coffee', 'He checked his phone a lot. When I disagreed about something he went quiet and changed the subject. Funny story about a football trophy though.');
+  mk(3, 5, 'Date', 'Easy and warm. He asked what I needed and respected that I wanted to head home early. He said we would make our own decisions, not his parents.');
   return f;
 }
 

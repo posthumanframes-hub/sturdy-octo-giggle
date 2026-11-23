@@ -16,12 +16,13 @@ A small, mobile-first scrapbook game for matching matrimonial profiles against y
 
 ## The timeline
 
-- **Check in** after a call, chat or date:
-  - how you felt with them (Off, Meh, Okay, Warm, Sparks): that's **Spark**
-  - three prompts drawn from your preferences, starting with what the profile couldn't answer, each answered *Felt right*, *Not sure* or *Felt off*: that's **Fit**
-  - *Felt off* raises a flag in that preference's colour, *Felt right* earns a green flag, and *Not sure* adds nothing
-- The folder shows Spark and Fit on a **seesaw**. Each is a little character that grows and cheers up as it rises, and the plank tips toward whichever is ahead and sits level when they're balanced. Below it are a one-line read, a tally of green, yellow and red flags, and a **Flags over time** chart showing how they accumulate.
-- Tap any flag to see where it came from, or clear it if it no longer applies. *Re-check* re-runs the first match after you change your preferences.
+- **Journal entry** after a call, chat or date:
+  - tap how you felt with them (Off, Meh, Okay, Warm, Sparks): that's **Spark**
+  - write what happened in your own words. If you're stuck, a *Stuck?* nudge suggests something to write about from what you still want to find out
+  - as you type, the entry is **auto-tagged** against your preferences: that's **Fit**. A sentence that shows something you want, or rules out something you don't, earns a green flag. One where it leans off raises a flag in that preference's colour (red for non-negotiables and red flags, yellow for green and yellow flags). A plain mention of a preference you typed yourself counts as support.
+- The folder shows Spark and Fit on a **seesaw**. Each is a little character that grows and cheers up as it rises, and the plank tips toward whichever is ahead and sits level when they're balanced. Below it are a one-line read and a tally of green, yellow and red flags.
+- Tap any tag to see the sentence it came from, change its colour, or clear it. *Re-check* re-runs the first match after you change your preferences.
+- Auto-tagging is a simple keyword reading that runs on the device (nothing is sent anywhere), so it will miss things and sometimes misread them. That's why every tag can be changed.
 - Each folder has a status (Exploring, Paused, Closed, Passed) and can be renamed or deleted.
 
 ## Rules it keeps
