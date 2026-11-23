@@ -29,6 +29,7 @@ A small, mobile-first scrapbook game for matching matrimonial profiles against y
 - Objects come only from lines that are actually on the form, and evidence only comes from what the profile states in its own words (about me, expectations, lifestyle lines such as smoking). The match never reads anything into job, education, caste, religion, family background or hobbies.
 - An unknown is never a flag. Flags are reviewable and can be cleared.
 - Privacy: everything stays in the browser's `localStorage`. Contact details are dropped when the biodata is parsed, and preference suggestions are worked out on the device. Settings can delete everything, and each folder has its own delete.
+- **Look:** in Settings, choose **Mode** (System, Light or Dark) and one of three **palettes**: Butter (warm butter and coral), Lagoon (sea-glass blue and teal) or Plum (mauve, plum and marigold). Each palette has a light and a dark version. System follows your device or the Claude viewer.
 - Reduced motion, sound and haptics can be toggled.
 
 The bundled sample biodata (Rohan Deshpande) is fictional.

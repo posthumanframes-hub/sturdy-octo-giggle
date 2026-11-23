@@ -24,18 +24,18 @@
   --stamp-ok:#4F6B45; --stamp-flag:#B4462F;
   --bg:var(--butter-bg);
 }
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --butter-bg:#2B261B; --cream-bg:#27231E; --sage-bg:#212720; --pink-bg:#2D2224; --blue-bg:#1F252B;
-  --ink:#F2E9DA; --ink-soft:#C3B6A8; --line:rgba(242,233,218,.2);
-  --table:#3A3328; --table-edge:rgba(242,233,218,.12); --shadow:rgba(0,0,0,.4);
-  --coral:#D86A50; --stamp-ok:#A7C59A; --stamp-flag:#EE937C; color-scheme:dark;
-}}
-:root[data-theme="dark"]{
-  --butter-bg:#2B261B; --cream-bg:#27231E; --sage-bg:#212720; --pink-bg:#2D2224; --blue-bg:#1F252B;
-  --ink:#F2E9DA; --ink-soft:#C3B6A8; --line:rgba(242,233,218,.2);
-  --table:#3A3328; --table-edge:rgba(242,233,218,.12); --shadow:rgba(0,0,0,.4);
-  --coral:#D86A50; --stamp-ok:#A7C59A; --stamp-flag:#EE937C; color-scheme:dark;
-}
+/* palettes: light values first, then dark. data-mode (light/dark) overrides the viewer theme; none follows it. */
+:root[data-pal="lagoon"]{--butter-bg:#E2EEEF; --cream-bg:#F2F7F6; --sage-bg:#DCEBE3; --pink-bg:#E5E8F4; --blue-bg:#DAE7F1; --ink:#22363A; --ink-soft:#5B7276; --line:rgba(34,54,58,.18); --coral:#2C7C84; --n-butter:#F4E4A4; --n-pink:#F2C8BF; --n-blue:#BCD8E6; --n-sage:#BEDFCE; --table:#EEF5F3; --stamp-ok:#2F6E55; --stamp-flag:#B4462F; --shadow:rgba(34,54,58,.16)}
+:root[data-pal="plum"]{--butter-bg:#F3E5EE; --cream-bg:#FAF3F6; --sage-bg:#ECE6F3; --pink-bg:#F6DFE3; --blue-bg:#E6E2F2; --ink:#3A2836; --ink-soft:#7A6375; --line:rgba(58,40,54,.18); --coral:#7D3F7B; --n-butter:#F6D88A; --n-pink:#F1C3D1; --n-blue:#D2CCEB; --n-sage:#CDE0C5; --table:#F8EEF4; --stamp-ok:#4F6B45; --stamp-flag:#A8364F; --shadow:rgba(58,40,54,.16)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]):not([data-mode="light"]){--butter-bg:#2B261B; --cream-bg:#27231E; --sage-bg:#212720; --pink-bg:#2D2224; --blue-bg:#1F252B; --ink:#F2E9DA; --ink-soft:#C3B6A8; --line:rgba(242,233,218,.2); --table:#3A3328; --table-edge:rgba(242,233,218,.12); --shadow:rgba(0,0,0,.4); --coral:#D86A50; --stamp-ok:#A7C59A; --stamp-flag:#EE937C; color-scheme:dark}}
+:root[data-theme="dark"]:not([data-mode="light"]){--butter-bg:#2B261B; --cream-bg:#27231E; --sage-bg:#212720; --pink-bg:#2D2224; --blue-bg:#1F252B; --ink:#F2E9DA; --ink-soft:#C3B6A8; --line:rgba(242,233,218,.2); --table:#3A3328; --table-edge:rgba(242,233,218,.12); --shadow:rgba(0,0,0,.4); --coral:#D86A50; --stamp-ok:#A7C59A; --stamp-flag:#EE937C; color-scheme:dark}
+:root[data-mode="dark"]{--butter-bg:#2B261B; --cream-bg:#27231E; --sage-bg:#212720; --pink-bg:#2D2224; --blue-bg:#1F252B; --ink:#F2E9DA; --ink-soft:#C3B6A8; --line:rgba(242,233,218,.2); --table:#3A3328; --table-edge:rgba(242,233,218,.12); --shadow:rgba(0,0,0,.4); --coral:#D86A50; --stamp-ok:#A7C59A; --stamp-flag:#EE937C; color-scheme:dark}
+@media (prefers-color-scheme: dark){:root[data-pal="lagoon"]:not([data-theme="light"]):not([data-mode="light"]){--butter-bg:#16272A; --cream-bg:#172225; --sage-bg:#152620; --pink-bg:#1C1F2E; --blue-bg:#162129; --ink:#E4F1EF; --ink-soft:#A6C0BF; --line:rgba(228,241,239,.2); --coral:#5DB4BC; --coral-ink:#10292C; --table:#203538; --table-edge:rgba(228,241,239,.12); --stamp-ok:#8FD1B0; --stamp-flag:#F09A86; --shadow:rgba(0,0,0,.45); color-scheme:dark}}
+:root[data-pal="lagoon"][data-theme="dark"]:not([data-mode="light"]){--butter-bg:#16272A; --cream-bg:#172225; --sage-bg:#152620; --pink-bg:#1C1F2E; --blue-bg:#162129; --ink:#E4F1EF; --ink-soft:#A6C0BF; --line:rgba(228,241,239,.2); --coral:#5DB4BC; --coral-ink:#10292C; --table:#203538; --table-edge:rgba(228,241,239,.12); --stamp-ok:#8FD1B0; --stamp-flag:#F09A86; --shadow:rgba(0,0,0,.45); color-scheme:dark}
+:root[data-pal="lagoon"][data-mode="dark"]{--butter-bg:#16272A; --cream-bg:#172225; --sage-bg:#152620; --pink-bg:#1C1F2E; --blue-bg:#162129; --ink:#E4F1EF; --ink-soft:#A6C0BF; --line:rgba(228,241,239,.2); --coral:#5DB4BC; --coral-ink:#10292C; --table:#203538; --table-edge:rgba(228,241,239,.12); --stamp-ok:#8FD1B0; --stamp-flag:#F09A86; --shadow:rgba(0,0,0,.45); color-scheme:dark}
+@media (prefers-color-scheme: dark){:root[data-pal="plum"]:not([data-theme="light"]):not([data-mode="light"]){--butter-bg:#291D27; --cream-bg:#241B23; --sage-bg:#231E2B; --pink-bg:#2B1D23; --blue-bg:#211E2C; --ink:#F3E7EF; --ink-soft:#C5B1C0; --line:rgba(243,231,239,.2); --coral:#CF8FCB; --coral-ink:#2A1027; --table:#382A35; --table-edge:rgba(243,231,239,.12); --stamp-ok:#B5D3A4; --stamp-flag:#F29AAE; --shadow:rgba(0,0,0,.45); color-scheme:dark}}
+:root[data-pal="plum"][data-theme="dark"]:not([data-mode="light"]){--butter-bg:#291D27; --cream-bg:#241B23; --sage-bg:#231E2B; --pink-bg:#2B1D23; --blue-bg:#211E2C; --ink:#F3E7EF; --ink-soft:#C5B1C0; --line:rgba(243,231,239,.2); --coral:#CF8FCB; --coral-ink:#2A1027; --table:#382A35; --table-edge:rgba(243,231,239,.12); --stamp-ok:#B5D3A4; --stamp-flag:#F29AAE; --shadow:rgba(0,0,0,.45); color-scheme:dark}
+:root[data-pal="plum"][data-mode="dark"]{--butter-bg:#291D27; --cream-bg:#241B23; --sage-bg:#231E2B; --pink-bg:#2B1D23; --blue-bg:#211E2C; --ink:#F3E7EF; --ink-soft:#C5B1C0; --line:rgba(243,231,239,.2); --coral:#CF8FCB; --coral-ink:#2A1027; --table:#382A35; --table-edge:rgba(243,231,239,.12); --stamp-ok:#B5D3A4; --stamp-flag:#F29AAE; --shadow:rgba(0,0,0,.45); color-scheme:dark}
 *{box-sizing:border-box}
 html,body{height:100%}
 body{margin:0;background-color:var(--bg);color:var(--ink);font:15px/1.5 var(--sans);-webkit-font-smoothing:antialiased;transition:background-color .6s ease;
@@ -585,6 +585,12 @@ button.bk-stamp.lg{position:static;font-size:11px;padding:7px 10px;transform:rot
 .earned .flag{width:17px;height:21px;animation:pop .45s var(--spring)}
 .sheet h3 .flag{width:18px;height:22px;vertical-align:-3px}
 .sheet .objgrid{margin:4px 0}
+.pals{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.pals button{display:grid;gap:6px;justify-items:center;border:1.2px solid var(--line);background:var(--paper);color:var(--paper-ink);border-radius:10px;padding:10px 6px;font:700 12px var(--sans);cursor:pointer}
+.pals button[aria-pressed=true]{border-color:var(--paper-ink);box-shadow:0 0 0 2px var(--coral)}
+.sw3{display:flex}
+.sw3 i{width:20px;height:20px;border-radius:50%;border:1.2px solid #3D3431;margin-left:-5px}
+.sw3 i:first-child{margin-left:0}
 html.rm *,html.rm *::before,html.rm *::after{animation:none!important;transition-duration:.01ms!important}
 @media (prefers-reduced-motion: reduce){.float{animation:none}}
 </style>
@@ -620,6 +626,13 @@ if (!S || S.v !== 1) S = fresh();
 const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} };
 const applyMotion = () => document.documentElement.classList.toggle('rm', !!S.settings.reduced);
 applyMotion();
+// Look: mode (system/light/dark) and palette live on the root element as data-mode and data-pal.
+function applyLook() {
+  const r = document.documentElement, m = S.settings.mode, pl = S.settings.pal;
+  if (m === 'light' || m === 'dark') r.dataset.mode = m; else delete r.dataset.mode;
+  if (pl && pl !== 'butter') r.dataset.pal = pl; else delete r.dataset.pal;
+}
+applyLook();
 
 /* ---------- sound + haptics ---------- */
 let ac = null;
@@ -1241,8 +1254,9 @@ const flagSvg = l => `<svg class="flag" viewBox="0 0 20 24" aria-hidden="true"><
 // the flag colour a preference category raises when something leans off
 const CAT_FLAG = {need: 'red', nice: 'yellow', avoid: 'yellow', no: 'red'};
 const flagFor = k => k === 'nice' ? flagSvg('green') : k === 'need' ? '<span class="nn">★</span>' : flagSvg(CAT_FLAG[k]);
-const FOLDER_COLORS = ['#D8B387', '#E9B9B3', '#B5C7A9', '#BCD0E0'];
-const folderArt = c => svg(`<path d="M6 14h36l8 9h64v65H6z" fill="#C9A57C" ${K}/><rect x="14" y="20" width="84" height="40" fill="#FFFCF5" ${K} transform="rotate(-3 56 40)"/><path d="M4 32h112l-6 56H10z" fill="${c}" ${K}/>`, '0 0 120 96');
+// Folder fronts take their colours from the active palette.
+const FOLDER_COLORS = ['var(--n-butter)', 'var(--n-pink)', 'var(--n-sage)', 'var(--n-blue)'];
+const folderArt = c => svg(`<path d="M6 14h36l8 9h64v65H6z" fill="#C9A57C" ${K}/><rect x="14" y="20" width="84" height="40" fill="#FFFCF5" ${K} transform="rotate(-3 56 40)"/><path d="M4 32h112l-6 56H10z" style="fill:${c}" ${K}/>`, '0 0 120 96');
 const STATUS = {exploring: 'Exploring', paused: 'Paused', closed: 'Closed', passed: 'Passed'};
 const FEEL = [[1, 'Off', 'discomfort'], [2, 'Meh', 'silence'], [3, 'Okay', 'curiosity'], [4, 'Warm', 'affection'], [5, 'Sparks', 'laughter']];
 const KINDS = ['Call', 'Messages', 'Coffee', 'Date', 'Other'];
@@ -1519,13 +1533,18 @@ function exampleFolder() {
 /* ---------- settings + privacy ---------- */
 function openSettings() {
   const st = S.settings;
+  const pals = [['butter', 'Butter', ['#F7EDCB', '#EDC3BC', '#C65A43']], ['lagoon', 'Lagoon', ['#E2EEEF', '#BCD8E6', '#2C7C84']], ['plum', 'Plum', ['#F3E5EE', '#F6D88A', '#7D3F7B']]];
   sheet(`<h3>Settings</h3>
+  <p class="label">Mode</p><div class="seg" id="s-mode">${[['system', 'System'], ['light', 'Light'], ['dark', 'Dark']].map(([k, l]) => `<button data-mode="${k}" aria-pressed="${(st.mode || 'system') === k}">${l}</button>`).join('')}</div>
+  <p class="label">Palette</p><div class="pals" id="s-pal">${pals.map(([k, l, cs]) => `<button data-pal="${k}" aria-pressed="${(st.pal || 'butter') === k}"><span class="sw3">${cs.map(c => `<i style="background:${c}"></i>`).join('')}</span>${l}</button>`).join('')}</div>
   <label class="tog"><span>Reduced motion</span><input type="checkbox" class="sw" id="s-rm" ${st.reduced ? 'checked' : ''}></label>
   <label class="tog"><span>Paper sounds</span><input type="checkbox" class="sw" id="s-snd" ${st.sound ? 'checked' : ''}></label>
   <label class="tog"><span>Haptics</span><input type="checkbox" class="sw" id="s-hap" ${st.haptics ? 'checked' : ''}></label>
   <p>Saved only in this browser. Contact details are never kept.</p>
   <button class="btn" id="s-f">My preferences</button>
   <div class="row2"><button class="btn" id="s-all">Delete everything</button><button class="btn primary" data-x>Done</button></div>`, (sh, close) => {
+    on(sh, '#s-mode button', (e, x) => { st.mode = x.dataset.mode; applyLook(); save(); $$('#s-mode button', sh).forEach(y => y.setAttribute('aria-pressed', y === x)); sfx('tuck'); });
+    on(sh, '#s-pal button', (e, x) => { st.pal = x.dataset.pal; applyLook(); save(); $$('#s-pal button', sh).forEach(y => y.setAttribute('aria-pressed', y === x)); sfx('tuck'); });
     $('#s-rm', sh).onchange = e => { st.reduced = e.target.checked; applyMotion(); save(); };
     $('#s-snd', sh).onchange = e => { st.sound = e.target.checked; save(); if (st.sound) sfx('page'); };
     $('#s-hap', sh).onchange = e => { st.haptics = e.target.checked; save(); buzz(10); };
