@@ -26,7 +26,15 @@ A small, mobile-first scrapbook game for matching matrimonial profiles against y
 - Auto-tagging is a simple keyword reading that runs on the device (nothing is sent anywhere), so it will miss things and sometimes misread them. That's why every tag can be changed.
 - **View profile** shows the form as a grid of little objects (tap one to see it up close). The full biodata lines and any attached image are folded away under *Full profile* until you tap it.
 - **Photos:** each folder has a strip of polaroids. Tap *Add photos* to add one or several at once. Tap a photo to see it large, make it the **cover** (shown in the folder header and on Home), or remove it. Photos are shrunk before saving. If the browser's storage fills up, the app tells you instead of silently dropping anything.
-- Each folder has a status (Exploring, Paused, Closed, Passed) and can be renamed or deleted.
+- Each folder has a status (Exploring, Paused, Closed, Passed) and can be renamed, **archived** (moved off the main grid into a folded *Archived* section at the bottom of Home, and back again) or deleted.
+
+## Stress and how you handle it (the VSA model)
+
+A light take on the Vulnerability-Stress-Adaptation model (Karney & Bradbury), which looks at how a relationship is shaped by what each person brings, the stress around them, and how they adapt together. Everything here is self-reported:
+- **Stress:** a journal entry can note *Anything stressful going on?* (Work, Family, Health, Money, Distance, Other). It's optional.
+- **Adaptation:** once stress is marked, *How did you handle it together?* appears. Talking it through, leaning on each other or giving each other space earns a green flag. Going quiet, snapping or blaming, or brushing it off raises a yellow flag.
+- **Vulnerabilities:** *What I bring* in your preferences holds your own sore spots or patterns. *What they've shared* in each folder holds what they've told you about their past or what's hard for them. When an entry mentions stress, one of these comes back as a gentle reminder.
+- **Through stress:** a card in each folder that says whether you've seen the two of you through a stressful patch yet, and how those patches went.
 
 ## Rules it keeps
 

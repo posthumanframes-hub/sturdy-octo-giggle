@@ -663,6 +663,19 @@ button.bk-stamp.lg{position:static;font-size:11px;padding:7px 10px;transform:rot
 .fullprof[open] summary::after{content:" ▾"}
 .fullprof[open] > :not(summary){animation:fadeIn .3s ease both}
 .scene > * + .label,.scene > * + .rs-h{margin-top:var(--space-2)}
+.vsa-cope{display:grid;gap:8px}
+.vsa-note{margin:0;font:italic 400 15px/1.4 var(--serif);color:var(--text-muted-canvas);border-left:3px solid var(--line);padding-left:10px}
+.tl-stress{margin:0;font:600 13px/1.35 var(--sans);color:var(--paper-soft)}
+.tl-stress .cloud{font-size:15px}
+.vsa-card{background:var(--paper);color:var(--paper-ink);border-radius:20px;padding:16px;display:grid;gap:10px;box-shadow:0 12px 26px -18px var(--shadow),0 3px 8px -6px var(--shadow)}
+.vsa-card .label{color:var(--paper-soft)}
+.vsa-line{margin:0;font:400 16.5px/1.4 var(--serif)}
+.vsa-row{display:flex;flex-wrap:wrap;gap:8px;font:700 12.5px var(--sans);color:var(--paper-soft)}
+.vsa-row span{display:inline-flex;align-items:center;gap:4px;background:var(--n-cream);border:1px solid var(--edge);border-radius:999px;padding:4px 10px}
+.vsa-card .none{color:var(--paper-soft);font-size:13px}
+.archived{display:grid;gap:14px}
+.archived summary{list-style:none;justify-self:start;cursor:pointer}
+.archived summary::-webkit-details-marker{display:none}
 html.rm *,html.rm *::before,html.rm *::after{animation:none!important;transition-duration:.01ms!important}
 @media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
 </style>
@@ -1311,6 +1324,8 @@ SCENES.mine = (o) => {
     ${pick ? `<div class="checkin"><p class="q">Does this still matter to you in the same way?</p><p class="pick">${esc(pick.text)} · ${CATL[pick.cat]}</p><div class="row3"><button class="btn" id="ck-y">Yes</button><button class="btn" id="ck-c">Change it</button><button class="btn" id="ck-n">Not now</button></div></div>` : ''}
     <div class="scrap">${groups.map(([k, l, dsc]) => { const g = list.filter(x => (x.cat || null) === k); if (!k && !g.length) return '';
       return `<section class="rs"><div class="rs-h"><h2>${k ? flagFor(k) : ''}${l}</h2>${k ? `<button class="tagbtn" data-addc="${k}">+ Add</button>` : ''}</div>${g.length ? `<div class="plist">${g.map(prow).join('')}</div>` : `<p class="none">${dsc}</p>`}</section>`; }).join('')}</div>
+    <div class="scrap"><section class="rs"><div class="rs-h"><h2>What I bring</h2><button class="tagbtn" id="addv">+ Add</button></div>
+      ${vuln().length ? `<div class="fchips">${vuln().map(x => `<button class="fchip" data-v="${x.id}"><span>${esc(x.text)}</span></button>`).join('')}</div>` : '<p class="none">Your own sore spots or patterns, like “I worry when replies are slow”. Private. They show up as gentle reminders when an entry mentions stress.</p>'}</section></div>
     <div class="actions">${o.first ? '<button class="btn primary" id="cont">Continue</button>' : ''}
     <button class="btn" id="help">Help me find them from past relationships</button>
     <button class="btn link" id="delr">Delete my reflections</button></div>`,
@@ -1322,6 +1337,8 @@ SCENES.mine = (o) => {
         mine().push({id: uid(), text: t, theme: th ? th.id : null, pol: polOf(th, t, k === 'avoid' || k === 'no' ? 'neg' : 'pos'), cat: k, src: [], checked: Date.now()});
         save(); sfx('tuck'); render(); }); });
       on(r, '#help', () => go('onb'));
+      on(r, '#addv', () => askText({title: 'What I bring', placeholder: 'e.g. I shut down when I’m stressed', ok: 'Add'}, t => { if (t) { vuln().push({id: uid(), text: t}); save(); render(); } }));
+      on(r, '[data-v]', (e, b) => { const x = vuln().find(y => y.id === b.dataset.v); askText({title: 'What I bring', value: x.text, ok: 'Save', remove: () => { S.vuln = vuln().filter(y => y !== x); save(); render(); }}, t => { if (t) { x.text = t; save(); render(); } }); });
       on(r, '#cont', () => go('home', {}, 'reset'));
       on(r, '#ck-y', () => { pick.checked = Date.now(); save(); toast('Kept'); render(); });
       on(r, '#ck-c', () => prefSheet(pick));
@@ -1350,6 +1367,22 @@ const folderArt = c => `<svg class="ill folder-art" viewBox="0 0 120 96" aria-hi
 const STATUS = {exploring: 'Exploring', paused: 'Paused', closed: 'Closed', passed: 'Passed'};
 const FEEL = [[1, 'Off', 'discomfort'], [2, 'Meh', 'silence'], [3, 'Okay', 'curiosity'], [4, 'Warm', 'affection'], [5, 'Sparks', 'laughter']];
 const KINDS = ['Call', 'Messages', 'Coffee', 'Date', 'Other'];
+// Vulnerability-Stress-Adaptation (Karney & Bradbury): what each person brings, the stress around them, and how they handle it together.
+const STRESSORS = ['Work', 'Family', 'Health', 'Money', 'Distance', 'Other'];
+const COPE = [['talked', 'Talked it through', 'good'], ['leaned', 'Leaned on each other', 'good'], ['space', 'Gave each other space', 'good'], ['quiet', 'Went quiet', 'strained'], ['snapped', 'Snapped or blamed', 'strained'], ['brushed', 'Brushed it off', 'strained']];
+const COPEL = Object.fromEntries(COPE.map(c => [c[0], c]));
+const copeFlag = k => { const c = COPEL[k]; return c ? {id: uid(), level: c[2] === 'good' ? 'green' : 'yellow', prefId: null, text: (c[2] === 'good' ? 'Under stress: ' : 'Under stress: ') + c[1].toLowerCase(), src: 'How you handled a stressful patch', cleared: false, vsa: true} : null; };
+const vuln = () => S.vuln || (S.vuln = []);
+// How the two of you have handled stress so far, across the timeline.
+function stressSummary(f) {
+  const st = f.entries.filter(e => e.stress && e.stress.length), good = st.filter(e => COPEL[e.cope] && COPEL[e.cope][2] === 'good').length, strained = st.filter(e => COPEL[e.cope] && COPEL[e.cope][2] === 'strained').length;
+  const line = !st.length ? 'You haven’t seen this through a stressful patch yet. Early on, most things feel easy.'
+    : !good && !strained ? 'Stress has come up. Note how you handled it to see a pattern.'
+    : good && !strained ? 'When things got stressful, you handled it together.'
+    : strained && !good ? 'Stress has been hard on the two of you so far.'
+    : 'Mixed so far: some stressful patches went well, some didn’t.';
+  return {count: st.length, good, strained, line};
+}
 const folders = () => S.folders || (S.folders = []);
 const folderById = id => folders().find(f => f.id === id);
 const fmtDate = t => new Date(t).toLocaleDateString(undefined, {day: 'numeric', month: 'short'});
@@ -1471,6 +1504,7 @@ function entryHtml(e, i, f, fresh) {
   return `<div class="tl-e${fresh ? ' fresh' : ''}"><span class="tl-dot k-${e.type}"></span><div class="tl-card" style="--r:${i % 2 ? .6 : -.6}deg">
     <div class="tl-h"><span>${fmtDate(e.date)} · ${esc(head)}</span>${e.type === 'match' ? '<button class="tagbtn" data-recheck>Re-check</button>' : ''}</div>
     ${feel ? `<div class="tl-feel">${tokenSvg(feel[2], e.feel)}<span>Felt ${feel[1].toLowerCase()}</span></div>` : ''}
+    ${e.stress && e.stress.length ? `<p class="tl-stress"><span class="cloud" aria-hidden="true">☁</span> Stress: ${e.stress.map(esc).join(', ')}${COPEL[e.cope] ? ` · ${COPEL[e.cope][1].toLowerCase()}` : ''}</p>` : ''}
     ${e.flags.length ? `<div class="fchips">${e.flags.map(x => fchip(e, x)).join('')}</div>` : (e.type === 'match' ? '<p class="tl-unknown">Nothing on the form lines up or clashes yet.</p>' : '')}
     ${e.type === 'match' && e.unknown.length ? `<p class="tl-unknown">To find out: ${e.unknown.map(id => (mine().find(x => x.id === id) || {}).text).filter(Boolean).map(esc).join(' · ')}</p>` : ''}
     ${e.note ? `<p class="tl-note">${esc(e.note)}</p>` : ''}
@@ -1493,7 +1527,7 @@ function newFolder() {
 })();
 
 SCENES.home = () => {
-  const fs = folders(), live = fs.filter(f => f.status !== 'passed'), passed = fs.filter(f => f.status === 'passed');
+  const fs = folders(), live = fs.filter(f => f.status !== 'passed' && !f.archived), passed = fs.filter(f => f.status === 'passed' && !f.archived), archived = fs.filter(f => f.archived);
   const s1 = mine().some(x => x.cat), s2 = fs.length > 0, s3 = fs.some(f => f.profile);
   const clip = `<svg class="pclip" viewBox="0 0 24 48" aria-hidden="true"><path d="M8 32V11a5 5 0 0 1 10 0v24a8 8 0 0 1-16 0V15" fill="none" stroke="#8F949C" stroke-width="2.4" stroke-linecap="round"/></svg>`;
   const tile = (f, i) => { const s = summary(f); return `<button class="ftile icard" data-id="${f.id}" style="--fc:${FOLDER_COLORS[i % 4]}">${clip}<span class="ft-status s-${f.status}">${STATUS[f.status]}</span>${coverOf(f) ? `<span class="ft-pic"><img src="${coverOf(f)}" alt=""></span>` : ''}<span class="ft-name">${esc(f.name)}</span>${tally(s.n)}</button>`; };
@@ -1503,6 +1537,7 @@ SCENES.home = () => {
     ${s1 && s2 && s3 ? '' : `<div class="steps">${[['Your preferences', s1, 'p'], ['Add a folder', s2, 'f'], ['Add a profile', s3, 'r']].map(([l, d, a], i) => `<button class="step${d ? ' done' : ''}" data-step="${a}"><b>${d ? '✓' : i + 1}</b>${l}</button>`).join('')}</div>`}
     <div class="fgrid">${live.map(tile).join('')}<button class="ftile icard add" id="newf"><span class="ft-name">+ New folder</span></button></div>
     ${passed.length ? `<p class="label">Passed</p><div class="fgrid passed">${passed.map((f, i) => tile(f, i + live.length)).join('')}</div>` : ''}
+    ${archived.length ? `<details class="archived"><summary class="tagbtn">Archived (${archived.length})</summary><div class="fgrid passed">${archived.map((f, i) => tile(f, i + live.length + passed.length)).join('')}</div></details>` : ''}
     <div class="actions"><button class="btn pill" id="mp">Your preferences</button>${fs.some(f => f.example) ? '' : '<button class="btn link" id="ex">See an example</button>'}</div>`,
     mount: r => {
       on(r, '.ftile[data-id]', (e, b) => go('folder', {f: b.dataset.id}));
@@ -1574,8 +1609,10 @@ function profileSheet(p) {
 }
 function folderSheet(f) {
   sheet(`<h3>Folder</h3><input id="fn" value="${esc(f.name)}" aria-label="Folder name"><div class="seg">${Object.keys(STATUS).map(s => `<button data-s="${s}" aria-pressed="${f.status === s}">${STATUS[s]}</button>`).join('')}</div>
+  <button class="btn" data-arch>${f.archived ? 'Unarchive folder' : 'Archive folder'}</button>
   <div class="row2"><button class="btn" data-del>Delete folder</button><button class="btn primary" data-ok>Save</button></div>`, (sh, close) => {
     let st = f.status;
+    $('[data-arch]', sh).onclick = () => { f.archived = !f.archived; save(); close(); toast(f.archived ? 'Archived' : 'Back on Home'); if (f.archived) go('home', {}, 'reset'); else render(); };
     on(sh, '[data-s]', (e, x) => { st = x.dataset.s; $$('[data-s]', sh).forEach(y => y.setAttribute('aria-pressed', y === x)); });
     $('[data-ok]', sh).onclick = () => { f.name = $('#fn', sh).value.trim() || f.name; if (st !== f.status) sfx('drop'); f.status = st; save(); close(); render(); };
     $('[data-del]', sh).onclick = () => { close(); confirmSheet(`Delete ${esc(f.name)}?`, 'This can’t be undone.', 'Delete', () => { S.folders = folders().filter(y => y !== f); save(); toast('Deleted'); go('home', {}, 'reset'); }); };
@@ -1591,6 +1628,9 @@ SCENES.folder = (o) => {
     <div class="row-pills"><button class="bk-stamp lg s-${f.status}" id="st">${STATUS[f.status]}</button>${p ? '<button class="btn link" id="prof">View profile</button>' : ''}</div>
     ${p ? `<div class="balance">${seesaw(s)}<div class="ss-labels"><span class="ss-l spark"><b>Spark</b>${s.chemW}</span><span class="ss-l fit"><b>Fit</b>${s.compW}</span></div><p class="bline">${s.line}</p>${tally(s.n)}</div>`
       : `<button class="checkin setup" id="addp"><span class="q">Add their profile</span><span class="pick">Paste a biodata or add an image. It gets matched against your preferences.</span></button>`}
+    ${p ? (() => { const v = stressSummary(f); return `<div class="vsa-card"><p class="label">Through stress</p><p class="vsa-line">${v.line}</p>${v.count ? `<div class="vsa-row"><span>☁ ${v.count} stressful patch${v.count > 1 ? 'es' : ''}</span>${v.good ? `<span class="ok">${flagSvg('green')} ${v.good} handled well</span>` : ''}${v.strained ? `<span class="hard">${flagSvg('yellow')} ${v.strained} strained</span>` : ''}</div>` : ''}
+      <div class="rs-h"><p class="label">What they’ve shared</p><button class="tagbtn" id="addsh">+ Add</button></div>
+      ${(f.shared || []).length ? `<div class="fchips">${f.shared.map(x => `<button class="fchip" data-sh="${x.id}"><span>${esc(x.text)}</span></button>`).join('')}</div>` : '<p class="none">Things they’ve told you about their past or what’s hard for them. Only what they shared.</p>'}</div>`; })() : ''}
     <div class="rs-h"><p class="label">Photos</p></div>
     <div class="photos"><button class="ph add" id="addph">${IC.plus}<span>Add photos</span></button>${(f.photos || []).map((ph, n) => `<button class="ph" data-ph="${ph.id}" style="--r:${n % 2 ? 2.5 : -2}deg" aria-label="Photo ${n + 1}${f.cover === ph.id ? ', cover' : ''}"><img src="${ph.src}" alt="">${f.cover === ph.id ? '<span class="ph-cv">cover</span>' : ''}</button>`).join('')}</div>
     ${f.entries.length ? `<p class="label">Timeline</p><div class="tl">${f.entries.map((e, i) => entryHtml(e, i, f, e.id === fresh)).join('')}</div>` : ''}
@@ -1598,6 +1638,8 @@ SCENES.folder = (o) => {
     mount: r => {
       if (fresh && !S.settings.reduced) setTimeout(() => { sfx('drop'); buzz(16); }, 500);
       on(r, '#st', () => folderSheet(f));
+      on(r, '#addsh', () => askText({title: 'What they’ve shared', sub: 'Only what they told you, in your words.', placeholder: 'e.g. Their parents divorced when they were young', ok: 'Add'}, t => { if (t) { (f.shared = f.shared || []).push({id: uid(), text: t}); save(); render(); } }));
+      on(r, '[data-sh]', (e, b) => { const x = f.shared.find(y => y.id === b.dataset.sh); askText({title: 'What they’ve shared', value: x.text, ok: 'Save', remove: () => { f.shared = f.shared.filter(y => y !== x); save(); render(); }}, t => { if (t) { x.text = t; save(); render(); } }); });
       on(r, '#prof', () => profileSheet(p));
       on(r, '#addp', () => go('add', {f: f.id})); on(r, '#addp2', () => go('add', {f: f.id}));
       on(r, '#ci', () => go('checkin', {f: f.id}));
@@ -1625,7 +1667,8 @@ SCENES.folder = (o) => {
 SCENES.checkin = (o) => {
   const f = folderById(o.f); if (!f) return SCENES.home();
   const editing = o.edit ? f.entries.find(e => e.id === o.edit) : null;
-  const ci = o.ci || (cur.opts.ci = editing ? {feel: editing.feel || 0, kind: editing.kind || '', text: editing.note || ''} : {feel: 0, kind: '', text: ''});
+  const ci = o.ci || (cur.opts.ci = editing ? {feel: editing.feel || 0, kind: editing.kind || '', text: editing.note || '', stress: [...(editing.stress || [])], cope: editing.cope || ''} : {feel: 0, kind: '', text: '', stress: [], cope: ''});
+  const reminders = [...vuln().map(x => `You noted: “${x.text}”`), ...(f.shared || []).map(x => `They shared: “${x.text}”`)];
   const nudges = pickPrompts(f).map(x => reflectFor(x));
   const tagsHtml = t => { const tags = autoTag(t); return tags.length ? tags.map(x => `<span class="fchip ${x.level}">${flagSvg(x.level)}<span>${esc(x.text)}</span></span>`).join('') : `<span class="none">${t.trim() ? 'No tags yet. Write about what happened.' : 'Tags appear here as you write.'}</span>`; };
   return {
@@ -1636,6 +1679,11 @@ SCENES.checkin = (o) => {
     <div class="seg" id="kind">${KINDS.map(k => `<button data-k="${k}" aria-pressed="${ci.kind === k}">${k}</button>`).join('')}</div>
     <div class="journal"><textarea id="jt" aria-label="What happened" placeholder="What happened? Write it the way you'd tell a friend.">${esc(ci.text)}</textarea>
     ${nudges.length ? `<div class="helper"><button class="tagbtn" id="help" aria-expanded="${!!ci.help}">Need a hand?</button>${ci.help ? `<div class="helper-list">${nudges.map((q, n) => `<button data-q="${n}">${esc(q)}</button>`).join('')}</div>` : ''}</div>` : ''}</div>
+    <p class="label">Anything stressful going on? · optional</p>
+    <div class="seg" id="stress">${STRESSORS.map(k => `<button data-st="${k}" aria-pressed="${ci.stress.includes(k)}">${k}</button>`).join('')}</div>
+    ${ci.stress.length ? `<div class="vsa-cope"><p class="label">How did you handle it together?</p>
+      <div class="seg" id="cope">${COPE.map(([k, l]) => `<button data-cp="${k}" aria-pressed="${ci.cope === k}">${l}</button>`).join('')}</div>
+      ${reminders.length ? `<p class="vsa-note">${esc(reminders[Math.floor(ci.text.length / 7) % reminders.length])}</p>` : ''}</div>` : ''}
     <p class="label">Fit · auto tags from your flags</p>
     <div class="fchips" id="tags" aria-live="polite">${tagsHtml(ci.text)}</div>
     ${mine().some(x => x.cat) ? '' : '<button class="checkin setup" id="setp"><span class="q">No preferences yet</span><span class="pick">Add some so entries can be tagged.</span></button>'}
@@ -1644,6 +1692,8 @@ SCENES.checkin = (o) => {
       on(r, '[data-feel]', (e, x) => { ci.feel = ci.feel === +x.dataset.feel ? 0 : +x.dataset.feel; $$('[data-feel]', r).forEach(y => { y.setAttribute('aria-pressed', +y.dataset.feel === ci.feel); y.classList.remove('pop'); }); if (ci.feel) { void x.offsetWidth; x.classList.add('pop'); } sfx('tuck'); buzz(6); });
       on(r, '#kind button', (e, x) => { ci.kind = ci.kind === x.dataset.k ? '' : x.dataset.k; $$('#kind button', r).forEach(y => y.setAttribute('aria-pressed', y.dataset.k === ci.kind)); sfx('tuck'); });
       on(r, '#help', () => { ci.help = !ci.help; sfx('page'); render(); });
+      on(r, '[data-st]', (e, x) => { const k = x.dataset.st, i = ci.stress.indexOf(k); if (i >= 0) ci.stress.splice(i, 1); else ci.stress.push(k); if (!ci.stress.length) ci.cope = ''; sfx('tuck'); render(); });
+      on(r, '[data-cp]', (e, x) => { ci.cope = ci.cope === x.dataset.cp ? '' : x.dataset.cp; $$('[data-cp]', r).forEach(y => y.setAttribute('aria-pressed', y.dataset.cp === ci.cope)); sfx('tuck'); });
       // tapping a starter prompt drops it into the page as a line to continue from
       on(r, '[data-q]', (e, x) => { const q = nudges[+x.dataset.q], ta = $('#jt', r); ci.text = (ci.text.trim() ? ci.text.trimEnd() + '\n' : '') + q + ' '; ta.value = ci.text; ta.focus(); ta.setSelectionRange(ci.text.length, ci.text.length); ci.help = false; x.closest('.helper-list').remove(); $('#help', r).setAttribute('aria-expanded', 'false'); sfx('tuck'); });
       on(r, '#setp', toPrefs);
@@ -1655,12 +1705,14 @@ SCENES.checkin = (o) => {
       on(r, '#save', () => {
         if (editing) {
           const kept = (editing.flags || []).filter(x => x.edited);
-          Object.assign(editing, {type: 'journal', feel: ci.feel || null, kind: ci.kind, note: ci.text.trim(),
-            flags: [...kept, ...autoTag(ci.text).filter(x => !kept.some(k => k.prefId === x.prefId))]});
+          const cf = copeFlag(ci.cope);
+          Object.assign(editing, {type: 'journal', feel: ci.feel || null, kind: ci.kind, note: ci.text.trim(), stress: [...ci.stress], cope: ci.cope,
+            flags: [...kept.filter(x => !x.vsa), ...autoTag(ci.text).filter(x => !kept.some(k => k.prefId === x.prefId)), ...(cf ? [cf] : [])]});
           S.ui.fresh = editing.id; save(); toast('Saved'); back(); return;
         }
-        if (!ci.feel && !ci.kind && !ci.text.trim()) { back(); return; }
-        const e = {id: uid(), type: 'journal', date: Date.now(), feel: ci.feel || null, kind: ci.kind, note: ci.text.trim(), flags: autoTag(ci.text)};
+        if (!ci.feel && !ci.kind && !ci.text.trim() && !ci.stress.length) { back(); return; }
+        const cf = copeFlag(ci.cope);
+        const e = {id: uid(), type: 'journal', date: Date.now(), feel: ci.feel || null, kind: ci.kind, note: ci.text.trim(), stress: [...ci.stress], cope: ci.cope, flags: [...autoTag(ci.text), ...(cf ? [cf] : [])]};
         f.entries.push(e); S.ui.fresh = e.id; save(); toast(e.flags.length ? `Added · ${e.flags.length} tag${e.flags.length > 1 ? 's' : ''}` : 'Added'); back();
       });
     }
