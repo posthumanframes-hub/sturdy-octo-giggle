@@ -21,6 +21,7 @@ A small, mobile-first scrapbook game for matching matrimonial profiles against y
   - write what happened in your own words. The helper is optional: tap *Need a hand?* to see a few starter prompts drawn from what you still want to find out, and tap one to drop it onto the page
   - as you type, the entry is **auto-tagged** against your preferences: that's **Fit**. A sentence that shows something you want, or rules out something you don't, earns a green flag. One where it leans off raises a flag in that preference's colour (red for non-negotiables and red flags, yellow for green and yellow flags). A plain mention of a preference you typed yourself counts as support.
 - The folder shows Spark and Fit on a **seesaw**. Each is a little character that grows and cheers up as it rises, and the plank tips toward whichever is ahead and sits level when they're balanced. Below it are a one-line read and a tally of green, yellow and red flags.
+- **Edit** any journal entry from the timeline to change how you felt, the type or the text. Saving re-tags it, but tags you recoloured or cleared yourself stay as you left them.
 - Tap any tag to see the sentence it came from, change its colour, or clear it. *Re-check* re-runs the first match after you change your preferences.
 - Auto-tagging is a simple keyword reading that runs on the device (nothing is sent anywhere), so it will miss things and sometimes misread them. That's why every tag can be changed.
 - Each folder has a status (Exploring, Paused, Closed, Passed) and can be renamed or deleted.

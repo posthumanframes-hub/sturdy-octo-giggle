@@ -602,6 +602,7 @@ button.bk-stamp.lg{position:static;font-size:11px;padding:7px 10px;transform:rot
 .helper .tagbtn{font-weight:600}
 .helper-list{display:grid;gap:6px;width:100%;animation:fadeIn .3s ease both}
 .helper-list button{background:var(--n-cream);color:var(--paper-ink);border:1.2px dashed var(--edge);border-radius:8px;padding:8px 10px;font:italic 400 14.5px/1.35 var(--serif);text-align:left;cursor:pointer}
+.tl-btns{display:flex;gap:6px}
 html.rm *,html.rm *::before,html.rm *::after{animation:none!important;transition-duration:.01ms!important}
 @media (prefers-reduced-motion: reduce){.float{animation:none}}
 </style>
@@ -1369,7 +1370,7 @@ function entryHtml(e, i, f, fresh) {
   const feel = e.feel && FEEL[e.feel - 1];
   const head = e.type === 'match' ? 'First match' : (e.kind || (e.type === 'journal' ? 'Journal' : 'Check-in'));
   return `<div class="tl-e${fresh ? ' fresh' : ''}"><span class="tl-dot k-${e.type}"></span><div class="tl-card" style="--r:${i % 2 ? .6 : -.6}deg">
-    <div class="tl-h"><span>${fmtDate(e.date)} · ${esc(head)}</span>${e.type === 'match' ? '<button class="tagbtn" data-recheck>Re-check</button>' : `<button class="tagbtn" data-dele="${e.id}">Remove</button>`}</div>
+    <div class="tl-h"><span>${fmtDate(e.date)} · ${esc(head)}</span>${e.type === 'match' ? '<button class="tagbtn" data-recheck>Re-check</button>' : `<span class="tl-btns"><button class="tagbtn" data-edit="${e.id}">Edit</button><button class="tagbtn" data-dele="${e.id}">Remove</button></span>`}</div>
     ${feel ? `<div class="tl-feel">${tokenSvg(feel[2], e.feel)}<span>Felt ${feel[1].toLowerCase()}</span></div>` : ''}
     ${e.flags.length ? `<div class="fchips">${e.flags.map(x => fchip(e, x)).join('')}</div>` : (e.type === 'match' ? '<p class="tl-unknown">Nothing on the form lines up or clashes yet.</p>' : '')}
     ${e.type === 'match' && e.unknown.length ? `<p class="tl-unknown">To find out: ${e.unknown.map(id => (mine().find(x => x.id === id) || {}).text).filter(Boolean).map(esc).join(' · ')}</p>` : ''}
@@ -1498,15 +1499,16 @@ SCENES.folder = (o) => {
       on(r, '[data-recheck]', () => { const old = f.entries.find(e => e.type === 'match'), nu = matchEntry(p, old.date);
         nu.flags.forEach(x => { if (old.flags.some(y => y.prefId === x.prefId && y.level === x.level && y.cleared)) x.cleared = true; });
         f.entries[f.entries.indexOf(old)] = nu; S.ui.fresh = nu.id; save(); toast('Re-checked'); render(); });
+      on(r, '[data-edit]', (e, b) => go('checkin', {f: f.id, edit: b.dataset.edit}));
       on(r, '[data-dele]', (e, b) => confirmSheet('Remove this entry?', 'Its tags go too.', 'Remove', () => { f.entries = f.entries.filter(x => x.id !== b.dataset.dele); save(); render(); }));
       on(r, '[data-flag]', (e, b) => { const [eid, xid] = b.dataset.flag.split(':'), x = f.entries.find(y => y.id === eid).flags.find(y => y.id === xid);
         const pref = mine().find(y => y.id === x.prefId);
         sheet(`<h3>${flagSvg(x.level)} ${esc(x.text)}</h3>${x.src ? `<div class="clips">${clipHtml(x.src, 0)}</div>` : ''}
           <p class="label">Tagged as</p><div class="seg" id="lv">${['green', 'yellow', 'red'].map(l => `<button data-l="${l}" aria-pressed="${x.level === l}">${flagSvg(l)} ${cap(l)}</button>`).join('')}</div>
           <div class="row2"><button class="btn" data-c>${x.cleared ? 'Restore tag' : 'Clear tag'}</button><button class="btn primary" data-x>Done</button></div>`, (sh, close) => {
-          on(sh, '[data-l]', (e2, y) => { x.level = y.dataset.l; if (pref) x.text = flagLabel(pref, x.level); save(); $$('[data-l]', sh).forEach(z => z.setAttribute('aria-pressed', z === y)); sfx('tuck'); });
+          on(sh, '[data-l]', (e2, y) => { x.level = y.dataset.l; x.edited = true; if (pref) x.text = flagLabel(pref, x.level); save(); $$('[data-l]', sh).forEach(z => z.setAttribute('aria-pressed', z === y)); sfx('tuck'); });
           $('[data-x]', sh).onclick = () => { close(); render(); };
-          $('[data-c]', sh).onclick = () => { x.cleared = !x.cleared; save(); close(); render(); };
+          $('[data-c]', sh).onclick = () => { x.cleared = !x.cleared; x.edited = true; save(); close(); render(); };
         }); });
     }
   };
@@ -1515,12 +1517,13 @@ SCENES.folder = (o) => {
 // A journal entry: how it felt (Spark) and what happened in your own words, auto-tagged against your flags (Fit).
 SCENES.checkin = (o) => {
   const f = folderById(o.f); if (!f) return SCENES.home();
-  const ci = o.ci || (cur.opts.ci = {feel: 0, kind: '', text: '', nudge: 0});
+  const editing = o.edit ? f.entries.find(e => e.id === o.edit) : null;
+  const ci = o.ci || (cur.opts.ci = editing ? {feel: editing.feel || 0, kind: editing.kind || '', text: editing.note || ''} : {feel: 0, kind: '', text: ''});
   const nudges = pickPrompts(f).map(x => reflectFor(x));
   const tagsHtml = t => { const tags = autoTag(t); return tags.length ? tags.map(x => `<span class="fchip ${x.level}">${flagSvg(x.level)}<span>${esc(x.text)}</span></span>`).join('') : `<span class="none">${t.trim() ? 'No tags yet. Write about what happened.' : 'Tags appear here as you write.'}</span>`; };
   return {
-    tone: 'pink', eyebrow: `${esc(f.name)} · ${fmtDate(Date.now())}`,
-    html: `<h1 class="t">Journal entry.</h1>
+    tone: 'pink', eyebrow: `${esc(f.name)} · ${fmtDate(editing ? editing.date : Date.now())}`,
+    html: `<h1 class="t">${editing ? 'Edit entry.' : 'Journal entry.'}</h1>
     <p class="label">Spark · how did you feel with them?</p>
     <div class="tokrow feelrow">${FEEL.map(([v, l, t]) => `<button class="tokbtn" data-feel="${v}" aria-pressed="${ci.feel === v}">${tokenSvg(t, v)}<span>${l}</span></button>`).join('')}</div>
     <div class="seg" id="kind">${KINDS.map(k => `<button data-k="${k}" aria-pressed="${ci.kind === k}">${k}</button>`).join('')}</div>
@@ -1529,7 +1532,7 @@ SCENES.checkin = (o) => {
     <p class="label">Fit · auto tags from your flags</p>
     <div class="fchips" id="tags" aria-live="polite">${tagsHtml(ci.text)}</div>
     ${mine().some(x => x.cat) ? '' : '<button class="checkin setup" id="setp"><span class="q">No preferences yet</span><span class="pick">Add some so entries can be tagged.</span></button>'}
-    <div class="actions"><button class="btn primary" id="save">Add to timeline</button></div>`,
+    <div class="actions"><button class="btn primary" id="save">${editing ? 'Save changes' : 'Add to timeline'}</button></div>`,
     mount: r => {
       on(r, '[data-feel]', (e, x) => { ci.feel = ci.feel === +x.dataset.feel ? 0 : +x.dataset.feel; $$('[data-feel]', r).forEach(y => { y.setAttribute('aria-pressed', +y.dataset.feel === ci.feel); y.classList.remove('pop'); }); if (ci.feel) { void x.offsetWidth; x.classList.add('pop'); } sfx('tuck'); buzz(6); });
       on(r, '#kind button', (e, x) => { ci.kind = ci.kind === x.dataset.k ? '' : x.dataset.k; $$('#kind button', r).forEach(y => y.setAttribute('aria-pressed', y.dataset.k === ci.kind)); sfx('tuck'); });
@@ -1543,6 +1546,12 @@ SCENES.checkin = (o) => {
         tm = setTimeout(() => { const box = $('#tags', r), html = tagsHtml(ci.text); if (html !== last) { last = html; box.innerHTML = html; $$('.fchip', box).forEach(c => c.classList.add('pop-in')); } }, 350);
       });
       on(r, '#save', () => {
+        if (editing) {
+          const kept = (editing.flags || []).filter(x => x.edited);
+          Object.assign(editing, {type: 'journal', feel: ci.feel || null, kind: ci.kind, note: ci.text.trim(),
+            flags: [...kept, ...autoTag(ci.text).filter(x => !kept.some(k => k.prefId === x.prefId))]});
+          S.ui.fresh = editing.id; save(); toast('Saved'); back(); return;
+        }
         if (!ci.feel && !ci.kind && !ci.text.trim()) { back(); return; }
         const e = {id: uid(), type: 'journal', date: Date.now(), feel: ci.feel || null, kind: ci.kind, note: ci.text.trim(), flags: autoTag(ci.text)};
         f.entries.push(e); S.ui.fresh = e.id; save(); toast(e.flags.length ? `Added · ${e.flags.length} tag${e.flags.length > 1 ? 's' : ''}` : 'Added'); back();
