@@ -586,7 +586,7 @@ button.bk-stamp.lg{position:static;font-size:11px;padding:7px 10px;transform:rot
 .flag{width:13px;height:16px;flex:none}
 .nn{color:#3F6A8A;margin-right:4px}
 .scrap h2 .flag{width:16px;height:20px;margin-right:6px;vertical-align:-2px}
-.balance{background:var(--paper);color:var(--paper-ink);border:1.3px solid var(--edge);padding:14px;display:grid;gap:10px;transform:rotate(-.5deg);box-shadow:4px 5px 0 -1px var(--n-butter),4px 5px 0 0 var(--edge)}
+.balance{background:var(--paper);color:var(--paper-ink);border:0;border-radius:26px;padding:18px 16px 16px;display:grid;gap:12px;box-shadow:0 1px 0 rgba(61,52,49,.05),0 16px 32px -18px var(--shadow),0 4px 10px -6px var(--shadow)}
 .balance .tally{color:var(--paper-soft)}
 .balance .tally .flag{width:16px;height:20px}
 .seesaw{display:block;width:100%;height:auto;overflow:visible;margin:-4px 0 -2px}
@@ -594,12 +594,12 @@ button.bk-stamp.lg{position:static;font-size:11px;padding:7px 10px;transform:rot
 @keyframes tip{0%{transform:rotate(calc(var(--tilt) * -1.8))}45%{transform:rotate(calc(var(--tilt) * 1.25))}100%{transform:rotate(var(--tilt))}}
 .seesaw .bud{animation:hop 2.8s ease-in-out infinite;animation-delay:var(--d)}
 @keyframes hop{0%,82%,100%{transform:translateY(0)}88%{transform:translateY(-6px)}94%{transform:translateY(0)}}
-.ss-labels{display:flex;justify-content:space-between;gap:10px;margin-top:-6px}
-.ss-l{display:grid;gap:1px;font:400 16px/1.15 var(--serif);padding:6px 10px 7px;border:1.2px solid var(--edge);transform:rotate(-2deg)}
+.ss-labels{display:flex;justify-content:space-between;gap:10px;margin-top:-10px;padding:0 4px}
+.ss-l{display:grid;gap:2px;font:400 16px/1.15 var(--serif);padding:9px 16px 10px;border:0;border-radius:18px 22px 16px 24px / 20px 16px 22px 18px;transform:rotate(-2deg);box-shadow:0 6px 12px -8px var(--shadow)}
 .ss-l b{font:800 11px var(--sans);letter-spacing:.12em;text-transform:uppercase}
-.ss-l.spark{background:var(--n-pink)} .ss-l.fit{background:var(--n-sage);transform:rotate(2deg);text-align:right}
+.ss-l.spark{background:var(--n-pink)} .ss-l.fit{background:var(--n-sage);transform:rotate(2deg);text-align:right;border-radius:22px 18px 24px 16px / 16px 20px 18px 22px}
 .balance .tally{justify-content:center;gap:8px}
-.balance .tally > span{background:var(--n-cream);border:1.2px solid var(--edge);border-radius:14px;padding:3px 10px 3px 6px;color:var(--paper-ink);transform:rotate(-2deg)}
+.balance .tally > span{background:var(--n-cream);border:1px solid var(--edge);border-radius:999px;padding:3px 10px 3px 6px;color:var(--paper-ink);transform:rotate(-2deg)}
 .balance .tally > span:nth-child(2){transform:rotate(1.5deg)}
 .bline{font:italic 400 15.5px/1.4 var(--serif);margin:0;text-align:center}
 .fchart{background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:10px 12px}
@@ -1458,7 +1458,7 @@ function seesaw(s) {
     return `<g class="bud" style="--d:${x > 150 ? .15 : 0}s"><g transform="translate(${x - 30 * sc} ${91 - 55 * sc}) scale(${sc})"><path d="${BLOBS[lv % 3]}" fill="${fill}" stroke="#3D3431" stroke-width="${2.2 / sc}" stroke-linejoin="round"/><g transform="translate(0 -2)">${face}</g></g></g>`;
   };
   return `<svg class="seesaw" viewBox="0 0 300 132" role="img" aria-label="Spark ${s.chemW}, Fit ${s.compW}">
-    <path d="M10 126h280" stroke="#3D3431" stroke-opacity=".35" stroke-width="2" stroke-dasharray="2 6" stroke-linecap="round"/>
+    <path d="M24 126h252" stroke="#3D3431" stroke-opacity=".18" stroke-width="2" stroke-dasharray="1 7" stroke-linecap="round"/>
     <g class="plank" style="--tilt:${tilt}deg">${buddy(s.chemLv, 62, '#EDC3BC')}${buddy(s.compLv, 238, '#C3D3B8')}
       <rect x="22" y="91" width="256" height="9" rx="4.5" fill="#D8B387" stroke="#3D3431" stroke-width="2"/></g>
     <path d="M150 96l-17 30h34z" fill="#F3E2A6" stroke="#3D3431" stroke-width="2" stroke-linejoin="round"/><circle cx="150" cy="99" r="3" fill="#3D3431"/>
