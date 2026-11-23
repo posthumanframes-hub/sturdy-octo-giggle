@@ -2,23 +2,33 @@
 
 *Check profiles against what matters to you.*
 
-A small, mobile-first scrapbook game for sorting matrimonial profiles against your own preferences and keeping track of how things go. Open `index.html` in any modern browser. There's no build step and nothing to install.
+A small, mobile-first scrapbook game for matching matrimonial profiles against your own preferences, then tracking how you feel with a person and whether there's a good balance of chemistry and compatibility. Open `index.html` in any modern browser. There's no build step and nothing to install.
 
-## How it plays
+## Three steps
 
-1. **What matters to you.** On first launch, four quick questions about past relationships (what you valued, what you wished was different, what to avoid, what surprised you). The game suggests preferences from your answers, and you sort each one as **Non-negotiable**, **Nice to have**, **Nice to not have** or **Hard no**. You can skip this and do it later. **My preferences** lets you edit, move or add preferences at any time.
-2. **Home.** Your shelf: one scrapbook per person, each with a status stamp (Undecided, Talking, Paused, Closed). Passed people sit on a shelf below.
-3. **Add biodata.** Paste the details, attach an image (and optionally *Read text from image*), or use the sample.
-4. **Filter check.** The biodata slides in and a stamp lands with the number of pass flags. Below it are *Potential incompatibilities*, *Reasons for curiosity* and *Talk about*. Each Talk about topic shows what to listen for. Then tap **Pass** or **Explore**.
-5. **Their scrapbook.** The form's details become little moving objects. Tap one to see it up close, with the line from the form and what it could point to. Your talk-about topics and your meetings are here too. Tap the status stamp to change it.
-6. **Add a meeting.** Flick each topic card right (*came up*) or left (*didn't*), tap the moments that fit, add a note if you like, and choose whether to keep talking. That's it.
+1. **Your preferences.** Add your **non-negotiables** and your **green**, **yellow** and **red flags**. Type them in directly, or tap *Help me find them from past relationships* to answer four questions and get suggestions you can edit and sort.
+2. **Add a folder.** One folder per person.
+3. **Add a profile to the folder.** Paste a biodata, attach an image (optionally *Read text from image*), or use the sample. The folder is matched against your preferences straight away. That **first match** is the start of a timeline:
+   - a **green flag** for each preference the profile's own words support (or, for a red or yellow flag preference, explicitly rule out)
+   - a **red flag** for a clash with a non-negotiable or red flag
+   - a **yellow flag** for a clash with a green or yellow flag
+   - everything the profile doesn't mention is listed under *To find out*, never counted against them
+
+## The timeline
+
+- **Check in** after a call, chat or date:
+  - how you felt with them (Off, Meh, Okay, Warm, Sparks): that's **chemistry**
+  - three prompts drawn from your preferences, starting with what the profile couldn't answer, each answered *Felt right*, *Not sure* or *Felt off*: that's **compatibility**
+  - *Felt off* raises a flag in that preference's colour, *Felt right* earns a green flag, and *Not sure* adds nothing
+- The folder shows a **Chemistry** and a **Compatibility** meter with a one-line read on the balance, a tally of green, yellow and red flags, and a **Flags over time** chart showing how they accumulate.
+- Tap any flag to see where it came from, or clear it if it no longer applies. *Re-check* re-runs the first match after you change your preferences.
+- Each folder has a status (Exploring, Paused, Closed, Passed) and can be renamed or deleted.
 
 ## Rules it keeps
 
-- Objects come only from lines that are actually on the form, and evidence only comes from what the profile states in its own words (about me, expectations, lifestyle lines such as smoking). The check never reads anything into job, education, caste, religion, family background or hobbies. Hobbies can show up as "Related, not proof".
-- An unknown is never a failed match. A pass flag can be dismissed, and a passed person can be brought back by changing their stamp.
-- No scores, rankings, timers or streaks.
-- Privacy: everything stays in the browser's `localStorage`. Contact details are dropped when the biodata is parsed, and preference extraction runs on the device. Settings can delete everything, and each scrapbook has its own delete.
-- Accessibility: card swipes have Didn't / Came up buttons and arrow keys. Reduced motion, sound and haptics can be toggled.
+- Objects come only from lines that are actually on the form, and evidence only comes from what the profile states in its own words (about me, expectations, lifestyle lines such as smoking). The match never reads anything into job, education, caste, religion, family background or hobbies.
+- An unknown is never a flag. Flags are reviewable and can be cleared.
+- Privacy: everything stays in the browser's `localStorage`. Contact details are dropped when the biodata is parsed, and preference suggestions are worked out on the device. Settings can delete everything, and each folder has its own delete.
+- Reduced motion, sound and haptics can be toggled.
 
 The bundled sample biodata (Rohan Deshpande) is fictional.
