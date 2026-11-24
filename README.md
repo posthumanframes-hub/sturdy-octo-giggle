@@ -6,7 +6,7 @@ A small, mobile-first scrapbook game for matching matrimonial profiles against y
 
 ## Three steps
 
-1. **Your preferences.** Add your **non-negotiables** and your **green**, **yellow** and **red flags**. Type them in directly, or tap *Help me find them from past relationships* to answer four questions and get suggestions you can edit and sort.
+1. **Your preferences.** Add your **non-negotiables** and your **green**, **yellow** and **red flags**. Type them in directly, or tap *Help me find them from past relationships* to answer five questions and get suggestions you can edit and sort.
 2. **Add a folder.** One folder per person.
 3. **Add a profile to the folder.** Paste a biodata, attach an image (optionally *Read text from image*), or use the sample. The folder is matched against your preferences straight away. That **first match** is the start of a timeline:
    - a **green flag** for each preference the profile's own words support (or, for a red or yellow flag preference, explicitly rule out)
@@ -33,7 +33,7 @@ A small, mobile-first scrapbook game for matching matrimonial profiles against y
 A light take on the Vulnerability-Stress-Adaptation model (Karney & Bradbury), which looks at how a relationship is shaped by what each person brings, the stress around them, and how they adapt together. It lives entirely in the journal and is read from what you write. There's no separate section:
 - **Stress:** a sentence like "rough week at work" or "stressful time with family" is tagged as context, for example **☁ Work stress**. It isn't a flag and doesn't count toward the tally.
 - **Adaptation:** in an entry that reads as stressful, how you handled it is tagged too. "Talked it through", "was there for me" or "listened" earns a green *Under stress* flag. "Went quiet", "snapped", "argued" or "brushed it off" raises a yellow one.
-- **Vulnerabilities:** *What I bring* in your preferences holds your own sore spots or patterns. When an entry reads as stressful, one comes back under the tags as a gentle reminder.
+- **Vulnerabilities:** *What I bring* in your preferences holds your own sore spots or patterns. The fifth reflection question, *What do you tend to bring into relationships?*, suggests them for you, or you can add them by hand. When an entry reads as stressful, one comes back under the tags as a gentle reminder.
 - Like every tag, these can be recoloured or cleared.
 
 ## Rules it keeps

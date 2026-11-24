@@ -945,14 +945,16 @@ const QS = [
   {k: 'valued', q: 'What did you value most in your past relationships?', hint: 'Any relationships. No names needed.', label: 'What you valued'},
   {k: 'wish', q: 'What did you consistently wish was different?', hint: '', label: 'What you wished for'},
   {k: 'avoid', q: 'What behaviours or situations would you not want to experience again?', hint: '', label: 'What to avoid'},
-  {k: 'surprised', q: 'What qualities surprised you by becoming important?', hint: '', label: 'What surprised you'}
+  {k: 'surprised', q: 'What qualities surprised you by becoming important?', hint: '', label: 'What surprised you'},
+  {k: 'bring', q: 'What do you tend to bring into relationships?', hint: 'Patterns you notice in yourself, like how you react when you’re stressed, hurt or unsure.', label: 'What I bring', bring: true}
 ];
 const QL = Object.fromEntries(QS.map(x => [x.k, x.label]));
 const EXAMPLE_ANSWERS = {
   valued: 'Laughing about silly things together. Long conversations about books and ideas. He gave me space to do my own thing.',
   wish: 'I wish we could talk through disagreements instead of going silent. More help around the house without being asked.',
   avoid: 'Being checked on all the time and asked where I was. His family making decisions for us. We lived with his parents and it was hard. Smoking indoors.',
-  surprised: 'Small acts of care mattered more than grand gestures. Honesty, even when it was awkward.'
+  surprised: 'Small acts of care mattered more than grand gestures. Honesty, even when it was awkward.',
+  bring: 'I shut down when I am stressed. I worry when replies are slow. I sometimes say yes to plans just to keep the peace.'
 };
 const CATS = [['need', 'Non-negotiable', 'Must have it to keep going.'], ['nice', 'Green flag', 'A good sign when you see it.'], ['avoid', 'Yellow flag', 'Worth watching. Not a dealbreaker.'], ['no', 'Red flag', 'A dealbreaker if it shows up.']];
 const CAT_EG = {need: 'e.g. Wants children', nice: 'e.g. Makes me laugh', avoid: 'e.g. Always on their phone', no: 'e.g. Smoking'};
@@ -1020,15 +1022,24 @@ const THEMES = [
 ];
 const THEME = Object.fromEntries(THEMES.map(t => [t.id, t]));
 const sentences = txt => String(txt || '').split(/(?<=[.!?])\s+|\n+/).map(x => x.trim()).filter(Boolean);
-const onb = () => S.onb || (S.onb = {done: false, a: {valued: '', wish: '', avoid: '', surprised: ''}});
+const onb = () => S.onb || (S.onb = {done: false, a: {valued: '', wish: '', avoid: '', surprised: '', bring: ''}});
 const mine = () => S.mine || (S.mine = []);
 const detect = text => THEMES.find(t => t.t.test(text)) || null;
 const polOf = (th, text, fallback) => th?.posT?.test(text) ? 'pos' : th?.negT?.test(text) ? 'neg' : fallback;
 // Mock of AI-assisted extraction: keyword themes, run on this device only.
+// Each sentence of the "what I bring" answer becomes a What I bring note (skipping ones already there).
+function extractBring() {
+  let n = 0;
+  sentences(onb().a.bring || '').forEach(sen => {
+    const t = sen.replace(/[.!]+$/, '').slice(0, 90);
+    if (t && !vuln().some(x => x.text.toLowerCase() === t.toLowerCase())) { vuln().push({id: uid(), text: t, src: 'bring'}); n++; }
+  });
+  save(); return n;
+}
 function extract() {
   const made = [];
   const all = () => [...mine(), ...made];
-  QS.forEach(({k}) => {
+  QS.filter(q => !q.bring).forEach(({k}) => {
     const ans = onb().a[k] || ''; if (!ans.trim()) return;
     let found = false;
     sentences(ans).forEach(sen => THEMES.forEach(th => {
@@ -1230,7 +1241,7 @@ const evPill = st => `<span class="ev ${st}">${{aligned: 'Aligned', conflict: 'C
 const quoteHtml = q => q ? `<q>${esc(q.k)}: “${esc(q.s)}”</q>` : '';
 
 /* ---------- onboarding ---------- */
-const dots = i => `<div class="dots" aria-label="Step ${i + 1} of 6">${[0, 1, 2, 3, 4, 5].map(k => `<span class="d${k < i ? ' done' : k === i ? ' on' : ''}"></span>`).join('')}</div>`;
+const dots = i => `<div class="dots" aria-label="Step ${i + 1} of ${QS.length + 2}">${Array.from({length: QS.length + 2}, (_, k) => k).map(k => `<span class="d${k < i ? ' done' : k === i ? ' on' : ''}"></span>`).join('')}</div>`;
 SCENES.onb = () => ({
   tone: 'sage', eyebrow: '',
   html: `<div class="onb-art" aria-hidden="true"><span></span><span></span></div>
@@ -1252,7 +1263,7 @@ SCENES.onbq = (o) => {
     mount: r => {
       const ta = $('#ans', r);
       ta.addEventListener('input', () => { onb().a[Q.k] = ta.value; save(); });
-      const next = () => { if (i < QS.length - 1) go('onbq', {i: i + 1}); else { extract(); go('review'); } };
+      const next = () => { if (i < QS.length - 1) go('onbq', {i: i + 1}); else { extract(); extractBring(); go('review'); } };
       on(r, '#next', next); on(r, '#skip', next);
     }
   };
@@ -1285,22 +1296,27 @@ let prowN = 0;
 const prow = x => `<div class="prow" style="--r:${(prowN++ % 3 - 1) * 1.1}deg"><div class="note-w"><button class="ptxt note ${x.cat ? CAT_NOTE[x.cat] : 'cream'}" data-id="${x.id}">${esc(x.text)}<small>${x.src.length ? esc(QL[x.src[0].q] || '') : 'Added by you'}</small></button></div><button class="x" data-del="${x.id}" aria-label="Delete ${esc(x.text)}">×</button></div>`;
 SCENES.review = () => ({
   tone: 'sage', eyebrow: '',
-  html: `${dots(4)}<h1 class="t">Here’s what we noticed.</h1><p class="sub">Edit anything. Worked out on this device.</p>
+  html: `${dots(QS.length)}<h1 class="t">Here’s what we noticed.</h1><p class="sub">Edit anything. Worked out on this device.</p>
   <div class="scrap"><div class="plist">${mine().map(prow).join('') || '<p class="none">Nothing found. Add your own.</p>'}</div></div>
   <div class="row2"><button class="btn" id="add">${IC.plus} Add</button><button class="btn" id="more">Find more</button></div>
+  <div class="scrap"><section class="rs"><div class="rs-h"><h2>What I bring</h2><button class="tagbtn" id="addv">+ Add</button></div>
+    ${vuln().length ? `<div class="plist">${vuln().map(x => `<div class="prow"><div class="note-w"><button class="ptxt note blue" data-v="${x.id}">${esc(x.text)}<small>${x.src === 'bring' ? 'What I bring' : 'Added by you'}</small></button></div><button class="x" data-delv="${x.id}" aria-label="Delete ${esc(x.text)}">×</button></div>`).join('')}</div>` : '<p class="none">Nothing yet. Your own patterns, like how you react under stress. Private.</p>'}</section></div>
   <div class="actions"><button class="btn primary" id="next">Continue</button></div>`,
   mount: r => {
     on(r, '.ptxt', (e, b) => prefSheet(mine().find(x => x.id === b.dataset.id)));
     on(r, '[data-del]', (e, b) => { S.mine = mine().filter(x => x.id !== b.dataset.del); save(); render(); });
     on(r, '#add', () => prefSheet(null));
-    on(r, '#more', () => { const n = extract(); toast(n ? `${n} more` : 'Nothing new'); render(); });
+    on(r, '#more', () => { const n = extract() + extractBring(); toast(n ? `${n} more` : 'Nothing new'); render(); });
+    on(r, '#addv', () => askText({title: 'What I bring', placeholder: 'e.g. I shut down when I’m stressed', ok: 'Add'}, t => { if (t) { vuln().push({id: uid(), text: t}); save(); render(); } }));
+    on(r, '[data-v]', (e, b) => { const x = vuln().find(y => y.id === b.dataset.v); askText({title: 'What I bring', value: x.text, ok: 'Save', remove: () => { S.vuln = vuln().filter(y => y !== x); save(); render(); }}, t => { if (t) { x.text = t; save(); render(); } }); });
+    on(r, '[data-delv]', (e, b) => { S.vuln = vuln().filter(y => y.id !== b.dataset.delv); save(); render(); });
     on(r, '#next', () => go('sort'));
   }
 });
 const catButtons = x => `<div class="cats">${CATS.map(([k, l]) => `<button data-c="${k}" data-id="${x.id}" aria-pressed="${x.cat === k}">${l}</button>`).join('')}</div>`;
 SCENES.sort = () => ({
   tone: 'sage', eyebrow: '',
-  html: `${dots(5)}<h1 class="t">How important is each of these to you?</h1><button class="btn link" id="what" style="align-self:flex-start;padding-left:0">What do these mean?</button>
+  html: `${dots(QS.length + 1)}<h1 class="t">How important is each of these to you?</h1><button class="btn link" id="what" style="align-self:flex-start;padding-left:0">What do these mean?</button>
   ${mine().map(x => `<div class="pcard"><p>${esc(x.text)}</p>${catButtons(x)}</div>`).join('') || '<p class="none">No preferences yet.</p>'}
   <div class="actions"><button class="btn primary" id="done">Done</button></div>`,
   mount: r => {
@@ -1340,7 +1356,7 @@ SCENES.mine = (o) => {
       on(r, '#ck-y', () => { pick.checked = Date.now(); save(); toast('Kept'); render(); });
       on(r, '#ck-c', () => prefSheet(pick));
       on(r, '#ck-n', () => { S.ui.checkHidden = true; render(); });
-      on(r, '#delr', () => confirmSheet('Delete your reflections?', 'Your answers are erased. Preferences stay.', 'Delete', () => { onb().a = {valued: '', wish: '', avoid: '', surprised: ''}; mine().forEach(x => { x.src = []; }); save(); toast('Deleted'); render(); }));
+      on(r, '#delr', () => confirmSheet('Delete your reflections?', 'Your answers are erased. Preferences stay.', 'Delete', () => { onb().a = {valued: '', wish: '', avoid: '', surprised: '', bring: ''}; mine().forEach(x => { x.src = []; }); save(); toast('Deleted'); render(); }));
     }
   };
 };
