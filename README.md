@@ -25,7 +25,7 @@ A small, mobile-first scrapbook game for matching matrimonial profiles against y
 - Tap any tag to see the sentence it came from, change its colour, or clear it. *Re-check* re-runs the first match after you change your preferences.
 - Auto-tagging is a simple keyword reading that runs on the device (nothing is sent anywhere), so it will miss things and sometimes misread them. That's why every tag can be changed.
 - **View profile** shows the form as a grid of little objects (tap one to see it up close). The full biodata lines and any attached image are folded away under *Full profile* until you tap it.
-- **Photos:** each folder has a strip of polaroids. Tap *Add photos* to add one or several at once. Tap a photo to see it large, make it the **cover** (shown in the folder header and on Home), or remove it. Photos are shrunk before saving. If the browser's storage fills up, the app tells you instead of silently dropping anything.
+- **Photos:** each folder has a strip of polaroids. Tap *Add photos* to add one or several at once. Tap a photo to see it large, make it the **cover** (a square polaroid in the folder header, and a little polaroid clipped to the top of its card on Home like a bookmark), or remove it. Photos are shrunk before saving. If the browser's storage fills up, the app tells you instead of silently dropping anything.
 - Each folder has a status (Exploring, Paused, Closed, Passed) and can be renamed, **archived** (moved off the main grid into a folded *Archived* section at the bottom of Home, and back again) or deleted.
 
 ## Stress and how you handle it (the VSA model)
