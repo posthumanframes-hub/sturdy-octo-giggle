@@ -1853,8 +1853,11 @@ function folderSheet(f) {
     $('[data-arch]', sh).onclick = () => { f.archived = !f.archived; save(); close(); toast(f.archived ? 'Archived' : 'Back on Home'); if (f.archived) go('home', {}, 'reset'); else render(); };
     on(sh, '[data-s]', (e, x) => { st = x.dataset.s; $$('[data-s]', sh).forEach(y => y.setAttribute('aria-pressed', y === x)); });
     $('[data-ok]', sh).onclick = () => { f.name = $('#fn', sh).value.trim() || f.name; if (st !== f.status) sfx('drop'); f.status = st; save(); close(); render(); };
-    $('[data-del]', sh).onclick = () => { close(); confirmSheet(`Delete ${esc(f.name)}?`, 'This can’t be undone.', 'Delete', () => { S.folders = folders().filter(y => y !== f); save(); toast('Deleted'); go('home', {}, 'reset'); }); };
+    $('[data-del]', sh).onclick = () => { close(); deleteFolder(f); };
   });
+}
+function deleteFolder(f) {
+  confirmSheet(`Delete ${esc(f.name)}?`, 'Their profile, photos and journal go too. This can’t be undone.', 'Delete', () => { S.folders = folders().filter(y => y !== f); delete S.stickers?.['folder:' + f.id]; save(); toast('Deleted'); go('home', {}, 'reset'); });
 }
 
 SCENES.folder = (o) => {
@@ -1869,10 +1872,11 @@ SCENES.folder = (o) => {
     <div class="rs-h"><p class="label">Photos</p></div>
     <div class="photos"><button class="ph add" id="addph">${IC.plus}<span>Add photos</span></button>${(f.photos || []).map((ph, n) => `<button class="ph" data-ph="${ph.id}" style="--r:${n % 2 ? 2.5 : -2}deg" aria-label="Photo ${n + 1}${f.cover === ph.id ? ', cover' : ''}"><img src="${ph.src}" alt="">${f.cover === ph.id ? '<span class="ph-cv">cover</span>' : ''}</button>`).join('')}</div>
     ${f.entries.length ? `<p class="label">Timeline</p><div class="tl">${f.entries.map((e, i) => entryHtml(e, i, f, e.id === fresh)).join('')}</div>` : ''}
-    <div class="actions">${p ? `<button class="btn primary" id="ci">${IC.plus} Journal entry</button>` : `<button class="btn primary" id="addp2">${IC.plus} Add profile</button>`}</div>`,
+    <div class="actions">${p ? `<button class="btn primary" id="ci">${IC.plus} Journal entry</button>` : `<button class="btn primary" id="addp2">${IC.plus} Add profile</button>`}<button class="btn link" id="delf">Delete folder</button></div>`,
     mount: r => {
       if (fresh && !S.settings.reduced) setTimeout(() => { sfx('drop'); buzz(16); }, 500);
       on(r, '#st', () => folderSheet(f));
+      on(r, '#delf', () => deleteFolder(f));
       on(r, '#ren', () => askText({title: 'Name', value: f.name, placeholder: 'Their name', ok: 'Save'}, t => { if (t) { f.name = t.slice(0, 40); save(); toast('Renamed'); render(); } }));
       on(r, '#prof', () => profileSheet(p));
       on(r, '#addp', () => go('add', {f: f.id})); on(r, '#addp2', () => go('add', {f: f.id}));
