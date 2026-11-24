@@ -36,6 +36,15 @@ A light take on the Vulnerability-Stress-Adaptation model (Karney & Bradbury), w
 - **Vulnerabilities:** *What I bring* in your preferences holds your own sore spots or patterns. The fifth reflection question, *What do you tend to bring into relationships?*, suggests them for you, or you can add them by hand. When an entry reads as stressful, one comes back under the tags as a gentle reminder.
 - Like every tag, these can be recoloured or cleared.
 
+## Look and stickers
+
+- **Japanese paper journal:** every page sits on soft grid paper (a faint chalk grid in dark mode). Headings get a marker highlight swiped behind them. Cards are washi-taped paper, sticky notes and ruled notebook pages. All the text is in English.
+- **Stickers:** Home and every folder have a sticker layer with a few hand-drawn stickers tucked into the gaps (a sleepy cat, onigiri, dango, coffee, sakura, sun, notes like "yay!" and "good day ♡", and more).
+  - Tap the sticker button in the header to add more from the sticker sheet.
+  - Tap a sticker to select it and drag it anywhere. Its toolbar turns it, makes it bigger or smaller, or peels it off.
+  - On a keyboard, arrow keys move a sticker and Delete removes it.
+  - Arrangements are saved on this device, separately for Home and each folder.
+
 ## Rules it keeps
 
 - Objects come only from lines that are actually on the form, and evidence only comes from what the profile states in its own words (about me, expectations, lifestyle lines such as smoking). The match never reads anything into job, education, caste, religion, family background or hobbies.
