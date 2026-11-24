@@ -30,11 +30,11 @@ A small, mobile-first scrapbook game for matching matrimonial profiles against y
 
 ## Stress and how you handle it (the VSA model)
 
-A light take on the Vulnerability-Stress-Adaptation model (Karney & Bradbury), which looks at how a relationship is shaped by what each person brings, the stress around them, and how they adapt together. Everything here is self-reported:
-- **Stress:** a journal entry can note *Anything stressful going on?* (Work, Family, Health, Money, Distance, Other). It's optional.
-- **Adaptation:** once stress is marked, *How did you handle it together?* appears. Talking it through, leaning on each other or giving each other space earns a green flag. Going quiet, snapping or blaming, or brushing it off raises a yellow flag.
-- **Vulnerabilities:** *What I bring* in your preferences holds your own sore spots or patterns. *What they've shared* in each folder holds what they've told you about their past or what's hard for them. When an entry mentions stress, one of these comes back as a gentle reminder.
-- **Through stress:** a card in each folder that says whether you've seen the two of you through a stressful patch yet, and how those patches went.
+A light take on the Vulnerability-Stress-Adaptation model (Karney & Bradbury), which looks at how a relationship is shaped by what each person brings, the stress around them, and how they adapt together. It lives entirely in the journal and is read from what you write. There's no separate section:
+- **Stress:** a sentence like "rough week at work" or "stressful time with family" is tagged as context, for example **☁ Work stress**. It isn't a flag and doesn't count toward the tally.
+- **Adaptation:** in an entry that reads as stressful, how you handled it is tagged too. "Talked it through", "was there for me" or "listened" earns a green *Under stress* flag. "Went quiet", "snapped", "argued" or "brushed it off" raises a yellow one.
+- **Vulnerabilities:** *What I bring* in your preferences holds your own sore spots or patterns. When an entry reads as stressful, one comes back under the tags as a gentle reminder.
+- Like every tag, these can be recoloured or cleared.
 
 ## Rules it keeps
 

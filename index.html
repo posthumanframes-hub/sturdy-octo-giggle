@@ -32,6 +32,8 @@
   --status-ok-paper:#4F6B45; --status-flag-paper:#B4462F; --status-muted-paper:#7A6D66;
   /* spacing, shape, touch */
   --space-1:4px; --space-2:8px; --space-3:12px; --space-4:16px; --space-5:20px; --space-6:24px; --space-8:32px; --space-10:40px;
+  --paper-warm:#FBF4E4; --paper-grain:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .42  0 0 0 0 .33  0 0 0 0 .22  0 0 0 .09 0'/></filter><rect width='100%' height='100%' filter='url(%23g)'/></svg>");
+  --page-rule:rgba(61,52,49,.085); --page-margin:rgba(198,90,67,.32);
   --radius-control:8px; --radius-sheet:14px; --touch-target:44px; --stroke-paper:1.3px; --stroke-control:1px;
 }
 /* palettes: light values first, then dark. data-mode (light/dark) overrides the viewer theme; none follows it. */
@@ -586,7 +588,8 @@ button.bk-stamp.lg{position:static;font-size:11px;padding:7px 10px;transform:rot
 .flag{width:13px;height:16px;flex:none}
 .nn{color:#3F6A8A;margin-right:4px}
 .scrap h2 .flag{width:16px;height:20px;margin-right:6px;vertical-align:-2px}
-.balance{background:var(--paper);color:var(--paper-ink);border:0;border-radius:26px;padding:18px 16px 16px;display:grid;gap:12px;box-shadow:0 1px 0 rgba(61,52,49,.05),0 16px 32px -18px var(--shadow),0 4px 10px -6px var(--shadow)}
+.balance{position:relative;background-color:var(--paper-warm);background-image:var(--paper-grain);color:var(--paper-ink);border:0;border-radius:6px;padding:22px 16px 16px;display:grid;gap:12px;box-shadow:0 1px 1px rgba(61,52,49,.08),0 14px 26px -16px var(--shadow),inset 0 0 26px rgba(160,120,70,.08)}
+.balance::before{content:"";position:absolute;left:50%;top:-8px;width:64px;height:16px;margin-left:-32px;background:var(--n-butter);opacity:.85;transform:rotate(-2deg)}
 .balance .tally{color:var(--paper-soft)}
 .balance .tally .flag{width:16px;height:20px}
 .seesaw{display:block;width:100%;height:auto;overflow:visible;margin:-4px 0 -2px}
@@ -610,7 +613,7 @@ button.bk-stamp.lg{position:static;font-size:11px;padding:7px 10px;transform:rot
 .tl-e{position:relative}
 .tl-dot{position:absolute;left:-22px;top:16px;width:13px;height:13px;border-radius:50%;background:var(--coral);border:2px solid var(--edge)}
 .tl-dot.k-match{background:var(--n-butter)}
-.tl-card{background:var(--paper);color:var(--paper-ink);border:var(--stroke-paper) solid var(--edge);padding:var(--space-4);display:grid;gap:8px;transform:rotate(var(--r,0deg));box-shadow:0 6px 12px -8px var(--shadow)}
+.tl-card{background-color:var(--paper-warm);background-image:var(--paper-grain),linear-gradient(90deg,transparent 26px,var(--page-margin) 26px 27.5px,transparent 27.5px),repeating-linear-gradient(transparent 0 26px,var(--page-rule) 26px 27px);background-position:0 0,0 0,0 12px;color:var(--paper-ink);border:0;border-radius:3px;padding:var(--space-4) var(--space-4) var(--space-4) 38px;display:grid;gap:8px;transform:rotate(var(--r,0deg));box-shadow:0 1px 1px rgba(61,52,49,.08),0 10px 18px -12px var(--shadow),inset 0 0 22px rgba(160,120,70,.08)}
 .tl-e.fresh .tl-card{animation:rise .7s var(--spring) both}
 .tl-h{display:flex;justify-content:space-between;align-items:center;gap:8px;font:800 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--paper-soft)}
 .tl-h .tagbtn{text-transform:none;letter-spacing:0}
@@ -636,8 +639,8 @@ button.bk-stamp.lg{position:static;font-size:11px;padding:7px 10px;transform:rot
 .sw3 i{width:20px;height:20px;border-radius:50%;border:1.2px solid var(--edge);margin-left:-5px}
 .sw3 i:first-child{margin-left:0}
 .journal{display:grid;gap:8px}
-.journal textarea{font:400 17px/1.45 var(--serif);min-height:170px;border:1.3px solid var(--edge);padding:14px 14px 14px 18px;background:var(--paper);color:var(--paper-ink);width:100%;resize:vertical;
-  background-image:repeating-linear-gradient(transparent 0 24px,rgba(61,52,49,.08) 24px 25px);background-position:0 10px;box-shadow:4px 5px 0 -1px var(--n-butter),4px 5px 0 0 var(--edge)}
+.journal textarea{font:400 17px/27px var(--serif);min-height:190px;border:0;border-radius:3px;padding:12px 14px 14px 40px;color:var(--paper-ink);width:100%;resize:vertical;
+  background-color:var(--paper-warm);background-image:var(--paper-grain),linear-gradient(90deg,transparent 28px,var(--page-margin) 28px 29.5px,transparent 29.5px),repeating-linear-gradient(transparent 0 26px,var(--page-rule) 26px 27px);background-position:0 0,0 0,0 12px;background-attachment:local;box-shadow:0 1px 1px rgba(61,52,49,.08),0 12px 20px -14px var(--shadow),inset 0 0 24px rgba(160,120,70,.08)}
 .nudge{justify-self:start;background:none;border:0;padding:2px 0;font:italic 400 14px/1.35 var(--serif);color:var(--ink-soft);cursor:pointer;text-align:left}
 .fchip.pop-in{animation:chipIn .35s var(--spring) both}
 @keyframes chipIn{from{opacity:0;transform:translateY(4px) scale(.94)}}
@@ -663,19 +666,13 @@ button.bk-stamp.lg{position:static;font-size:11px;padding:7px 10px;transform:rot
 .fullprof[open] summary::after{content:" ▾"}
 .fullprof[open] > :not(summary){animation:fadeIn .3s ease both}
 .scene > * + .label,.scene > * + .rs-h{margin-top:var(--space-2)}
-.vsa-cope{display:grid;gap:8px}
 .vsa-note{margin:0;font:italic 400 15px/1.4 var(--serif);color:var(--text-muted-canvas);border-left:3px solid var(--line);padding-left:10px}
-.tl-stress{margin:0;font:600 13px/1.35 var(--sans);color:var(--paper-soft)}
-.tl-stress .cloud{font-size:15px}
-.vsa-card{background:var(--paper);color:var(--paper-ink);border-radius:20px;padding:16px;display:grid;gap:10px;box-shadow:0 12px 26px -18px var(--shadow),0 3px 8px -6px var(--shadow)}
-.vsa-card .label{color:var(--paper-soft)}
-.vsa-line{margin:0;font:400 16.5px/1.4 var(--serif)}
-.vsa-row{display:flex;flex-wrap:wrap;gap:8px;font:700 12.5px var(--sans);color:var(--paper-soft)}
-.vsa-row span{display:inline-flex;align-items:center;gap:4px;background:var(--n-cream);border:1px solid var(--edge);border-radius:999px;padding:4px 10px}
-.vsa-card .none{color:var(--paper-soft);font-size:13px}
 .archived{display:grid;gap:14px}
 .archived summary{list-style:none;justify-self:start;cursor:pointer}
 .archived summary::-webkit-details-marker{display:none}
+.fchip.stress{background:#E9EEF2;color:#3D4A55}
+.fchip .cloud{font-size:14px;line-height:1}
+.tl-note{line-height:27px}
 html.rm *,html.rm *::before,html.rm *::after{animation:none!important;transition-duration:.01ms!important}
 @media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
 </style>
@@ -1325,7 +1322,7 @@ SCENES.mine = (o) => {
     <div class="scrap">${groups.map(([k, l, dsc]) => { const g = list.filter(x => (x.cat || null) === k); if (!k && !g.length) return '';
       return `<section class="rs"><div class="rs-h"><h2>${k ? flagFor(k) : ''}${l}</h2>${k ? `<button class="tagbtn" data-addc="${k}">+ Add</button>` : ''}</div>${g.length ? `<div class="plist">${g.map(prow).join('')}</div>` : `<p class="none">${dsc}</p>`}</section>`; }).join('')}</div>
     <div class="scrap"><section class="rs"><div class="rs-h"><h2>What I bring</h2><button class="tagbtn" id="addv">+ Add</button></div>
-      ${vuln().length ? `<div class="fchips">${vuln().map(x => `<button class="fchip" data-v="${x.id}"><span>${esc(x.text)}</span></button>`).join('')}</div>` : '<p class="none">Your own sore spots or patterns, like “I worry when replies are slow”. Private. They show up as gentle reminders when an entry mentions stress.</p>'}</section></div>
+      ${vuln().length ? `<div class="fchips">${vuln().map(x => `<button class="fchip" data-v="${x.id}"><span>${esc(x.text)}</span></button>`).join('')}</div>` : '<p class="none">Your own sore spots or patterns, like “I worry when replies are slow”. Private. When a journal entry reads as stressful, one comes back as a gentle reminder.</p>'}</section></div>
     <div class="actions">${o.first ? '<button class="btn primary" id="cont">Continue</button>' : ''}
     <button class="btn" id="help">Help me find them from past relationships</button>
     <button class="btn link" id="delr">Delete my reflections</button></div>`,
@@ -1350,7 +1347,7 @@ SCENES.mine = (o) => {
 
 /* ---------- folders: one per person, with a timeline ---------- */
 const FLAGC = {green: '#7FA86E', yellow: '#E3B341', red: '#C65A43'};
-const flagSvg = l => `<svg class="flag" viewBox="0 0 20 24" aria-hidden="true"><path d="M4 2v20" stroke="#3D3431" stroke-width="2" stroke-linecap="round"/><path d="M5 3h11l-3 4 3 4H5z" fill="${FLAGC[l]}" stroke="#3D3431" stroke-width="1.4" stroke-linejoin="round"/></svg>`;
+const flagSvg = l => l === 'stress' ? '<span class="cloud" aria-hidden="true">☁</span>' : `<svg class="flag" viewBox="0 0 20 24" aria-hidden="true"><path d="M4 2v20" stroke="#3D3431" stroke-width="2" stroke-linecap="round"/><path d="M5 3h11l-3 4 3 4H5z" fill="${FLAGC[l]}" stroke="#3D3431" stroke-width="1.4" stroke-linejoin="round"/></svg>`;
 // the flag colour a preference category raises when something leans off
 const CAT_FLAG = {need: 'red', nice: 'yellow', avoid: 'yellow', no: 'red'};
 const flagFor = k => k === 'nice' ? flagSvg('green') : k === 'need' ? '<span class="nn">★</span>' : flagSvg(CAT_FLAG[k]);
@@ -1367,22 +1364,7 @@ const folderArt = c => `<svg class="ill folder-art" viewBox="0 0 120 96" aria-hi
 const STATUS = {exploring: 'Exploring', paused: 'Paused', closed: 'Closed', passed: 'Passed'};
 const FEEL = [[1, 'Off', 'discomfort'], [2, 'Meh', 'silence'], [3, 'Okay', 'curiosity'], [4, 'Warm', 'affection'], [5, 'Sparks', 'laughter']];
 const KINDS = ['Call', 'Messages', 'Coffee', 'Date', 'Other'];
-// Vulnerability-Stress-Adaptation (Karney & Bradbury): what each person brings, the stress around them, and how they handle it together.
-const STRESSORS = ['Work', 'Family', 'Health', 'Money', 'Distance', 'Other'];
-const COPE = [['talked', 'Talked it through', 'good'], ['leaned', 'Leaned on each other', 'good'], ['space', 'Gave each other space', 'good'], ['quiet', 'Went quiet', 'strained'], ['snapped', 'Snapped or blamed', 'strained'], ['brushed', 'Brushed it off', 'strained']];
-const COPEL = Object.fromEntries(COPE.map(c => [c[0], c]));
-const copeFlag = k => { const c = COPEL[k]; return c ? {id: uid(), level: c[2] === 'good' ? 'green' : 'yellow', prefId: null, text: (c[2] === 'good' ? 'Under stress: ' : 'Under stress: ') + c[1].toLowerCase(), src: 'How you handled a stressful patch', cleared: false, vsa: true} : null; };
 const vuln = () => S.vuln || (S.vuln = []);
-// How the two of you have handled stress so far, across the timeline.
-function stressSummary(f) {
-  const st = f.entries.filter(e => e.stress && e.stress.length), good = st.filter(e => COPEL[e.cope] && COPEL[e.cope][2] === 'good').length, strained = st.filter(e => COPEL[e.cope] && COPEL[e.cope][2] === 'strained').length;
-  const line = !st.length ? 'You haven’t seen this through a stressful patch yet. Early on, most things feel easy.'
-    : !good && !strained ? 'Stress has come up. Note how you handled it to see a pattern.'
-    : good && !strained ? 'When things got stressful, you handled it together.'
-    : strained && !good ? 'Stress has been hard on the two of you so far.'
-    : 'Mixed so far: some stressful patches went well, some didn’t.';
-  return {count: st.length, good, strained, line};
-}
 const folders = () => S.folders || (S.folders = []);
 const folderById = id => folders().find(f => f.id === id);
 const fmtDate = t => new Date(t).toLocaleDateString(undefined, {day: 'numeric', month: 'short'});
@@ -1410,6 +1392,7 @@ function photoSheet(f, ph) {
 }
 const squiggle = () => S.settings.reduced ? IC.squiggle : IC.squiggle.replace('"/></svg>', '"><animate attributeName="d" dur="2.6s" begin="0.9s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines=".45 0 .55 1;.45 0 .55 1" values="M3 8c14-5 24 4 38-1s24-4 38 0 26 3 40-2 10-1 14 0;M3 8c14 5 24-4 38 1s24 4 38 0 26-3 40 2 10 1 14 0;M3 8c14-5 24 4 38-1s24-4 38 0 26 3 40-2 10-1 14 0"/></path></svg>');
 
+
 // First level of matching: what the profile says in its own words, against your preferences.
 function matchEntry(profile, date) {
   const c = compare(profile, {});
@@ -1426,7 +1409,8 @@ const NEGATION = /(n't|\bnot\b|\bnever\b|\bno\b|\bbarely\b|\bhardly\b|\bwithout\
 const STOP = new Set('want wants wanted someone being person really about their there with have that this more less like good very make makes into from what when who your yours mine them they open'.split(' '));
 const prefMatches = (pref, sen) => {
   const th = THEME[pref.theme];
-  if (th) return th.t.test(sen) || (th.negT && th.negT.test(sen)) || (th.posT && th.posT.test(sen));
+  // match on the theme's own trigger words; its broader polarity words (like "parents") only decide which way a matched sentence leans
+  if (th) return th.t.test(sen) || (th.posT && th.posT.test(sen));
   return pref.text.toLowerCase().split(/[^a-z']+/).filter(w => w.length >= 4 && !STOP.has(w)).some(w => new RegExp('\\b' + w.slice(0, 5), 'i').test(sen));
 };
 function lean(pref, sen) {
@@ -1440,6 +1424,23 @@ function lean(pref, sen) {
   if (!score) return th ? null : neg ? 'off' : 'good';
   return score > 0 ? 'good' : 'off';
 }
+// Stress and how you handled it (the VSA model), read from what you wrote. A stress tag is context, not a flag;
+// how you handled it together becomes a green or yellow flag.
+const STRESS_CUE = /\b(stress\w*|rough|hard (day|week|time)|tough|tense|anxious|worried|pressure|overwhelm\w*|exhaust\w*|bad (day|week)|crisis|struggl\w*)\b/i;
+const STRESS_KIND = [['Work', /\b(work|deadline|boss|office|project|job|layoff|overtime|exam)\w*/i], ['Family', /\b(family|parents?|mum|mom|dad|in-?laws?|sibling|relatives)\b/i], ['Health', /\b(sick|ill|hospital|doctor|health|injur\w*|fever|unwell)\b/i], ['Money', /\b(money|bills?|rent|debt|salary|broke|loan)\b/i], ['Distance', /\b(long[- ]distance|far apart|time ?zones?|different cit\w*)\b/i]];
+const COPE_GOOD = /\b(talk(ed)? (it |things )?(through|out)|support(ed|ive)|lean(ed)? on|(was|were) there for|helped|gave (me|us|each other) space|checked in|listened|comfort(ed)?|reassur\w*)\b/i;
+const COPE_HARD = /\b(went (quiet|silent)|snapped|blam(e|ed)|shout\w*|yell\w*|brushed (it )?off|ignored|shut down|stonewall\w*|argued|fought|cold shoulder)\b/i;
+function stressTags(text) {
+  const sens = sentences(text), hit = sens.filter(x => STRESS_CUE.test(x));
+  if (!hit.length) return [];
+  const kinds = [...new Set(hit.flatMap(x => STRESS_KIND.filter(([, re]) => re.test(x)).map(([k]) => k)))];
+  const out = [{id: uid(), level: 'stress', prefId: null, text: kinds.length ? `${kinds.join(' & ')} stress` : 'A stressful patch', src: hit[0], cleared: false, vsa: true}];
+  const good = sens.find(x => COPE_GOOD.test(x)), hard = sens.find(x => COPE_HARD.test(x));
+  if (hard) out.push({id: uid(), level: 'yellow', prefId: null, text: `Under stress: ${hard.match(COPE_HARD)[0].toLowerCase()}`, src: hard, cleared: false, vsa: true});
+  if (good) out.push({id: uid(), level: 'green', prefId: null, text: `Under stress: ${good.match(COPE_GOOD)[0].toLowerCase()}`, src: good, cleared: false, vsa: true});
+  return out;
+}
+const allTags = text => [...stressTags(text), ...autoTag(text)];
 function autoTag(text) {
   const out = [], sens = sentences(text), rank = {green: 0, yellow: 1, red: 2};
   mine().filter(x => x.cat).forEach(pref => {
@@ -1465,7 +1466,7 @@ function pickPrompts(f) {
 // Spark comes from how you felt; Fit from the flags so far.
 function summary(f) {
   const n = {green: 0, yellow: 0, red: 0};
-  f.entries.forEach(e => (e.flags || []).forEach(x => { if (!x.cleared) n[x.level]++; }));
+  f.entries.forEach(e => (e.flags || []).forEach(x => { if (!x.cleared && x.level in n) n[x.level]++; }));
   const feels = f.entries.filter(e => e.feel).slice(-3).map(e => e.feel);
   const chemLv = feels.length ? Math.round(feels.reduce((a, b) => a + b, 0) / feels.length) : 0;
   const tot = n.green + n.yellow + n.red;
@@ -1504,7 +1505,6 @@ function entryHtml(e, i, f, fresh) {
   return `<div class="tl-e${fresh ? ' fresh' : ''}"><span class="tl-dot k-${e.type}"></span><div class="tl-card" style="--r:${i % 2 ? .6 : -.6}deg">
     <div class="tl-h"><span>${fmtDate(e.date)} · ${esc(head)}</span>${e.type === 'match' ? '<button class="tagbtn" data-recheck>Re-check</button>' : ''}</div>
     ${feel ? `<div class="tl-feel">${tokenSvg(feel[2], e.feel)}<span>Felt ${feel[1].toLowerCase()}</span></div>` : ''}
-    ${e.stress && e.stress.length ? `<p class="tl-stress"><span class="cloud" aria-hidden="true">☁</span> Stress: ${e.stress.map(esc).join(', ')}${COPEL[e.cope] ? ` · ${COPEL[e.cope][1].toLowerCase()}` : ''}</p>` : ''}
     ${e.flags.length ? `<div class="fchips">${e.flags.map(x => fchip(e, x)).join('')}</div>` : (e.type === 'match' ? '<p class="tl-unknown">Nothing on the form lines up or clashes yet.</p>' : '')}
     ${e.type === 'match' && e.unknown.length ? `<p class="tl-unknown">To find out: ${e.unknown.map(id => (mine().find(x => x.id === id) || {}).text).filter(Boolean).map(esc).join(' · ')}</p>` : ''}
     ${e.note ? `<p class="tl-note">${esc(e.note)}</p>` : ''}
@@ -1628,9 +1628,6 @@ SCENES.folder = (o) => {
     <div class="row-pills"><button class="bk-stamp lg s-${f.status}" id="st">${STATUS[f.status]}</button>${p ? '<button class="btn link" id="prof">View profile</button>' : ''}</div>
     ${p ? `<div class="balance">${seesaw(s)}<div class="ss-labels"><span class="ss-l spark"><b>Spark</b>${s.chemW}</span><span class="ss-l fit"><b>Fit</b>${s.compW}</span></div><p class="bline">${s.line}</p>${tally(s.n)}</div>`
       : `<button class="checkin setup" id="addp"><span class="q">Add their profile</span><span class="pick">Paste a biodata or add an image. It gets matched against your preferences.</span></button>`}
-    ${p ? (() => { const v = stressSummary(f); return `<div class="vsa-card"><p class="label">Through stress</p><p class="vsa-line">${v.line}</p>${v.count ? `<div class="vsa-row"><span>☁ ${v.count} stressful patch${v.count > 1 ? 'es' : ''}</span>${v.good ? `<span class="ok">${flagSvg('green')} ${v.good} handled well</span>` : ''}${v.strained ? `<span class="hard">${flagSvg('yellow')} ${v.strained} strained</span>` : ''}</div>` : ''}
-      <div class="rs-h"><p class="label">What they’ve shared</p><button class="tagbtn" id="addsh">+ Add</button></div>
-      ${(f.shared || []).length ? `<div class="fchips">${f.shared.map(x => `<button class="fchip" data-sh="${x.id}"><span>${esc(x.text)}</span></button>`).join('')}</div>` : '<p class="none">Things they’ve told you about their past or what’s hard for them. Only what they shared.</p>'}</div>`; })() : ''}
     <div class="rs-h"><p class="label">Photos</p></div>
     <div class="photos"><button class="ph add" id="addph">${IC.plus}<span>Add photos</span></button>${(f.photos || []).map((ph, n) => `<button class="ph" data-ph="${ph.id}" style="--r:${n % 2 ? 2.5 : -2}deg" aria-label="Photo ${n + 1}${f.cover === ph.id ? ', cover' : ''}"><img src="${ph.src}" alt="">${f.cover === ph.id ? '<span class="ph-cv">cover</span>' : ''}</button>`).join('')}</div>
     ${f.entries.length ? `<p class="label">Timeline</p><div class="tl">${f.entries.map((e, i) => entryHtml(e, i, f, e.id === fresh)).join('')}</div>` : ''}
@@ -1638,8 +1635,6 @@ SCENES.folder = (o) => {
     mount: r => {
       if (fresh && !S.settings.reduced) setTimeout(() => { sfx('drop'); buzz(16); }, 500);
       on(r, '#st', () => folderSheet(f));
-      on(r, '#addsh', () => askText({title: 'What they’ve shared', sub: 'Only what they told you, in your words.', placeholder: 'e.g. Their parents divorced when they were young', ok: 'Add'}, t => { if (t) { (f.shared = f.shared || []).push({id: uid(), text: t}); save(); render(); } }));
-      on(r, '[data-sh]', (e, b) => { const x = f.shared.find(y => y.id === b.dataset.sh); askText({title: 'What they’ve shared', value: x.text, ok: 'Save', remove: () => { f.shared = f.shared.filter(y => y !== x); save(); render(); }}, t => { if (t) { x.text = t; save(); render(); } }); });
       on(r, '#prof', () => profileSheet(p));
       on(r, '#addp', () => go('add', {f: f.id})); on(r, '#addp2', () => go('add', {f: f.id}));
       on(r, '#ci', () => go('checkin', {f: f.id}));
@@ -1653,7 +1648,7 @@ SCENES.folder = (o) => {
       on(r, '[data-flag]', (e, b) => { const [eid, xid] = b.dataset.flag.split(':'), x = f.entries.find(y => y.id === eid).flags.find(y => y.id === xid);
         const pref = mine().find(y => y.id === x.prefId);
         sheet(`<h3>${flagSvg(x.level)} ${esc(x.text)}</h3>${x.src ? `<div class="clips">${clipHtml(x.src, 0)}</div>` : ''}
-          <p class="label">Tagged as</p><div class="seg" id="lv">${['green', 'yellow', 'red'].map(l => `<button data-l="${l}" aria-pressed="${x.level === l}">${flagSvg(l)} ${cap(l)}</button>`).join('')}</div>
+          ${x.level === 'stress' ? '' : `<p class="label">Tagged as</p>`}<div class="seg" id="lv"${x.level === 'stress' ? ' hidden' : ''}>${['green', 'yellow', 'red'].map(l => `<button data-l="${l}" aria-pressed="${x.level === l}">${flagSvg(l)} ${cap(l)}</button>`).join('')}</div>
           <div class="row2"><button class="btn" data-c>${x.cleared ? 'Restore tag' : 'Clear tag'}</button><button class="btn primary" data-x>Done</button></div>`, (sh, close) => {
           on(sh, '[data-l]', (e2, y) => { x.level = y.dataset.l; x.edited = true; if (pref) x.text = flagLabel(pref, x.level); save(); $$('[data-l]', sh).forEach(z => z.setAttribute('aria-pressed', z === y)); sfx('tuck'); });
           $('[data-x]', sh).onclick = () => { close(); render(); };
@@ -1667,10 +1662,12 @@ SCENES.folder = (o) => {
 SCENES.checkin = (o) => {
   const f = folderById(o.f); if (!f) return SCENES.home();
   const editing = o.edit ? f.entries.find(e => e.id === o.edit) : null;
-  const ci = o.ci || (cur.opts.ci = editing ? {feel: editing.feel || 0, kind: editing.kind || '', text: editing.note || '', stress: [...(editing.stress || [])], cope: editing.cope || ''} : {feel: 0, kind: '', text: '', stress: [], cope: ''});
-  const reminders = [...vuln().map(x => `You noted: “${x.text}”`), ...(f.shared || []).map(x => `They shared: “${x.text}”`)];
+  const ci = o.ci || (cur.opts.ci = editing ? {feel: editing.feel || 0, kind: editing.kind || '', text: editing.note || ''} : {feel: 0, kind: '', text: ''});
   const nudges = pickPrompts(f).map(x => reflectFor(x));
-  const tagsHtml = t => { const tags = autoTag(t); return tags.length ? tags.map(x => `<span class="fchip ${x.level}">${flagSvg(x.level)}<span>${esc(x.text)}</span></span>`).join('') : `<span class="none">${t.trim() ? 'No tags yet. Write about what happened.' : 'Tags appear here as you write.'}</span>`; };
+  // a gentle reminder of what you bring shows when the entry reads as stressful
+  const tagsHtml = t => { const tags = allTags(t), v = vuln(), stressed = tags.some(x => x.level === 'stress');
+    return (tags.length ? tags.map(x => `<span class="fchip ${x.level}">${flagSvg(x.level)}<span>${esc(x.text)}</span></span>`).join('') : `<span class="none">${t.trim() ? 'No tags yet. Write about what happened.' : 'Tags appear here as you write.'}</span>`)
+      + (stressed && v.length ? `<p class="vsa-note">You noted: “${esc(v[t.length % v.length].text)}”</p>` : ''); };
   return {
     tone: 'pink', eyebrow: `${esc(f.name)} · ${fmtDate(editing ? editing.date : Date.now())}`,
     html: `<h1 class="t">${editing ? 'Edit entry.' : 'Journal entry.'}</h1>
@@ -1679,11 +1676,6 @@ SCENES.checkin = (o) => {
     <div class="seg" id="kind">${KINDS.map(k => `<button data-k="${k}" aria-pressed="${ci.kind === k}">${k}</button>`).join('')}</div>
     <div class="journal"><textarea id="jt" aria-label="What happened" placeholder="What happened? Write it the way you'd tell a friend.">${esc(ci.text)}</textarea>
     ${nudges.length ? `<div class="helper"><button class="tagbtn" id="help" aria-expanded="${!!ci.help}">Need a hand?</button>${ci.help ? `<div class="helper-list">${nudges.map((q, n) => `<button data-q="${n}">${esc(q)}</button>`).join('')}</div>` : ''}</div>` : ''}</div>
-    <p class="label">Anything stressful going on? · optional</p>
-    <div class="seg" id="stress">${STRESSORS.map(k => `<button data-st="${k}" aria-pressed="${ci.stress.includes(k)}">${k}</button>`).join('')}</div>
-    ${ci.stress.length ? `<div class="vsa-cope"><p class="label">How did you handle it together?</p>
-      <div class="seg" id="cope">${COPE.map(([k, l]) => `<button data-cp="${k}" aria-pressed="${ci.cope === k}">${l}</button>`).join('')}</div>
-      ${reminders.length ? `<p class="vsa-note">${esc(reminders[Math.floor(ci.text.length / 7) % reminders.length])}</p>` : ''}</div>` : ''}
     <p class="label">Fit · auto tags from your flags</p>
     <div class="fchips" id="tags" aria-live="polite">${tagsHtml(ci.text)}</div>
     ${mine().some(x => x.cat) ? '' : '<button class="checkin setup" id="setp"><span class="q">No preferences yet</span><span class="pick">Add some so entries can be tagged.</span></button>'}
@@ -1692,8 +1684,6 @@ SCENES.checkin = (o) => {
       on(r, '[data-feel]', (e, x) => { ci.feel = ci.feel === +x.dataset.feel ? 0 : +x.dataset.feel; $$('[data-feel]', r).forEach(y => { y.setAttribute('aria-pressed', +y.dataset.feel === ci.feel); y.classList.remove('pop'); }); if (ci.feel) { void x.offsetWidth; x.classList.add('pop'); } sfx('tuck'); buzz(6); });
       on(r, '#kind button', (e, x) => { ci.kind = ci.kind === x.dataset.k ? '' : x.dataset.k; $$('#kind button', r).forEach(y => y.setAttribute('aria-pressed', y.dataset.k === ci.kind)); sfx('tuck'); });
       on(r, '#help', () => { ci.help = !ci.help; sfx('page'); render(); });
-      on(r, '[data-st]', (e, x) => { const k = x.dataset.st, i = ci.stress.indexOf(k); if (i >= 0) ci.stress.splice(i, 1); else ci.stress.push(k); if (!ci.stress.length) ci.cope = ''; sfx('tuck'); render(); });
-      on(r, '[data-cp]', (e, x) => { ci.cope = ci.cope === x.dataset.cp ? '' : x.dataset.cp; $$('[data-cp]', r).forEach(y => y.setAttribute('aria-pressed', y.dataset.cp === ci.cope)); sfx('tuck'); });
       // tapping a starter prompt drops it into the page as a line to continue from
       on(r, '[data-q]', (e, x) => { const q = nudges[+x.dataset.q], ta = $('#jt', r); ci.text = (ci.text.trim() ? ci.text.trimEnd() + '\n' : '') + q + ' '; ta.value = ci.text; ta.focus(); ta.setSelectionRange(ci.text.length, ci.text.length); ci.help = false; x.closest('.helper-list').remove(); $('#help', r).setAttribute('aria-expanded', 'false'); sfx('tuck'); });
       on(r, '#setp', toPrefs);
@@ -1705,15 +1695,14 @@ SCENES.checkin = (o) => {
       on(r, '#save', () => {
         if (editing) {
           const kept = (editing.flags || []).filter(x => x.edited);
-          const cf = copeFlag(ci.cope);
-          Object.assign(editing, {type: 'journal', feel: ci.feel || null, kind: ci.kind, note: ci.text.trim(), stress: [...ci.stress], cope: ci.cope,
-            flags: [...kept.filter(x => !x.vsa), ...autoTag(ci.text).filter(x => !kept.some(k => k.prefId === x.prefId)), ...(cf ? [cf] : [])]});
+          Object.assign(editing, {type: 'journal', feel: ci.feel || null, kind: ci.kind, note: ci.text.trim(),
+            flags: [...kept, ...allTags(ci.text).filter(x => !kept.some(k => (x.prefId ? k.prefId === x.prefId : k.text === x.text)))]});
+          delete editing.stress; delete editing.cope;
           S.ui.fresh = editing.id; save(); toast('Saved'); back(); return;
         }
-        if (!ci.feel && !ci.kind && !ci.text.trim() && !ci.stress.length) { back(); return; }
-        const cf = copeFlag(ci.cope);
-        const e = {id: uid(), type: 'journal', date: Date.now(), feel: ci.feel || null, kind: ci.kind, note: ci.text.trim(), stress: [...ci.stress], cope: ci.cope, flags: [...autoTag(ci.text), ...(cf ? [cf] : [])]};
-        f.entries.push(e); S.ui.fresh = e.id; save(); toast(e.flags.length ? `Added · ${e.flags.length} tag${e.flags.length > 1 ? 's' : ''}` : 'Added'); back();
+        if (!ci.feel && !ci.kind && !ci.text.trim()) { back(); return; }
+        const e = {id: uid(), type: 'journal', date: Date.now(), feel: ci.feel || null, kind: ci.kind, note: ci.text.trim(), flags: allTags(ci.text)};
+        f.entries.push(e); S.ui.fresh = e.id; save(); toast(e.flags.filter(x => x.level !== 'stress').length ? `Added · ${e.flags.length} tag${e.flags.length > 1 ? 's' : ''}` : 'Added'); back();
       });
     }
   };
