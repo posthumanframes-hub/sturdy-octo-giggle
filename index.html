@@ -1893,7 +1893,7 @@ function openSettings() {
     : installEvt ? '<button class="btn primary" id="s-inst">Install Plot Twist</button>'
     : isIOS ? '<p>To install on iPhone or iPad: tap <b>Share</b>, then <b>Add to Home Screen</b>.</p>'
     : '<p>To install: open this page in Chrome, Edge or Safari, then choose <b>Install app</b> or <b>Add to Home Screen</b> from the browser menu.</p>'}
-  <div class="row2"><button class="btn" id="s-exp">Export backup</button><button class="btn" id="s-imp">Import backup</button></div>
+  ${window.top === window.self ? '<div class="row2"><button class="btn" id="s-exp">Export backup</button><button class="btn" id="s-imp">Import backup</button></div>' : '<p>Backups (export and import) work in the installed app or on the app’s own link, not inside this preview.</p>'}
   <button class="btn" id="s-f">My preferences</button>
   <div class="row2"><button class="btn" id="s-all">Delete everything</button><button class="btn primary" data-x>Done</button></div>`, (sh, close) => {
     on(sh, '#s-mode button', (e, x) => { st.mode = x.dataset.mode; applyLook(); save(); $$('#s-mode button', sh).forEach(y => y.setAttribute('aria-pressed', y === x)); sfx('tuck'); });
@@ -1905,14 +1905,14 @@ function openSettings() {
     $('#s-f', sh).onclick = () => { close(); toPrefs(); };
     $('#s-inst', sh)?.addEventListener('click', async () => { const ev = installEvt; if (!ev) return; ev.prompt(); try { await ev.userChoice; } catch (e) {} installEvt = null; close(); });
     // a backup is one JSON file with everything (photos included), so you can move to another browser or the installed app
-    $('#s-exp', sh).onclick = () => {
+    if ($('#s-exp', sh)) $('#s-exp', sh).onclick = () => {
       try {
         const blob = new Blob([JSON.stringify(S)], {type: 'application/json'}), a = document.createElement('a');
         a.href = URL.createObjectURL(blob); a.download = `plot-twist-backup-${new Date().toISOString().slice(0, 10)}.json`;
         document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); toast('Backup saved');
       } catch (e) { toast('Couldn’t save a backup here'); }
     };
-    $('#s-imp', sh).onclick = () => {
+    if ($('#s-imp', sh)) $('#s-imp', sh).onclick = () => {
       const inp = document.createElement('input'); inp.type = 'file'; inp.accept = 'application/json,.json';
       inp.onchange = () => { const file = inp.files && inp.files[0]; if (!file) return; const fr = new FileReader();
         fr.onload = () => { let d; try { d = JSON.parse(fr.result); } catch (e) { toast('That file isn’t a Plot Twist backup'); return; }
