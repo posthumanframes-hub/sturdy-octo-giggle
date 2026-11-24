@@ -707,6 +707,30 @@ button.bk-stamp.lg{position:static;font-size:11px;padding:7px 10px;transform:rot
 .stk-grid button{display:grid;justify-items:center;gap:4px;padding:10px 4px 8px;border:1px solid var(--line);border-radius:var(--radius-control);background:var(--paper);color:var(--paper-ink);font:600 12px/1.2 var(--sans);cursor:pointer;min-height:var(--touch-target)}
 .stk-grid .stk-art{width:54px;height:46px;display:grid;place-items:center;filter:drop-shadow(1.2px 0 0 #fff) drop-shadow(-1.2px 0 0 #fff) drop-shadow(0 1.2px 0 #fff) drop-shadow(0 -1.2px 0 #fff) drop-shadow(0 2px 2px rgba(40,30,20,.18))}
 .stk-grid .stk-art svg{max-width:100%;max-height:100%}
+.who .rename{align-self:center;background:transparent;border-color:transparent;box-shadow:none;color:var(--text-muted-canvas)}
+.who .rename:hover,.who .rename:focus-visible{background:var(--paper);color:var(--paper-ink)}
+.guide{display:grid;gap:12px;margin-block:auto}
+.guide-dots{display:flex;gap:6px;justify-content:center}
+.guide-dots span{width:26px;height:5px;border-radius:3px;background:var(--line)}
+.guide-dots .done{background:var(--text-muted-canvas)} .guide-dots .on{background:var(--action-primary)}
+.guide-done{display:flex;align-items:center;gap:10px;font:600 14px/1.3 var(--sans);color:var(--text-muted-canvas);animation:fadeIn .4s ease both}
+.gd-n{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:color-mix(in srgb,var(--stamp-ok) 20%,transparent);color:var(--stamp-ok);font:800 12px var(--sans);flex:none}
+.guide-card{position:relative;background-color:var(--paper-warm);background-image:var(--paper-grain);color:var(--paper-ink);border-radius:6px;padding:26px 20px 22px;display:grid;gap:10px;transform:rotate(var(--r,0deg));box-shadow:0 1px 1px rgba(61,52,49,.08),0 16px 28px -16px var(--shadow);animation:rise .6s var(--spring) both}
+.guide-card::before{content:"";position:absolute;left:50%;top:-8px;width:64px;height:16px;margin-left:-32px;background:var(--n-butter);opacity:.85;transform:rotate(-2deg)}
+.guide-card h1.t{margin:0;color:var(--paper-ink);background:linear-gradient(transparent 58%,color-mix(in srgb,var(--n-butter) 85%,transparent) 58% 90%,transparent 90%)}
+.guide-card p{margin:0;font:400 16.5px/1.5 var(--serif)}
+.guide-art{width:64px;height:56px;display:block}
+.gc-n{position:absolute;right:16px;top:14px;font:800 11px var(--sans);letter-spacing:.1em;color:var(--paper-soft)}
+.splash{position:fixed;inset:0;z-index:80;pointer-events:none;display:grid;place-content:center;justify-items:center;gap:14px;background-color:var(--butter-bg);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px;transition:opacity .4s ease}
+.splash.out{opacity:0;pointer-events:none}
+.splash-card{position:relative;width:200px;padding:30px 18px 22px;background:#F3E2A6;border:1px solid rgba(61,52,49,.2);border-radius:6px;display:grid;justify-items:center;gap:6px;
+  box-shadow:5px 5px 0 -1px #EAD38F,5px 5px 0 0 rgba(61,52,49,.2),0 14px 24px -14px rgba(40,30,20,.35);animation:drop .7s var(--spring) both}
+.splash-card .pclip{position:absolute;left:14px;top:-14px;width:16px;height:34px;transform:rotate(-12deg)}
+.splash-name{font:400 34px/1 var(--serif);color:#3D3431;background:#FFFCF5;padding:6px 12px;border-radius:4px}
+.splash-card .squiggle path{animation:drawIn .9s ease-out .35s forwards}
+.splash-load{margin:0;font:400 18px var(--serif);font-style:italic;color:var(--ink-soft);animation:fadeIn .6s ease .5s both}
+@keyframes drop{from{transform:translateY(-40px) rotate(-8deg);opacity:0}to{transform:rotate(-2deg);opacity:1}}
 html.rm *,html.rm *::before,html.rm *::after{animation:none!important;transition-duration:.01ms!important}
 @media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
 </style>
@@ -839,11 +863,40 @@ const loadTess = () => tessP || (tessP = new Promise((res, rej) => {
   sc.onload = () => res(window.Tesseract); sc.onerror = () => { tessP = null; rej(new Error('load')); };
   document.head.append(sc);
 }));
+// Text recognition reads clean, large, high-contrast black-on-white text best, so the photo is prepared first:
+// enlarged to about 2000px wide, made grayscale, contrast-stretched, then turned into black and white (Otsu threshold).
+async function prepareForReading(file) {
+  const url = URL.createObjectURL(file);
+  try {
+    const im = await new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = url; });
+    const sc = clamp(2000 / im.width, 1, 3), w = Math.round(im.width * sc), h = Math.round(im.height * sc);
+    const c = document.createElement('canvas'); c.width = w; c.height = h;
+    const g = c.getContext('2d', {willReadFrequently: true}); g.imageSmoothingQuality = 'high'; g.drawImage(im, 0, 0, w, h);
+    const img = g.getImageData(0, 0, w, h), d = img.data, hist = new Array(256).fill(0), gray = new Uint8ClampedArray(w * h);
+    let lo = 255, hi = 0;
+    for (let i = 0, j = 0; i < d.length; i += 4, j++) { const v = Math.round(.299 * d[i] + .587 * d[i + 1] + .114 * d[i + 2]); gray[j] = v; if (v < lo) lo = v; if (v > hi) hi = v; }
+    const span = Math.max(1, hi - lo);
+    for (let j = 0; j < gray.length; j++) { gray[j] = Math.round((gray[j] - lo) * 255 / span); hist[gray[j]]++; }
+    // Otsu: the threshold that best separates ink from paper
+    let sum = 0; for (let t = 0; t < 256; t++) sum += t * hist[t];
+    let sumB = 0, wB = 0, best = 0, thr = 128;
+    for (let t = 0; t < 256; t++) { wB += hist[t]; if (!wB) continue; const wF = gray.length - wB; if (!wF) break; sumB += t * hist[t];
+      const mB = sumB / wB, mF = (sum - sumB) / wF, between = wB * wF * (mB - mF) * (mB - mF); if (between > best) { best = between; thr = t; } }
+    for (let i = 0, j = 0; i < d.length; i += 4, j++) { const v = gray[j] > thr ? 255 : 0; d[i] = d[i + 1] = d[i + 2] = v; d[i + 3] = 255; }
+    g.putImageData(img, 0, 0);
+    return c;
+  } finally { URL.revokeObjectURL(url); }
+}
 async function readImageText(file, onProg) {
   const T = await loadTess();
   const w = await T.createWorker('eng', 1, {logger: m => { if (m.status === 'recognizing text') onProg(Math.round(m.progress * 100)); }});
-  try { const {data} = await Promise.race([w.recognize(file), new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 90000))]); return data.text; }
-  finally { w.terminate(); }
+  try {
+    // page segmentation 6 = one uniform block of text, which suits a biodata page; keep spacing so label/value gaps survive
+    await w.setParameters({tessedit_pageseg_mode: '6', preserve_interword_spaces: '1'});
+    let src = file; try { src = await prepareForReading(file); } catch (e) {}
+    const {data} = await Promise.race([w.recognize(src), new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 90000))]);
+    return tidyBiodataText(data.text);
+  } finally { w.terminate(); }
 }
 function attachPhoto(prof, url) {
   prof.photo = url;
@@ -1144,7 +1197,32 @@ function compare(p, d) {
   return {items, unsorted: mine().filter(x => !x.cat).length, flags: items.filter(i => i.flag && !i.dismissed).length};
 }
 
+// Biodata text from photos and tables comes in many shapes. Turn the common ones into "Label: value" lines:
+// "Name | Rohan", "Height ; 5'10", "Education — B.E.", "Diet    Vegetarian", or a label on one line and its value on the next.
+const BIO_KEYS = ['full name', 'name', 'date of birth', 'birth date', 'dob', 'time of birth', 'birth time', 'place of birth', 'birth place', 'age', 'height', 'weight', 'complexion', 'blood group', 'education', 'qualification', 'occupation', 'profession', 'job', 'designation', 'company', 'working at', 'annual income', 'income', 'salary', 'religion', 'caste', 'sub caste', 'community', 'gotra', 'rashi', 'raasi', 'nakshatra', 'star', 'manglik', 'mangal dosha', 'diet', 'food', 'smoking', 'drinking', 'father', "father's name", "father's occupation", 'mother', "mother's name", "mother's occupation", 'siblings', 'brother', 'brothers', 'sister', 'sisters', 'family type', 'family', 'native place', 'native', 'residence', 'address', 'city', 'location', 'contact', 'contact number', 'mobile', 'phone', 'email', 'hobbies', 'interests', 'about me', 'about', 'expectations', 'partner preference', 'looking for'];
+const BIO_KEY_RE = new RegExp('^(' + BIO_KEYS.slice().sort((a, b) => b.length - a.length).map(k => k.replace(/[.*+?^${}()|[\]\\']/g, m => '\\' + m).replace(/ /g, '\\s+')).join('|') + ')\\b', 'i');
+function tidyBiodataText(text) {
+  const lines = String(text || '').replace(/\r/g, '').split('\n')
+    .map(l => l.replace(/[|¦‖]+/g, ' | ').replace(/[“”]/g, '"').replace(/[‘’`]/g, "'").replace(/^[\s|•·*>\-–—_.~]+|[\s|_~]+$/g, '').replace(/[ \t]+/g, ' ').trim())
+    .filter(l => l && /[A-Za-z0-9]/.test(l));
+  const out = [];
+  for (let i = 0; i < lines.length; i++) {
+    const l = lines[i];
+    if (/^[^:：]{1,40}[:：]\s*\S/.test(l)) { out.push(l.replace(/\s*[:：]\s*/, ': ')); continue; }
+    const m = l.match(BIO_KEY_RE);
+    if (m) {
+      const key = m[1].replace(/\s+/g, ' ');
+      let rest = l.slice(m[0].length).replace(/^[\s:：;=|—–\-.]+/, '').trim();
+      // a label alone on its line takes the next line as its value, unless that line is a label too
+      if (!rest && i + 1 < lines.length && !BIO_KEY_RE.test(lines[i + 1]) && !/[:：]/.test(lines[i + 1])) rest = lines[++i];
+      if (rest) { out.push(cap(key) + ': ' + rest); continue; }
+    }
+    out.push(l);
+  }
+  return out.join('\n');
+}
 function parseBiodata(text) {
+  text = tidyBiodataText(text);
   const rows = [], groups = {}; let name = '';
   text.split(/\r?\n/).forEach(line => {
     const m = line.match(/^\s*([A-Za-z][^:：]{0,40}?)\s*[:：]\s*(.+?)\s*$/);
@@ -1237,11 +1315,16 @@ const STK = {
 const stickerKey = () => cur.name === 'home' ? 'home' : cur.name === 'folder' ? 'folder:' + cur.opts.f : null;
 // a few to start, tucked into the usual gaps
 const STK_DEFAULTS = {
-  home: [['cat', .80, .79, -6, 1.15], ['onigiri', .12, .8, 8, .9], ['sakura', .66, .04, 14, .62], ['star', .08, .04, -10, .55], ['yay', .48, .84, -4, .95]],
+  home: [['cat', .84, .68, -6, 1.05], ['onigiri', .11, .69, 8, .85], ['sakura', .66, .04, 14, .62], ['star', .08, .04, -10, .55], ['yay', .5, .62, -4, .9]],
   folder: [['coffee', .88, .1, 10, .8], ['sparkle', .6, .035, -8, .5]]
 };
 function stickersFor(key) {
   S.stickers = S.stickers || {};
+  if (key === 'home' && S.stickers.home && !S.stickers.homeV2) {  // old spots sat on the buttons
+    const moved = {cat: [.84, .68], onigiri: [.11, .69], yay: [.5, .62]}, old = {cat: [.80, .79], onigiri: [.12, .8], yay: [.48, .84]};
+    S.stickers.home.forEach(t => { if (old[t.k] && t.x === old[t.k][0] && t.y === old[t.k][1]) [t.x, t.y] = moved[t.k]; });
+    S.stickers.homeV2 = 1;
+  }
   if (!S.stickers[key]) S.stickers[key] = (STK_DEFAULTS[key.split(':')[0]] || []).map(([k, x, y, r, s]) => ({id: uid(), k, x, y, r, s}));
   return S.stickers[key];
 }
@@ -1686,13 +1769,11 @@ function newFolder() {
 
 SCENES.home = () => {
   const fs = folders(), live = fs.filter(f => f.status !== 'passed' && !f.archived), passed = fs.filter(f => f.status === 'passed' && !f.archived), archived = fs.filter(f => f.archived);
-  const s1 = mine().some(x => x.cat), s2 = fs.length > 0, s3 = fs.some(f => f.profile);
   const clip = `<svg class="pclip" viewBox="0 0 24 48" aria-hidden="true"><path d="M8 32V11a5 5 0 0 1 10 0v24a8 8 0 0 1-16 0V15" fill="none" stroke="#8F949C" stroke-width="2.4" stroke-linecap="round"/></svg>`;
   const tile = (f, i) => { const s = summary(f); return `<button class="ftile icard" data-id="${f.id}" style="--fc:${FOLDER_COLORS[i % 4]}">${clip}<span class="ft-status s-${f.status}">${STATUS[f.status]}</span>${coverOf(f) ? `<span class="ft-pic"><img src="${coverOf(f)}" alt=""></span>` : ''}<span class="ft-name">${esc(f.name)}</span>${tally(s.n)}</button>`; };
   return {
     tone: 'butter', back: false, eyebrow: '',
     html: `<div class="home-head"><span class="burst" aria-hidden="true"><i></i><i></i><i></i></span><h1 class="display home-t">Plot Twist</h1><span class="burst r" aria-hidden="true"><i></i><i></i><i></i></span></div><div class="home-sq">${squiggle()}</div>
-    ${s1 && s2 && s3 ? '' : `<div class="steps">${[['Your preferences', s1, 'p'], ['Add a folder', s2, 'f'], ['Add a profile', s3, 'r']].map(([l, d, a], i) => `<button class="step${d ? ' done' : ''}" data-step="${a}"><b>${d ? '✓' : i + 1}</b>${l}</button>`).join('')}</div>`}
     <div class="fgrid">${live.map(tile).join('')}<button class="ftile icard add" id="newf"><span class="ft-name">+ New folder</span></button></div>
     ${passed.length ? `<p class="label">Passed</p><div class="fgrid passed">${passed.map((f, i) => tile(f, i + live.length)).join('')}</div>` : ''}
     ${archived.length ? `<details class="archived"><summary class="tagbtn">Archived (${archived.length})</summary><div class="fgrid passed">${archived.map((f, i) => tile(f, i + live.length + passed.length)).join('')}</div></details>` : ''}
@@ -1701,7 +1782,6 @@ SCENES.home = () => {
       on(r, '.ftile[data-id]', (e, b) => go('folder', {f: b.dataset.id}));
       on(r, '#newf', newFolder);
       on(r, '#mp', toPrefs);
-      on(r, '[data-step]', (e, b) => { const a = b.dataset.step; if (a === 'p') toPrefs(); else if (a === 'f') newFolder(); else { const f = fs.find(x => !x.profile); if (f) go('add', {f: f.id}); else newFolder(); } });
       on(r, '#ex', () => { folders().push(exampleFolder()); save(); render(); });
     }
   };
@@ -1733,7 +1813,7 @@ SCENES.add = (o) => {
       }));
       on(r, '#ocr', async () => {
         const st = $('#ocrs', r); st.hidden = false; st.textContent = 'Reading… (on this device)';
-        try { const text = await readImageText(file, n => { st.textContent = `Reading… ${n}%`; }); $('#bt', r).value = text.split(/\n/).map(x => x.trim()).filter(Boolean).join('\n'); st.textContent = 'Check the text, then tap Match it.'; }
+        try { const text = await readImageText(file, n => { st.textContent = `Reading… ${n}%`; }); $('#bt', r).value = text; st.textContent = 'Read on this device. Check and fix anything it misread, then tap Match it.'; }
         catch (e) { st.textContent = 'Couldn’t read text here. Type the details instead.'; }
       });
       on(r, '#go', () => { const p = parseBiodata($('#bt', r).value); if (!p.rows.length) { toast('Try one detail per line, like Hobbies: reading'); return; } start(p); });
@@ -1782,7 +1862,7 @@ SCENES.folder = (o) => {
   const p = f.profile, s = summary(f), fresh = S.ui.fresh; S.ui.fresh = null;
   return {
     tone: 'pink', eyebrow: 'Folder',
-    html: `<div class="who">${coverOf(f) ? `<span class="polaroid"><img src="${coverOf(f)}" alt=""></span>` : ''}<h1 class="t">${esc(f.name)}</h1></div>
+    html: `<div class="who">${coverOf(f) ? `<span class="polaroid"><img src="${coverOf(f)}" alt=""></span>` : ''}<h1 class="t">${esc(f.name)}</h1><button class="icon-btn rename" id="ren" aria-label="Edit name">${IC.pen}</button></div>
     <div class="row-pills"><button class="bk-stamp lg s-${f.status}" id="st">${STATUS[f.status]}</button>${p ? '<button class="btn link" id="prof">View profile</button>' : ''}</div>
     ${p ? `<div class="balance">${seesaw(s)}<div class="ss-labels"><span class="ss-l spark"><b>Spark</b>${s.chemW}</span><span class="ss-l fit"><b>Fit</b>${s.compW}</span></div><p class="bline">${s.line}</p>${tally(s.n)}</div>`
       : `<button class="checkin setup" id="addp"><span class="q">Add their profile</span><span class="pick">Paste a biodata or add an image. It gets matched against your preferences.</span></button>`}
@@ -1793,6 +1873,7 @@ SCENES.folder = (o) => {
     mount: r => {
       if (fresh && !S.settings.reduced) setTimeout(() => { sfx('drop'); buzz(16); }, 500);
       on(r, '#st', () => folderSheet(f));
+      on(r, '#ren', () => askText({title: 'Name', value: f.name, placeholder: 'Their name', ok: 'Save'}, t => { if (t) { f.name = t.slice(0, 40); save(); toast('Renamed'); render(); } }));
       on(r, '#prof', () => profileSheet(p));
       on(r, '#addp', () => go('add', {f: f.id})); on(r, '#addp2', () => go('add', {f: f.id}));
       on(r, '#ci', () => go('checkin', {f: f.id}));
@@ -1866,6 +1947,42 @@ SCENES.checkin = (o) => {
   };
 };
 
+/* ---------- first-launch guide: one step at a time ---------- */
+const GUIDE = [
+  {art: 'heart', title: 'Set your preferences.', text: 'Non-negotiables, plus green, yellow and red flags. Stuck? Five quick questions can suggest some.', cta: 'Next'},
+  {art: 'letter', title: 'One folder per person.', text: 'Paste their biodata or add a photo of it. You’ll see how it matches.', cta: 'Next'},
+  {art: 'coffee', title: 'Keep a journal.', text: 'Jot down how each call or date went. Entries get tagged against your flags.', cta: 'Next'}
+];
+SCENES.guide = (o) => {
+  const step = clamp(o.step || 0, 0, GUIDE.length - 1), g = GUIDE[step], last = step === GUIDE.length - 1;
+  return {
+    tone: 'butter', back: false, eyebrow: `Getting started · ${step + 1} of ${GUIDE.length}`,
+    html: `<div class="guide">
+      <div class="guide-dots" aria-hidden="true">${GUIDE.map((_, k) => `<span class="${k < step ? 'done' : k === step ? 'on' : ''}"></span>`).join('')}</div>
+      ${GUIDE.slice(0, step).map((x, k) => `<div class="guide-done"><span class="gd-n">✓</span>${esc(x.title)}</div>`).join('')}
+      <div class="guide-card" style="--r:${step % 2 ? 1.2 : -1.2}deg"><span class="guide-art stk-art">${STK[g.art][1]}</span><span class="gc-n">${step + 1}</span>
+        <h1 class="t">${g.title}</h1><p>${g.text}</p></div>
+    </div>
+    <div class="actions">${last ? '<button class="btn primary" id="gstart">Set my preferences</button><button class="btn" id="gex">Look around first</button>' : `<button class="btn primary" id="gnext">${g.cta}</button><button class="btn link" id="gskip">Skip the guide</button>`}</div>`,
+    mount: r => {
+      const done = () => { S.guided = true; save(); };
+      on(r, '#gnext', () => { sfx('page'); go('guide', {step: step + 1}, 'replace'); });
+      on(r, '#gskip', () => { done(); go('home', {}, 'reset'); });
+      on(r, '#gstart', () => { done(); go('home', {}, 'reset'); toPrefs(); });
+      on(r, '#gex', () => { done(); go('home', {}, 'reset'); });
+    }
+  };
+};
+// a short loader each time the app opens: the folder card drops in and the squiggle draws itself
+function splash() {
+  const el = document.createElement('div'); el.className = 'splash'; el.setAttribute('aria-hidden', 'true');
+  el.innerHTML = `<div class="splash-card"><svg class="pclip" viewBox="0 0 24 48"><path d="M8 32V11a5 5 0 0 1 10 0v24a8 8 0 0 1-16 0V15" fill="none" stroke="#8F949C" stroke-width="2.4" stroke-linecap="round"/></svg><span class="splash-name">Plot Twist</span>${IC.squiggle}</div><p class="splash-load">opening your journal…</p>`;
+  document.body.append(el);
+  const hold = S.settings && S.settings.reduced ? 250 : 1300;
+  setTimeout(() => { el.classList.add('out'); setTimeout(() => el.remove(), 450); }, hold);
+}
+splash();
+
 /* ---------- example folder for a first look ---------- */
 function exampleFolder() {
   const day = 864e5, p = parseBiodata(SAMPLE);
@@ -1895,6 +2012,7 @@ function openSettings() {
     : '<p>To install: open this page in Chrome, Edge or Safari, then choose <b>Install app</b> or <b>Add to Home Screen</b> from the browser menu.</p>'}
   ${window.top === window.self ? '<div class="row2"><button class="btn" id="s-exp">Export backup</button><button class="btn" id="s-imp">Import backup</button></div>' : '<p>Backups (export and import) work in the installed app or on the app’s own link, not inside this preview.</p>'}
   <button class="btn" id="s-f">My preferences</button>
+  <button class="btn link" id="s-guide">Show the getting-started guide</button>
   <div class="row2"><button class="btn" id="s-all">Delete everything</button><button class="btn primary" data-x>Done</button></div>`, (sh, close) => {
     on(sh, '#s-mode button', (e, x) => { st.mode = x.dataset.mode; applyLook(); save(); $$('#s-mode button', sh).forEach(y => y.setAttribute('aria-pressed', y === x)); sfx('tuck'); });
     on(sh, '#s-pal button', (e, x) => { st.pal = x.dataset.pal; applyLook(); save(); $$('#s-pal button', sh).forEach(y => y.setAttribute('aria-pressed', y === x)); sfx('tuck'); });
@@ -1903,6 +2021,7 @@ function openSettings() {
     $('#s-hap', sh).onchange = e => { st.haptics = e.target.checked; save(); buzz(10); };
     $('[data-x]', sh).onclick = close;
     $('#s-f', sh).onclick = () => { close(); toPrefs(); };
+    $('#s-guide', sh).onclick = () => { close(); go('guide', {step: 0}); };
     $('#s-inst', sh)?.addEventListener('click', async () => { const ev = installEvt; if (!ev) return; ev.prompt(); try { await ev.userChoice; } catch (e) {} installEvt = null; close(); });
     // a backup is one JSON file with everything (photos included), so you can move to another browser or the installed app
     if ($('#s-exp', sh)) $('#s-exp', sh).onclick = () => {
@@ -1943,6 +2062,8 @@ const tintBar = () => { const m = document.querySelector('meta[name=theme-color]
 idbGet().then(async v => {
   if (v && v.v === 1) { S = v; applyMotion(); applyLook(); }
   else if (v === null) { const ok = await save(); if (ok) { try { localStorage.removeItem(KEY); } catch (e) {} } }
+  // first launch (nothing set up yet): walk through the three steps
+  if (!S.guided && !folders().length && !mine().some(x => x.cat)) cur = {name: 'guide', opts: {step: 0}};
   render();
 });
 })();

@@ -1,6 +1,6 @@
 // Plot Twist service worker: keeps the app on the device so it opens offline.
 // Bump VERSION when the app shell changes so installed copies pick up the update.
-const VERSION = 'plot-twist-v1';
+const VERSION = 'plot-twist-v2';
 const RUNTIME = 'plot-twist-runtime';
 const SHELL = ['./', './index.html', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png', './icons/maskable-512.png', './icons/apple-touch-icon.png', './icons/favicon-32.png', './icons/icon.svg'];
 

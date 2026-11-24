@@ -21,9 +21,11 @@ When you change the app, bump `VERSION` in `sw.js` so installed copies pick up t
 
 ## Three steps
 
+On first launch a short **getting-started guide** walks through these one card at a time (replay it from Settings). The home page itself just shows your folders.
+
 1. **Your preferences.** Add your **non-negotiables** and your **green**, **yellow** and **red flags**. Type them in directly, or tap *Help me find them from past relationships* to answer five questions and get suggestions you can edit and sort.
 2. **Add a folder.** One folder per person.
-3. **Add a profile to the folder.** Paste a biodata, attach an image (optionally *Read text from image*), or use the sample. The folder is matched against your preferences straight away. That **first match** is the start of a timeline:
+3. **Add a profile to the folder.** Paste a biodata, attach an image (optionally *Read text from image*), or use the sample. Reading an image happens on the device: the photo is enlarged, turned black and white and sharpened before reading, and messy lines like `Name | Rohan` or `Height — 5'10"` are tidied into `Label: value` so the fields land in the right place. Check the text before matching; tap the pencil next to a folder's name to rename it. The folder is matched against your preferences straight away. That **first match** is the start of a timeline:
    - a **green flag** for each preference the profile's own words support (or, for a red or yellow flag preference, explicitly rule out)
    - a **red flag** for a clash with a non-negotiable or red flag
    - a **yellow flag** for a clash with a green or yellow flag
