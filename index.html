@@ -5,6 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Plot Twist</title>
 <meta name="claude:viewport-fit-sides" content="cover">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#F7EDCB">
+<link rel="icon" href="icons/favicon-32.png" sizes="32x32">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Plot Twist">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..600&family=Nunito:wght@400;600;700;800&family=Patrick+Hand&display=swap">
@@ -1197,6 +1206,7 @@ function render() {
   } else root.style.animation = 'none';
   lastScene = cur.name;
   save();
+  tintBar();
 }
 const on = (root, sel, fn, ev = 'click') => $$(sel, root).forEach(el => el.addEventListener(ev, e => fn(e, el)));
 const say = msg => { $('#live').textContent = msg; };
@@ -1878,6 +1888,12 @@ function openSettings() {
   <label class="tog"><span>Paper sounds</span><input type="checkbox" class="sw" id="s-snd" ${st.sound ? 'checked' : ''}></label>
   <label class="tog"><span>Haptics</span><input type="checkbox" class="sw" id="s-hap" ${st.haptics ? 'checked' : ''}></label>
   <p>Everything is stored on this device only. Contact details are never kept.</p>
+  <p class="label">App</p>
+  ${isStandalone() ? '<p>Installed on this device. It opens full screen and works offline.</p>'
+    : installEvt ? '<button class="btn primary" id="s-inst">Install Plot Twist</button>'
+    : isIOS ? '<p>To install on iPhone or iPad: tap <b>Share</b>, then <b>Add to Home Screen</b>.</p>'
+    : '<p>To install: open this page in Chrome, Edge or Safari, then choose <b>Install app</b> or <b>Add to Home Screen</b> from the browser menu.</p>'}
+  <div class="row2"><button class="btn" id="s-exp">Export backup</button><button class="btn" id="s-imp">Import backup</button></div>
   <button class="btn" id="s-f">My preferences</button>
   <div class="row2"><button class="btn" id="s-all">Delete everything</button><button class="btn primary" data-x>Done</button></div>`, (sh, close) => {
     on(sh, '#s-mode button', (e, x) => { st.mode = x.dataset.mode; applyLook(); save(); $$('#s-mode button', sh).forEach(y => y.setAttribute('aria-pressed', y === x)); sfx('tuck'); });
@@ -1887,11 +1903,42 @@ function openSettings() {
     $('#s-hap', sh).onchange = e => { st.haptics = e.target.checked; save(); buzz(10); };
     $('[data-x]', sh).onclick = close;
     $('#s-f', sh).onclick = () => { close(); toPrefs(); };
+    $('#s-inst', sh)?.addEventListener('click', async () => { const ev = installEvt; if (!ev) return; ev.prompt(); try { await ev.userChoice; } catch (e) {} installEvt = null; close(); });
+    // a backup is one JSON file with everything (photos included), so you can move to another browser or the installed app
+    $('#s-exp', sh).onclick = () => {
+      try {
+        const blob = new Blob([JSON.stringify(S)], {type: 'application/json'}), a = document.createElement('a');
+        a.href = URL.createObjectURL(blob); a.download = `plot-twist-backup-${new Date().toISOString().slice(0, 10)}.json`;
+        document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); toast('Backup saved');
+      } catch (e) { toast('Couldn’t save a backup here'); }
+    };
+    $('#s-imp', sh).onclick = () => {
+      const inp = document.createElement('input'); inp.type = 'file'; inp.accept = 'application/json,.json';
+      inp.onchange = () => { const file = inp.files && inp.files[0]; if (!file) return; const fr = new FileReader();
+        fr.onload = () => { let d; try { d = JSON.parse(fr.result); } catch (e) { toast('That file isn’t a Plot Twist backup'); return; }
+          if (!d || d.v !== 1) { toast('That file isn’t a Plot Twist backup'); return; }
+          close(); confirmSheet('Replace everything with this backup?', 'What’s on this device now is replaced by the backup.', 'Replace', async () => { S = d; applyMotion(); applyLook(); const ok = await save(); toast(ok ? 'Backup restored' : 'Storage is full'); go('home', {}, 'reset'); }); };
+        fr.readAsText(file); };
+      inp.click();
+    };
     $('#s-all', sh).onclick = () => { close(); confirmSheet('Delete everything?', 'This can’t be undone.', 'Delete', () => { const keep = S.settings; S = fresh(); S.settings = keep; try { localStorage.removeItem(KEY); } catch (e) {} save(); toast('Deleted'); go('home', {}, 'reset'); }); };
   });
 }
 
 cur = {name: 'home', opts: {}};
+/* ---------- installable app ---------- */
+const isStandalone = () => { try { return matchMedia('(display-mode: standalone)').matches || navigator.standalone === true; } catch (e) { return false; } };
+const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+let installEvt = null;
+window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); installEvt = e; });
+window.addEventListener('appinstalled', () => { installEvt = null; toast('Installed'); });
+try {
+  // only where the page is served from its own site (not a sandboxed preview or a local file)
+  if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol) && window.top === window.self) navigator.serviceWorker.register('sw.js').catch(() => {});
+} catch (e) {}
+try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {}); } catch (e) {}
+// the phone's status bar matches the page colour
+const tintBar = () => { const m = document.querySelector('meta[name=theme-color]'); if (m) m.content = getComputedStyle(document.body).backgroundColor; };
 // wait for what is stored before the first render, so nothing saved is ever overwritten by an empty start
 idbGet().then(async v => {
   if (v && v.v === 1) { S = v; applyMotion(); applyLook(); }

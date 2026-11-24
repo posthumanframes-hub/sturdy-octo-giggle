@@ -2,7 +2,22 @@
 
 *Check profiles against what matters to you.*
 
-A small, mobile-first scrapbook game for matching matrimonial profiles against your own preferences, then tracking how you feel with a person and whether there's a good balance of **Spark** (how it feels) and **Fit** (how it lines up with what matters to you). Open `index.html` in any modern browser. There's no build step and nothing to install.
+A small, mobile-first scrapbook game for matching matrimonial profiles against your own preferences, then tracking how you feel with a person and whether there's a good balance of **Spark** (how it feels) and **Fit** (how it lines up with what matters to you). Open `index.html` in any modern browser. There's no build step.
+
+## Install it as an app
+
+Plot Twist is an installable web app (a PWA). `manifest.webmanifest` gives it its name, icons and full-screen mode, and `sw.js` keeps a copy on the device so it opens offline.
+
+1. **Host it on HTTPS**, for example with GitHub Pages: in the repo's **Settings → Pages**, choose *Deploy from a branch*, pick the branch, select folder `/ (root)`, and save. It appears at `https://<owner>.github.io/<repo>/`.
+2. **Install it** from that link:
+   - **Android (Chrome):** use the *Install app* prompt, the menu's *Install app*, or **Install Plot Twist** in the app's Settings.
+   - **iPhone or iPad (Safari):** tap *Share*, then *Add to Home Screen*.
+   - **Desktop (Chrome or Edge):** use the install icon in the address bar.
+3. It then opens from its own icon, full screen, and works without a connection. Text reading and fonts are cached after their first use.
+
+**Data stays on the device, per app.** The installed app, each browser and each link keep their own separate data. Use **Settings → Export backup** to save everything (photos included) as one file, and **Import backup** to load it into the app, another browser or a new phone.
+
+When you change the app, bump `VERSION` in `sw.js` so installed copies pick up the update.
 
 ## Three steps
 
